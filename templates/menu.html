@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <title>{{ company.name }}</title>
+</head>
+
+<style>
+   html,body{
+    margin:0;
+    height:100%;
+}
+img{
+  display:block;
+  width:100%;
+  object-fit: cover;
+}
+</style>
+
+    <img src="{{ company.menu.url }}">
+
+</body>
+</html>
