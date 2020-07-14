@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <title>{{ company.name }}</title>
+</head>
+
+{#<style>#}
+{#    html, body {#}
+{#        margin: 0;#}
+{#        height: 100%;#}
+{#    }#}
+{##}
+{#    img {#}
+{#        display: block;#}
+{#        width: 100%;#}
+{#        object-fit: cover;#}
+{#    }#}
+{#</style>#}
+<div class="row1">
+
+    <a href="{% url 'download' company.slug %}">Download All!</a>
+</div>
+{% for cmp in company.create_qr %}
+<img height="50" width="50" src="{{ cmp}}" >
+
+
+{% endfor %}
+</body>
+</html>
