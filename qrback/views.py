@@ -50,10 +50,11 @@ def menu(request, *args, **kwargs):
         if category_id != 0:
             return render(request, template_name='digitalmenu.html',
                           context={'categories': Entry.objects.filter(company_id=company.id, category=category_id),
-                                   'company': company, 'table_id': table_id})
+                                   'company': company, 'table_id': table_id, 'category_id': category_id})
         else:
             return render(request, template_name='digitalmenu.html',
-                          context={'categories': categories, 'company': company, 'table_id': table_id})
+                          context={'categories': categories, 'company': company, 'table_id': table_id,
+                                   'category_id': category_id})
     else:
         return render(request, template_name='menu.html', context={'company': company})
 

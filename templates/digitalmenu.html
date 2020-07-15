@@ -3,23 +3,42 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Title</title>
+    {% load static %}
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+          rel="stylesheet">
+
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="{% static 'js/asteroid-alert.js' %}"></script>
+
+
 </head>
 <style>
+    html, body {
+        margin: 0;
+        height: 100%;
+    }
+
+    img {
+        display: block;
+        width: 100%;
+        object-fit: cover;
+    }
+
     * {
         box-sizing: border-box;
     }
 
-    .container {
-        position: relative;
-        width: 50%;
-        max-width: 300px;
+    .centered {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
     }
 
-    .image {
-        display: block;
-        width: 100%;
-        height: auto;
-    }
 
     .overlay {
         position: absolute;
@@ -39,19 +58,60 @@
     .container:hover .overlay {
         opacity: 1;
     }
+
 </style>
 <body>
 
-{% for category in categories %}
-    <div class="container">
-        <a href="{% url 'category' company.slug category.id table_id %}">
-            <img src="{{ category.image.url }}" alt="Avatar" class="image">
-        </a>
-        <a href="{% url 'category' company.slug category.id table_id %}">
-            <div class="overlay">{{ category.name }}</div>
-        </a>
-    </div>
 
+{% for category in categories %}
+
+    {#        <div class="container">#}
+    {#            <a href="{% url 'category' company.slug category.id table_id %}">#}
+    {#                <img src="{{ category.image.url }}" alt="Avatar" class="image">#}
+    {#            </a>#}
+    {#           <div class="centered">Centered</div>#}
+    {#        </div>#}
+
+    <script>
+        function myFunction() {
+            $confirm("Sipariş verme işleminizi onaylıyormusunuz?", "#26a69a")
+                .then(() => {
+                    $toast("Siparişiniz verildi", "#26a69a");
+                })
+        }
+    </script>
+
+    <div class="card">
+        <div class="card-image waves-effect waves-block waves-light">
+
+            {% if category_id == 0 %}
+                <a href="{% url 'category' company.slug category.id table_id %}">
+                    <img src="{{ category.image.url }}">
+                </a>
+            {% else %}
+                <img class="activator" src="{{ category.image.url }}">
+
+            {% endif %}
+        </div>
+        {% if category_id != 0 %}
+            <div class="card-reveal">
+                <span class="card-title grey-text text-darken-4">{{ category.name }}<i class="material-icons right">close</i></span>
+                <p>Sipariş ver butonuna tıklayarak {{ category.name }} siparişi verebilirsiniz</p>
+                <div class="row1">
+                    <input prefix="Adet" class="quantity" id="id_form-0-quantity" min="0" name="form-0-quantity"
+                           value="1" type="number">
+                    <button onclick="myFunction()" class="btn waves-effect waves-light" type="submit" name="action">
+                        Sipariş Ver
+                    </button>
+
+                </div>
+            </div>
+        {% endif %}
+        <div class="card-content">
+            <span class="card-title activator grey-text text-darken-4">{{ category.name }}</span>
+        </div>
+
+    </div>
 
     {#    <a href="{% url 'category' company.slug category.id table_id %}">{{ category.name }}</a>#}
 {% endfor %}
