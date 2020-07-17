@@ -6,13 +6,22 @@ from django.shortcuts import render
 from django.views.generic import DetailView
 
 from qrback import service
-from qrback.models import Company, Entry, FoodCategory
+from qrback.models import Company, Entry, FoodCategory, Accounting
 from qrforall import settings
 
 
 def index(request):
     context = {}
     return render(request, template_name='index.html', context=context)
+
+
+def orderDetail(request, *args, **kwargs):
+    slug = kwargs['slug']
+    table_id = kwargs['table_id']
+    company = Company.objects.get(slug=slug)
+    accounting = Accounting.get_table_account(company, table_id)
+    context = {'accounting': accounting}
+    return render(request, template_name='digitalchooser.html', context=context)
 
 
 def download(request, *args, **kwargs):
@@ -44,6 +53,13 @@ def menu(request, *args, **kwargs):
     if 'category_id' in kwargs:
         category_id = kwargs['category_id']
     company = Company.objects.get(slug__exact=slug)
+    if request.method == "POST":
+        count = int(request.POST['count'])
+
+        account = Accounting.get_table_account(company, table_id)
+        entry = Entry.objects.get(id=category_id)
+
+        account.add_entry(entry, count)
     categories = FoodCategory.objects.all()
 
     if company.account_type.has_unique_tables:

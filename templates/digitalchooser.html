@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>test</title>
+</head>
+<body>
+{{ accounting.company }}<br>
+{% for order_list in accounting.order_list.all %}
+    {{ order_list.name }}<br>
+    {{ order_list.count }}<br>
+    {{ order_list.price }}<br>
+{% endfor %}
+Toplam : {{ accounting.get_borrow }}
+</body>
+</html>

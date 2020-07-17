@@ -1,6 +1,9 @@
 import os
 
 from django.db import models
+from django.db.models import Sum, QuerySet, F
+from django.db.models.functions import Coalesce
+from django.forms import FloatField
 from django.utils.text import slugify
 
 from qrback import service
@@ -57,8 +60,10 @@ class Company(models.Model):
 class FoodCategory(models.Model):
     name = models.CharField(max_length=20)
     image = models.ImageField(upload_to=get_image_path, blank=True, null=True)
+
     def __str__(self):
         return self.name
+
 
 class Entry(models.Model):
     name = models.CharField(max_length=20)
@@ -66,5 +71,59 @@ class Entry(models.Model):
     image = models.ImageField(upload_to=get_image_path, blank=True, null=True)
     category = models.ManyToManyField(FoodCategory)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
+
     def __str__(self):
         return self.name
+
+
+class Account_Entry(models.Model):
+    name = models.CharField(max_length=20)
+    price = models.FloatField(default=0)
+    count = models.IntegerField(default=0)
+
+
+class Accounting(models.Model):
+    table = models.IntegerField()
+    order_list = models.ManyToManyField(Account_Entry, blank=True)
+    first_order_time = models.DateTimeField(auto_now_add=True)
+    closed_at = models.DateTimeField(auto_now=True)
+    is_closed = models.BooleanField(default=False)
+    checked_money = models.FloatField(default=0)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+
+    def add_entry(self, entry: Entry, count: int = 1):
+        obj, _ = self.order_list.get_or_create(name=entry.name)
+        obj.price = entry.price
+        obj.name = entry.name
+        obj.count = obj.count + count
+        obj.save()
+
+    def withdraw(self, money=0):
+        borrowed = 0
+        if money != 0:
+            borrowed = self.get_borrow() - money
+        else:
+            self.checked_money = self.get_borrow()
+        if borrowed == 0:
+            self.is_closed = True
+
+    @property
+    def get_borrow(self):
+        sum = 0
+        if self.order_list.exists():
+            sum = list(self.order_list.all().annotate(total_spent=Sum(
+                F('price') *
+                F('count'),
+                output_field=models.FloatField()
+            )).aggregate(Sum('total_spent')).values())[0] - self.checked_money
+        return sum
+
+    @classmethod
+    def get_table_account(cls, company, table_id):
+        ses_table = cls.objects.filter(company=company, is_closed=False, table=table_id).last()
+        if ses_table == None:
+            ses_table = cls()
+            ses_table.table = table_id
+            ses_table.company = company
+            ses_table.save()
+        return ses_table

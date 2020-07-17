@@ -13,9 +13,11 @@
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="{% static 'js/asteroid-alert.js' %}"></script>
+    <script src="{% static 'js/custom.js' %}"></script>
 
 
 </head>
+
 <style>
     html, body {
         margin: 0;
@@ -59,22 +61,35 @@
         opacity: 1;
     }
 
+    a.btn-floating {
+        font-size: 10px;
+    }
+
+    {#.card{#}
+    {#    margin-bottom: 0.1px;#}
+    {#    margin-top: 0.1px;#}
+
 </style>
 <body>
 
-
+<div class="fixed-action-btn" style="size: 1px">
+    <a class="btn-floating btn-large red" style="size: 1px">
+        <i class="large material-icons">mode_edit</i>
+    </a>
+    <ul>
+        <li><a class="btn-floating red" href="{% url 'order-detail' company.slug table_id %}">Hesap</a></li>
+        {#        <li><a class="btn-floating yellow darken-1">Hesap<i class="material-icons">format_quote</i></a></li>#}
+        <li><a class="btn-floating green" href="{% url 'garson' company.slug table_id %}">Garson</a></li>
+        {#        <li><a class="btn-floating blue"><i class="material-icons">attach_file</i></a></li>#}
+    </ul>
+</div>
+{% if category_id == 0 %}
+    <h2>{{ company.name }}</h2>
+{% endif %}
 {% for category in categories %}
-
-    {#        <div class="container">#}
-    {#            <a href="{% url 'category' company.slug category.id table_id %}">#}
-    {#                <img src="{{ category.image.url }}" alt="Avatar" class="image">#}
-    {#            </a>#}
-    {#           <div class="centered">Centered</div>#}
-    {#        </div>#}
-
     <script>
         function myFunction() {
-            $confirm("Sipariş verme işleminizi onaylıyormusunuz?", "#26a69a")
+            $confirm("Sipariş verme işleminizi onaylıyormusunuz?", "#26a69a ")
                 .then(() => {
                     $toast("Siparişiniz verildi", "#26a69a");
                 })
@@ -98,18 +113,31 @@
                 <span class="card-title grey-text text-darken-4">{{ category.name }}<i class="material-icons right">close</i></span>
                 <p>Sipariş ver butonuna tıklayarak {{ category.name }} siparişi verebilirsiniz</p>
                 <div class="row1">
-                    <input prefix="Adet" class="quantity" id="id_form-0-quantity" min="0" name="form-0-quantity"
-                           value="1" type="number">
-                    <button onclick="myFunction()" class="btn waves-effect waves-light" type="submit" name="action">
-                        Sipariş Ver
-                    </button>
-
+                    {#                    <input prefix="Adet" class="quantity" id="id_form-0-quantity" min="0" name="form-0-quantity"#}
+                    {#                           value="1" type="number">#}
+                    {#                    <button onclick="myFunction()" class="btn waves-effect waves-light" type="submit" name="action">#}
+                    {#                        Sipariş Ver#}
+                    {#                    </button>#}
+                    <form action="{% url 'order' company.slug table_id category_id %}" method="post">
+                        {% csrf_token %}
+                        <input prefix="Adet" class="quantity" id="count" min="0" name="count"
+                               value="1" type="number">
+                        <input class="btn waves-effect waves-light" type="submit" value="Sipariş ver">
+                    </form>
                 </div>
             </div>
+            <div class="card-content">
+                <span class="card-title activator grey-text text-darken-4">{{ category.name }}<i
+                        class="right">{{ category.price|floatformat }}₺</i></span>
+            </div>
+        {% else %}
+            <a href="{% url 'category' company.slug category.id table_id %}">
+                <div class="card-content">
+                    <span class="card-title activator grey-text text-darken-4">{{ category.name }}</span>
+                </div>
+            </a>
         {% endif %}
-        <div class="card-content">
-            <span class="card-title activator grey-text text-darken-4">{{ category.name }}</span>
-        </div>
+
 
     </div>
 
