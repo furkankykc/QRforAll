@@ -1,0 +1,607 @@
+@charset "UTF-8";
+html.remodal-is-locked {
+overflow: hidden;
+} .remodal,
+[data-remodal-id] {
+display: none;
+} .remodal-overlay {
+position: fixed;
+z-index: 9999;
+top: -5000px;
+right: -5000px;
+bottom: -5000px;
+left: -5000px;
+display: none;
+} .remodal-wrapper {
+position: fixed;
+z-index: 10000;
+top: 0;
+right: 0;
+bottom: 0;
+left: 0;
+display: none;
+overflow: auto;
+text-align: center;
+-webkit-overflow-scrolling: touch;
+}
+.remodal-wrapper:after {
+display: inline-block;
+height: 100%;
+margin-left: -0.05em;
+content: "";
+} .remodal-overlay,
+.remodal-wrapper {
+-webkit-backface-visibility: hidden;
+backface-visibility: hidden;
+} .remodal {
+position: relative;
+outline: none;
+-webkit-text-size-adjust: 100%;
+-moz-text-size-adjust: 100%;
+-ms-text-size-adjust: 100%;
+text-size-adjust: 100%;
+}
+.remodal-is-initialized { display: inline-block;
+}.remodal-bg.remodal-is-opening,
+.remodal-bg.remodal-is-opened {
+-webkit-filter: blur(3px);
+filter: blur(3px);
+} .remodal-overlay {
+background: rgba(43, 46, 56, 0.9);
+}
+.remodal-overlay.remodal-is-opening,
+.remodal-overlay.remodal-is-closing {
+-webkit-animation-fill-mode: forwards;
+animation-fill-mode: forwards;
+}
+.remodal-overlay.remodal-is-opening {
+-webkit-animation: remodal-overlay-opening-keyframes 0.3s;
+animation: remodal-overlay-opening-keyframes 0.3s;
+}
+.remodal-overlay.remodal-is-closing {
+-webkit-animation: remodal-overlay-closing-keyframes 0.3s;
+animation: remodal-overlay-closing-keyframes 0.3s;
+} .remodal-wrapper {
+padding: 10px 10px 0;
+} .remodal {
+-webkit-box-sizing: border-box;
+box-sizing: border-box;
+width: 100%;
+margin-bottom: 10px;
+padding: 35px;
+-webkit-transform: translate3d(0, 0, 0);
+transform: translate3d(0, 0, 0);
+color: #2b2e38;
+background: #fff;
+}
+.remodal.remodal-is-opening,
+.remodal.remodal-is-closing {
+-webkit-animation-fill-mode: forwards;
+animation-fill-mode: forwards;
+}
+.remodal.remodal-is-opening {
+-webkit-animation: remodal-opening-keyframes 0.3s;
+animation: remodal-opening-keyframes 0.3s;
+}
+.remodal.remodal-is-closing {
+-webkit-animation: remodal-closing-keyframes 0.3s;
+animation: remodal-closing-keyframes 0.3s;
+} .remodal,
+.remodal-wrapper:after {
+vertical-align: middle;
+} .remodal-close {
+position: absolute;
+top: 0;
+left: 0;
+display: block;
+overflow: visible;
+width: 35px;
+height: 35px;
+margin: 0;
+padding: 0;
+cursor: pointer;
+-webkit-transition: color 0.2s;
+transition: color 0.2s;
+text-decoration: none;
+color: #95979c;
+border: 0;
+outline: 0;
+background: transparent;
+}
+.remodal-close:hover,
+.remodal-close:focus {
+color: #2b2e38;
+}
+.remodal-close:before {
+font-family: Arial, "Helvetica CY", "Nimbus Sans L", sans-serif !important;
+font-size: 25px;
+line-height: 35px;
+position: absolute;
+top: 0;
+left: 0;
+display: block;
+width: 35px;
+content: "\00d7";
+text-align: center;
+} .remodal-confirm,
+.remodal-cancel {
+font: inherit;
+display: inline-block;
+overflow: visible;
+min-width: 110px;
+margin: 0;
+padding: 12px 0;
+cursor: pointer;
+-webkit-transition: background 0.2s;
+transition: background 0.2s;
+text-align: center;
+vertical-align: middle;
+text-decoration: none;
+border: 0;
+outline: 0;
+}
+.remodal-confirm {
+color: #fff;
+background: #81c784;
+}
+.remodal-confirm:hover,
+.remodal-confirm:focus {
+background: #66bb6a;
+}
+.remodal-cancel {
+color: #fff;
+background: #e57373;
+}
+.remodal-cancel:hover,
+.remodal-cancel:focus {
+background: #ef5350;
+} .remodal-confirm::-moz-focus-inner,
+.remodal-cancel::-moz-focus-inner,
+.remodal-close::-moz-focus-inner {
+padding: 0;
+border: 0;
+} @-webkit-keyframes remodal-opening-keyframes {
+from {
+-webkit-transform: scale(1.05);
+transform: scale(1.05);
+opacity: 0;
+}
+to {
+-webkit-transform: none;
+transform: none;
+opacity: 1;
+}
+}
+@keyframes remodal-opening-keyframes {
+from {
+-webkit-transform: scale(1.05);
+transform: scale(1.05);
+opacity: 0;
+}
+to {
+-webkit-transform: none;
+transform: none;
+opacity: 1;
+}
+}
+@-webkit-keyframes remodal-closing-keyframes {
+from {
+-webkit-transform: scale(1);
+transform: scale(1);
+opacity: 1;
+}
+to {
+-webkit-transform: scale(0.95);
+transform: scale(0.95);
+opacity: 0;
+}
+}
+@keyframes remodal-closing-keyframes {
+from {
+-webkit-transform: scale(1);
+transform: scale(1);
+opacity: 1;
+}
+to {
+-webkit-transform: scale(0.95);
+transform: scale(0.95);
+opacity: 0;
+}
+}
+@-webkit-keyframes remodal-overlay-opening-keyframes {
+from {
+opacity: 0;
+}
+to {
+opacity: 1;
+}
+}
+@keyframes remodal-overlay-opening-keyframes {
+from {
+opacity: 0;
+}
+to {
+opacity: 1;
+}
+}
+@-webkit-keyframes remodal-overlay-closing-keyframes {
+from {
+opacity: 1;
+}
+to {
+opacity: 0;
+}
+}
+@keyframes remodal-overlay-closing-keyframes {
+from {
+opacity: 1;
+}
+to {
+opacity: 0;
+}
+} @media only screen and (min-width: 641px) {
+.remodal {
+max-width: 700px;
+}
+} .lt-ie9 .remodal-overlay {
+background: #2b2e38;
+}
+.lt-ie9 .remodal {
+width: 700px;
+}
+
+@font-face {
+font-family: "socicon";
+src:url(../../../plugins/user_press/acess/fonts/socicon.eot);
+src:url(../../../plugins/user_press/acess/fonts/socicond41d.eot?#iefix) format("embedded-opentype"),
+url(../../../plugins/user_press/acess/fonts/socicon.woff) format("woff"),
+url(../../../plugins/user_press/acess/fonts/socicon.ttf) format("truetype"),
+url(../../../plugins/user_press/acess/fonts/socicon.svg#socicon) format("svg");
+font-weight: normal;
+font-style: normal;
+}
+[data-icon]:before {
+font-family: "socicon" !important;
+content: attr(data-icon);
+font-style: normal !important;
+font-weight: normal !important;
+font-variant: normal !important;
+text-transform: none !important;
+speak: none;
+line-height: 1;
+-webkit-font-smoothing: antialiased;
+-moz-osx-font-smoothing: grayscale;
+}
+[class^="socicon-"]:before,
+[class*=" socicon-"]:before {
+font-family: "socicon" !important;
+font-style: normal !important;
+font-weight: normal !important;
+font-variant: normal !important;
+text-transform: none !important;
+speak: none;
+line-height: 1;
+-webkit-font-smoothing: antialiased;
+-moz-osx-font-smoothing: grayscale;
+}
+.socicon-modelmayhem:before {
+content: "\e000";
+}
+.socicon-mixcloud:before {
+content: "\e001";
+}
+.socicon-drupal:before {
+content: "\e002";
+}
+.socicon-swarm:before {
+content: "\e003";
+}
+.socicon-istock:before {
+content: "\e004";
+}
+.socicon-yammer:before {
+content: "\e005";
+}
+.socicon-ello:before {
+content: "\e006";
+}
+.socicon-stackoverflow:before {
+content: "\e007";
+}
+.socicon-persona:before {
+content: "\e008";
+}
+.socicon-triplej:before {
+content: "\e009";
+}
+.socicon-houzz:before {
+content: "\e00a";
+}
+.socicon-rss:before {
+content: "\e00b";
+}
+.socicon-paypal:before {
+content: "\e00c";
+}
+.socicon-odnoklassniki:before {
+content: "\e00d";
+}
+.socicon-airbnb:before {
+content: "\e00e";
+}
+.socicon-periscope:before {
+content: "\e00f";
+}
+.socicon-outlook:before {
+content: "\e010";
+}
+.socicon-coderwall:before {
+content: "\e011";
+}
+.socicon-tripadvisor:before {
+content: "\e012";
+}
+.socicon-appnet:before {
+content: "\e013";
+}
+.socicon-goodreads:before {
+content: "\e014";
+}
+.socicon-tripit:before {
+content: "\e015";
+}
+.socicon-lanyrd:before {
+content: "\e016";
+}
+.socicon-slideshare:before {
+content: "\e017";
+}
+.socicon-buffer:before {
+content: "\e018";
+}
+.socicon-disqus:before {
+content: "\e019";
+}
+.socicon-vkontakte:before {
+content: "\e01a";
+}
+.socicon-whatsapp:before {
+content: "\e01b";
+}
+.socicon-patreon:before {
+content: "\e01c";
+}
+.socicon-storehouse:before {
+content: "\e01d";
+}
+.socicon-pocket:before {
+content: "\e01e";
+}
+.socicon-mail:before {
+content: "\e01f";
+}
+.socicon-blogger:before {
+content: "\e020";
+}
+.socicon-technorati:before {
+content: "\e021";
+}
+.socicon-reddit:before {
+content: "\e022";
+}
+.socicon-dribbble:before {
+content: "\e023";
+}
+.socicon-stumbleupon:before {
+content: "\e024";
+}
+.socicon-digg:before {
+content: "\e025";
+}
+.socicon-envato:before {
+content: "\e026";
+}
+.socicon-behance:before {
+content: "\e027";
+}
+.socicon-delicious:before {
+content: "\e028";
+}
+.socicon-deviantart:before {
+content: "\e029";
+}
+.socicon-forrst:before {
+content: "\e02a";
+}
+.socicon-play:before {
+content: "\e02b";
+}
+.socicon-zerply:before {
+content: "\e02c";
+}
+.socicon-wikipedia:before {
+content: "\e02d";
+}
+.socicon-apple:before {
+content: "\e02e";
+}
+.socicon-flattr:before {
+content: "\e02f";
+}
+.socicon-github:before {
+content: "\e030";
+}
+.socicon-renren:before {
+content: "\e031";
+}
+.socicon-friendfeed:before {
+content: "\e032";
+}
+.socicon-newsvine:before {
+content: "\e033";
+}
+.socicon-identica:before {
+content: "\e034";
+}
+.socicon-bebo:before {
+content: "\e035";
+}
+.socicon-zynga:before {
+content: "\e036";
+}
+.socicon-steam:before {
+content: "\e037";
+}
+.socicon-xbox:before {
+content: "\e038";
+}
+.socicon-windows:before {
+content: "\e039";
+}
+.socicon-qq:before {
+content: "\e03a";
+}
+.socicon-douban:before {
+content: "\e03b";
+}
+.socicon-meetup:before {
+content: "\e03c";
+}
+.socicon-playstation:before {
+content: "\e03d";
+}
+.socicon-android:before {
+content: "\e03e";
+}
+.socicon-snapchat:before {
+content: "\e03f";
+}
+.socicon-twitter:before {
+content: "\e040";
+}
+.socicon-facebook:before {
+content: "\e041";
+}
+.socicon-googleplus:before {
+content: "\e042";
+}
+.socicon-pinterest:before {
+content: "\e043";
+}
+.socicon-foursquare:before {
+content: "\e044";
+}
+.socicon-yahoo:before {
+content: "\e045";
+}
+.socicon-skype:before {
+content: "\e046";
+}
+.socicon-yelp:before {
+content: "\e047";
+}
+.socicon-feedburner:before {
+content: "\e048";
+}
+.socicon-linkedin:before {
+content: "\e049";
+}
+.socicon-viadeo:before {
+content: "\e04a";
+}
+.socicon-xing:before {
+content: "\e04b";
+}
+.socicon-myspace:before {
+content: "\e04c";
+}
+.socicon-soundcloud:before {
+content: "\e04d";
+}
+.socicon-spotify:before {
+content: "\e04e";
+}
+.socicon-grooveshark:before {
+content: "\e04f";
+}
+.socicon-lastfm:before {
+content: "\e050";
+}
+.socicon-youtube:before {
+content: "\e051";
+}
+.socicon-vimeo:before {
+content: "\e052";
+}
+.socicon-dailymotion:before {
+content: "\e053";
+}
+.socicon-vine:before {
+content: "\e054";
+}
+.socicon-flickr:before {
+content: "\e055";
+}
+.socicon-500px:before {
+content: "\e056";
+}
+.socicon-instagram:before {
+content: "\e057";
+}
+.socicon-wordpress:before {
+content: "\e058";
+}
+.socicon-tumblr:before {
+content: "\e059";
+}
+.socicon-twitch:before {
+content: "\e05a";
+}
+.socicon-8tracks:before {
+content: "\e05b";
+}
+.socicon-amazon:before {
+content: "\e05c";
+}
+.socicon-icq:before {
+content: "\e05d";
+}
+.socicon-smugmug:before {
+content: "\e05e";
+}
+.socicon-ravelry:before {
+content: "\e05f";
+}
+.socicon-weibo:before {
+content: "\e060";
+}
+.socicon-baidu:before {
+content: "\e061";
+}
+.socicon-angellist:before {
+content: "\e062";
+}
+.socicon-ebay:before {
+content: "\e063";
+}
+.socicon-imdb:before {
+content: "\e064";
+}
+.socicon-stayfriends:before {
+content: "\e065";
+}
+.socicon-residentadvisor:before {
+content: "\e066";
+}
+.socicon-google:before {
+content: "\e067";
+}
+.socicon-yandex:before {
+content: "\e068";
+}
+.socicon-sharethis:before {
+content: "\e069";
+}
+.socicon-bandcamp:before {
+content: "\e06a";
+}.woocommerce .woocommerce-error .button,.woocommerce .woocommerce-info .button,.woocommerce .woocommerce-message .button,.woocommerce-page .woocommerce-error .button,.woocommerce-page .woocommerce-info .button,.woocommerce-page .woocommerce-message .button{float:right}.woocommerce .col2-set,.woocommerce-page .col2-set{width:100%}.woocommerce .col2-set::after,.woocommerce .col2-set::before,.woocommerce-page .col2-set::after,.woocommerce-page .col2-set::before{content:' ';display:table}.woocommerce .col2-set::after,.woocommerce-page .col2-set::after{clear:both}.woocommerce .col2-set .col-1,.woocommerce-page .col2-set .col-1{float:left;width:48%}.woocommerce .col2-set .col-2,.woocommerce-page .col2-set .col-2{float:right;width:48%}.woocommerce img,.woocommerce-page img{height:auto;max-width:100%}.woocommerce #content div.product div.images,.woocommerce div.product div.images,.woocommerce-page #content div.product div.images,.woocommerce-page div.product div.images{float:left;width:48%}.woocommerce #content div.product div.thumbnails::after,.woocommerce #content div.product div.thumbnails::before,.woocommerce div.product div.thumbnails::after,.woocommerce div.product div.thumbnails::before,.woocommerce-page #content div.product div.thumbnails::after,.woocommerce-page #content div.product div.thumbnails::before,.woocommerce-page div.product div.thumbnails::after,.woocommerce-page div.product div.thumbnails::before{content:' ';display:table}.woocommerce #content div.product div.thumbnails::after,.woocommerce div.product div.thumbnails::after,.woocommerce-page #content div.product div.thumbnails::after,.woocommerce-page div.product div.thumbnails::after{clear:both}.woocommerce #content div.product div.thumbnails a,.woocommerce div.product div.thumbnails a,.woocommerce-page #content div.product div.thumbnails a,.woocommerce-page div.product div.thumbnails a{float:left;width:30.75%;margin-right:3.8%;margin-bottom:1em}.woocommerce #content div.product div.thumbnails a.last,.woocommerce div.product div.thumbnails a.last,.woocommerce-page #content div.product div.thumbnails a.last,.woocommerce-page div.product div.thumbnails a.last{margin-right:0}.woocommerce #content div.product div.thumbnails a.first,.woocommerce div.product div.thumbnails a.first,.woocommerce-page #content div.product div.thumbnails a.first,.woocommerce-page div.product div.thumbnails a.first{clear:both}.woocommerce #content div.product div.thumbnails.columns-1 a,.woocommerce div.product div.thumbnails.columns-1 a,.woocommerce-page #content div.product div.thumbnails.columns-1 a,.woocommerce-page div.product div.thumbnails.columns-1 a{width:100%;margin-right:0;float:none}.woocommerce #content div.product div.thumbnails.columns-2 a,.woocommerce div.product div.thumbnails.columns-2 a,.woocommerce-page #content div.product div.thumbnails.columns-2 a,.woocommerce-page div.product div.thumbnails.columns-2 a{width:48%}.woocommerce #content div.product div.thumbnails.columns-4 a,.woocommerce div.product div.thumbnails.columns-4 a,.woocommerce-page #content div.product div.thumbnails.columns-4 a,.woocommerce-page div.product div.thumbnails.columns-4 a{width:22.05%}.woocommerce #content div.product div.thumbnails.columns-5 a,.woocommerce div.product div.thumbnails.columns-5 a,.woocommerce-page #content div.product div.thumbnails.columns-5 a,.woocommerce-page div.product div.thumbnails.columns-5 a{width:16.9%}.woocommerce #content div.product div.summary,.woocommerce div.product div.summary,.woocommerce-page #content div.product div.summary,.woocommerce-page div.product div.summary{float:right;width:48%;clear:none}.woocommerce #content div.product .woocommerce-tabs,.woocommerce div.product .woocommerce-tabs,.woocommerce-page #content div.product .woocommerce-tabs,.woocommerce-page div.product .woocommerce-tabs{clear:both}.woocommerce #content div.product .woocommerce-tabs ul.tabs::after,.woocommerce #content div.product .woocommerce-tabs ul.tabs::before,.woocommerce div.product .woocommerce-tabs ul.tabs::after,.woocommerce div.product .woocommerce-tabs ul.tabs::before,.woocommerce-page #content div.product .woocommerce-tabs ul.tabs::after,.woocommerce-page #content div.product .woocommerce-tabs ul.tabs::before,.woocommerce-page div.product .woocommerce-tabs ul.tabs::after,.woocommerce-page div.product .woocommerce-tabs ul.tabs::before{content:' ';display:table}.woocommerce #content div.product .woocommerce-tabs ul.tabs::after,.woocommerce div.product .woocommerce-tabs ul.tabs::after,.woocommerce-page #content div.product .woocommerce-tabs ul.tabs::after,.woocommerce-page div.product .woocommerce-tabs ul.tabs::after{clear:both}.woocommerce #content div.product .woocommerce-tabs ul.tabs li,.woocommerce div.product .woocommerce-tabs ul.tabs li,.woocommerce-page #content div.product .woocommerce-tabs ul.tabs li,.woocommerce-page div.product .woocommerce-tabs ul.tabs li{display:inline-block}.woocommerce #content div.product #reviews .comment::after,.woocommerce #content div.product #reviews .comment::before,.woocommerce div.product #reviews .comment::after,.woocommerce div.product #reviews .comment::before,.woocommerce-page #content div.product #reviews .comment::after,.woocommerce-page #content div.product #reviews .comment::before,.woocommerce-page div.product #reviews .comment::after,.woocommerce-page div.product #reviews .comment::before{content:' ';display:table}.woocommerce #content div.product #reviews .comment::after,.woocommerce div.product #reviews .comment::after,.woocommerce-page #content div.product #reviews .comment::after,.woocommerce-page div.product #reviews .comment::after{clear:both}.woocommerce #content div.product #reviews .comment img,.woocommerce div.product #reviews .comment img,.woocommerce-page #content div.product #reviews .comment img,.woocommerce-page div.product #reviews .comment img{float:right;height:auto}.woocommerce ul.products,.woocommerce-page ul.products{clear:both}.woocommerce ul.products::after,.woocommerce ul.products::before,.woocommerce-page ul.products::after,.woocommerce-page ul.products::before{content:' ';display:table}.woocommerce ul.products::after,.woocommerce-page ul.products::after{clear:both}.woocommerce ul.products li.product,.woocommerce-page ul.products li.product{float:left;margin:0 3.8% 2.992em 0;padding:0;position:relative;width:22.05%;margin-left:0}.woocommerce ul.products li.first,.woocommerce-page ul.products li.first{clear:both}.woocommerce ul.products li.last,.woocommerce-page ul.products li.last{margin-right:0}.woocommerce ul.products.columns-1 li.product,.woocommerce-page ul.products.columns-1 li.product{width:100%;margin-right:0}.woocommerce ul.products.columns-2 li.product,.woocommerce-page ul.products.columns-2 li.product{width:48%}.woocommerce ul.products.columns-3 li.product,.woocommerce-page ul.products.columns-3 li.product{width:30.75%}.woocommerce ul.products.columns-5 li.product,.woocommerce-page ul.products.columns-5 li.product{width:16.95%}.woocommerce ul.products.columns-6 li.product,.woocommerce-page ul.products.columns-6 li.product{width:13.5%}.woocommerce-page.columns-1 ul.products li.product,.woocommerce.columns-1 ul.products li.product{width:100%;margin-right:0}.woocommerce-page.columns-2 ul.products li.product,.woocommerce.columns-2 ul.products li.product{width:48%}.woocommerce-page.columns-3 ul.products li.product,.woocommerce.columns-3 ul.products li.product{width:30.75%}.woocommerce-page.columns-5 ul.products li.product,.woocommerce.columns-5 ul.products li.product{width:16.95%}.woocommerce-page.columns-6 ul.products li.product,.woocommerce.columns-6 ul.products li.product{width:13.5%}.woocommerce .woocommerce-result-count,.woocommerce-page .woocommerce-result-count{float:left}.woocommerce .woocommerce-ordering,.woocommerce-page .woocommerce-ordering{float:right}.woocommerce .woocommerce-pagination ul.page-numbers::after,.woocommerce .woocommerce-pagination ul.page-numbers::before,.woocommerce-page .woocommerce-pagination ul.page-numbers::after,.woocommerce-page .woocommerce-pagination ul.page-numbers::before{content:' ';display:table}.woocommerce .woocommerce-pagination ul.page-numbers::after,.woocommerce-page .woocommerce-pagination ul.page-numbers::after{clear:both}.woocommerce .woocommerce-pagination ul.page-numbers li,.woocommerce-page .woocommerce-pagination ul.page-numbers li{display:inline-block}.woocommerce #content table.cart img,.woocommerce table.cart img,.woocommerce-page #content table.cart img,.woocommerce-page table.cart img{height:auto}.woocommerce #content table.cart td.actions,.woocommerce table.cart td.actions,.woocommerce-page #content table.cart td.actions,.woocommerce-page table.cart td.actions{text-align:right}.woocommerce #content table.cart td.actions .input-text,.woocommerce table.cart td.actions .input-text,.woocommerce-page #content table.cart td.actions .input-text,.woocommerce-page table.cart td.actions .input-text{width:80px}.woocommerce #content table.cart td.actions .coupon,.woocommerce table.cart td.actions .coupon,.woocommerce-page #content table.cart td.actions .coupon,.woocommerce-page table.cart td.actions .coupon{float:left}.woocommerce #content table.cart td.actions .coupon label,.woocommerce table.cart td.actions .coupon label,.woocommerce-page #content table.cart td.actions .coupon label,.woocommerce-page table.cart td.actions .coupon label{display:none}.woocommerce .cart-collaterals,.woocommerce-page .cart-collaterals{width:100%}.woocommerce .cart-collaterals::after,.woocommerce .cart-collaterals::before,.woocommerce-page .cart-collaterals::after,.woocommerce-page .cart-collaterals::before{content:' ';display:table}.woocommerce .cart-collaterals::after,.woocommerce-page .cart-collaterals::after{clear:both}.woocommerce .cart-collaterals .related,.woocommerce-page .cart-collaterals .related{width:30.75%;float:left}.woocommerce .cart-collaterals .cross-sells,.woocommerce-page .cart-collaterals .cross-sells{width:48%;float:left}.woocommerce .cart-collaterals .cross-sells ul.products,.woocommerce-page .cart-collaterals .cross-sells ul.products{float:none}.woocommerce .cart-collaterals .cross-sells ul.products li,.woocommerce-page .cart-collaterals .cross-sells ul.products li{width:48%}.woocommerce .cart-collaterals .shipping_calculator,.woocommerce-page .cart-collaterals .shipping_calculator{width:48%;clear:right;float:right}.woocommerce .cart-collaterals .shipping_calculator::after,.woocommerce .cart-collaterals .shipping_calculator::before,.woocommerce-page .cart-collaterals .shipping_calculator::after,.woocommerce-page .cart-collaterals .shipping_calculator::before{content:' ';display:table}.woocommerce .cart-collaterals .shipping_calculator::after,.woocommerce-page .cart-collaterals .shipping_calculator::after{clear:both}.woocommerce .cart-collaterals .shipping_calculator .col2-set .col-1,.woocommerce .cart-collaterals .shipping_calculator .col2-set .col-2,.woocommerce-page .cart-collaterals .shipping_calculator .col2-set .col-1,.woocommerce-page .cart-collaterals .shipping_calculator .col2-set .col-2{width:47%}.woocommerce .cart-collaterals .cart_totals,.woocommerce-page .cart-collaterals .cart_totals{float:right;width:48%}.woocommerce ul.cart_list li::after,.woocommerce ul.cart_list li::before,.woocommerce ul.product_list_widget li::after,.woocommerce ul.product_list_widget li::before,.woocommerce-page ul.cart_list li::after,.woocommerce-page ul.cart_list li::before,.woocommerce-page ul.product_list_widget li::after,.woocommerce-page ul.product_list_widget li::before{content:' ';display:table}.woocommerce ul.cart_list li::after,.woocommerce ul.product_list_widget li::after,.woocommerce-page ul.cart_list li::after,.woocommerce-page ul.product_list_widget li::after{clear:both}.woocommerce ul.cart_list li img,.woocommerce ul.product_list_widget li img,.woocommerce-page ul.cart_list li img,.woocommerce-page ul.product_list_widget li img{float:right;height:auto}.woocommerce form .form-row::after,.woocommerce form .form-row::before,.woocommerce-page form .form-row::after,.woocommerce-page form .form-row::before{content:' ';display:table}.woocommerce form .form-row::after,.woocommerce-page form .form-row::after{clear:both}.woocommerce form .form-row label,.woocommerce-page form .form-row label{display:block}.woocommerce form .form-row label.checkbox,.woocommerce-page form .form-row label.checkbox{display:inline}.woocommerce form .form-row select,.woocommerce-page form .form-row select{width:100%}.woocommerce form .form-row .input-text,.woocommerce-page form .form-row .input-text{box-sizing:border-box;width:100%}.woocommerce form .form-row-first,.woocommerce form .form-row-last,.woocommerce-page form .form-row-first,.woocommerce-page form .form-row-last{width:47%;overflow:visible}.woocommerce form .form-row-first,.woocommerce-page form .form-row-first{float:left}.woocommerce form .form-row-last,.woocommerce-page form .form-row-last{float:right}.woocommerce form .form-row-wide,.woocommerce-page form .form-row-wide{clear:both}.woocommerce #payment .form-row select,.woocommerce-page #payment .form-row select{width:auto}.woocommerce #payment .terms,.woocommerce #payment .wc-terms-and-conditions,.woocommerce-page #payment .terms,.woocommerce-page #payment .wc-terms-and-conditions{text-align:left;padding:0 1em 0 0;float:left}.woocommerce #payment #place_order,.woocommerce-page #payment #place_order{float:right}.woocommerce .woocommerce-billing-fields::after,.woocommerce .woocommerce-billing-fields::before,.woocommerce .woocommerce-shipping-fields::after,.woocommerce .woocommerce-shipping-fields::before,.woocommerce-page .woocommerce-billing-fields::after,.woocommerce-page .woocommerce-billing-fields::before,.woocommerce-page .woocommerce-shipping-fields::after,.woocommerce-page .woocommerce-shipping-fields::before{content:' ';display:table}.woocommerce .woocommerce-billing-fields::after,.woocommerce .woocommerce-shipping-fields::after,.woocommerce-page .woocommerce-billing-fields::after,.woocommerce-page .woocommerce-shipping-fields::after{clear:both}.woocommerce .woocommerce-terms-and-conditions,.woocommerce-page .woocommerce-terms-and-conditions{margin-bottom:1.618em;padding:1.618em}.woocommerce .woocommerce-oembed,.woocommerce-page .woocommerce-oembed{position:relative}.woocommerce-account .woocommerce-MyAccount-navigation{float:left;width:30%}.woocommerce-account .woocommerce-MyAccount-content{float:right;width:68%}.woocommerce-page.left-sidebar #content.twentyeleven{width:58.4%;margin:0 7.6%;float:right}.woocommerce-page.right-sidebar #content.twentyeleven{margin:0 7.6%;width:58.4%;float:left}.twentyfourteen .tfwc{padding:12px 10px 0;max-width:474px;margin:0 auto}.twentyfourteen .tfwc .product .entry-summary{padding:0!important;margin:0 0 1.618em!important}.twentyfourteen .tfwc div.product.hentry.has-post-thumbnail{margin-top:0}@media screen and (min-width:673px){.twentyfourteen .tfwc{padding-right:30px;padding-left:30px}}@media screen and (min-width:1040px){.twentyfourteen .tfwc{padding-right:15px;padding-left:15px}}@media screen and (min-width:1110px){.twentyfourteen .tfwc{padding-right:30px;padding-left:30px}}@media screen and (min-width:1218px){.twentyfourteen .tfwc{margin-right:54px}.full-width .twentyfourteen .tfwc{margin-right:auto}}.twentyfifteen .t15wc{padding-left:7.6923%;padding-right:7.6923%;padding-top:7.6923%;margin-bottom:7.6923%;background:#fff;box-shadow:0 0 1px rgba(0,0,0,.15)}.twentyfifteen .t15wc .page-title{margin-left:0}@media screen and (min-width:38.75em){.twentyfifteen .t15wc{margin-right:7.6923%;margin-left:7.6923%;margin-top:8.3333%}}@media screen and (min-width:59.6875em){.twentyfifteen .t15wc{margin-left:8.3333%;margin-right:8.3333%;padding:10%}.single-product .twentyfifteen .entry-summary{padding:0!important}}.twentysixteen .site-main{margin-right:7.6923%;margin-left:7.6923%}.twentysixteen .entry-summary{margin-right:0;margin-left:0}#content .twentysixteen div.product div.images,#content .twentysixteen div.product div.summary{width:46.42857%}@media screen and (min-width:44.375em){.twentysixteen .site-main{margin-right:23.0769%}}@media screen and (min-width:56.875em){.twentysixteen .site-main{margin-right:0;margin-left:0}.no-sidebar .twentysixteen .site-main{margin-right:15%;margin-left:15%}.no-sidebar .twentysixteen .entry-summary{margin-right:0;margin-left:0}}.rtl .woocommerce .col2-set .col-1,.rtl .woocommerce-page .col2-set .col-1{float:right}.rtl .woocommerce .col2-set .col-2,.rtl .woocommerce-page .col2-set .col-2{float:left}

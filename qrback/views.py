@@ -6,7 +6,7 @@ from django.shortcuts import render
 from django.views.generic import DetailView
 
 from qrback import service
-from qrback.models import Company, Entry, FoodCategory, Accounting
+from qrback.models import Company, Entry, FoodCategory, Accounting, Category
 from qrforall import settings
 
 
@@ -15,13 +15,20 @@ def index(request):
     return render(request, template_name='index.html', context=context)
 
 
+def test(request, slug):
+    eid = Entry.objects.filter(company__slug=slug).values('category').distinct()
+    categories = FoodCategory.objects.filter(id__in=eid)
+    context = {'category': Entry.objects.filter(company__slug=slug, category=categories.first())}
+    return render(request, template_name='menu/velidrodnov.html', context=context)
+
+
 def orderDetail(request, *args, **kwargs):
     slug = kwargs['slug']
     table_id = kwargs['table_id']
     company = Company.objects.get(slug=slug)
     accounting = Accounting.get_table_account(company, table_id)
     context = {'accounting': accounting}
-    return render(request, template_name='digitalchooser.html', context=context)
+    return render(request, template_name='digitalorderlist.html', context=context)
 
 
 def download(request, *args, **kwargs):
@@ -60,7 +67,9 @@ def menu(request, *args, **kwargs):
         entry = Entry.objects.get(id=category_id)
 
         account.add_entry(entry, count)
-    categories = FoodCategory.objects.all()
+    eid = Entry.objects.filter(company__slug=slug).values('category').distinct()
+
+    categories = FoodCategory.objects.filter(id__in=eid)
 
     if company.account_type.has_unique_tables:
         if category_id != 0:
@@ -68,7 +77,7 @@ def menu(request, *args, **kwargs):
                           context={'categories': Entry.objects.filter(company_id=company.id, category=category_id),
                                    'company': company, 'table_id': table_id, 'category_id': category_id})
         else:
-            return render(request, template_name='digitalmenu.html',
+            return render(request, template_name='digitalchooser.html',
                           context={'categories': categories, 'company': company, 'table_id': table_id,
                                    'category_id': category_id})
     else:

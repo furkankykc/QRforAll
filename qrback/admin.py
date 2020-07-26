@@ -16,12 +16,13 @@ admin.site.register(Entry)
 class CompanyAdmin(admin.ModelAdmin):
     # fields = ('slug', 'name', 'account_type', 'categories', 'menu')
     prepopulated_fields = {'slug': ('name',)}
-    list_display = ('menuPreview', 'name', 'account_type', 'generate_qr')
+    list_display = ('name', 'account_type', 'generate_qr')
 
-    def menuPreview(self, obj):
-        return mark_safe(
-            '<img with=50 height=50 src={}/>'.format(os.path.join(settings.MEDIA_URL, obj.logo.url))
-        )
+    # def menuPreview(self, obj):
+    #     return mark_safe(
+    #         '<images alt="{}"with=50 height=50 src={}/>'.format(obj.name,
+    #                                                             os.path.join(settings.MEDIA_URL, obj.logo.url))
+    #     )
 
     def generate_qr(self, obj):
         return mark_safe(
