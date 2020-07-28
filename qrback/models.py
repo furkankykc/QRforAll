@@ -74,7 +74,7 @@ class Entry(models.Model):
     price = models.FloatField()
     image = models.ImageField(upload_to=get_image_path, blank=True, null=True)
     category = models.ManyToManyField(FoodCategory)
-    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE,related_name='comp_entry')
 
     @property
     def get_image(self):
