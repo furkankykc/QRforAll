@@ -6,14 +6,21 @@ from django.utils.safestring import mark_safe
 
 from qrback.models import *
 
-admin.site.register(Category)
-admin.site.register(AccountType)
-admin.site.register(FoodGroup)
-
 
 # admin.site.register(Entry)
+class CustomAdminSite(admin.AdminSite):
+    site_title = "Furkankykc"
+    site_header = "Furkankykc"
+    index_title = "Furkan Kıyıkcı"
 
-@admin.register(Entry)
+
+customAdminSite = CustomAdminSite()
+customAdminSite.register(Category)
+customAdminSite.register(AccountType)
+customAdminSite.register(FoodGroup)
+
+
+@admin.register(Entry, site=customAdminSite)
 class EntryAdmin(admin.ModelAdmin):
     list_display = ('name', 'price', 'category', 'company', 'image')
 
@@ -30,6 +37,7 @@ class EntryAdmin(admin.ModelAdmin):
             if db_field.name == "category":
                 kwargs["queryset"] = FoodCategory.objects.filter(owner=request.user)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
     def get_queryset(self, request):
         qs = super(EntryAdmin, self).get_queryset(request)
         if request.user.is_superuser:
@@ -38,7 +46,7 @@ class EntryAdmin(admin.ModelAdmin):
         return qs.filter(company__owner=request.user)
 
 
-@admin.register(FoodCategory)
+@admin.register(FoodCategory,site=customAdminSite)
 class FoodCategoryAdmin(admin.ModelAdmin):
 
     def get_readonly_fields(self, request, obj=None):
@@ -58,7 +66,7 @@ class FoodCategoryAdmin(admin.ModelAdmin):
         return qs.filter(owner=request.user)
 
 
-@admin.register(Company)
+@admin.register(Company,site=customAdminSite)
 class CompanyAdmin(admin.ModelAdmin):
     # fields = ('slug', 'name', 'account_type', 'categories', 'menu')
     prepopulated_fields = {'slug': ('name',)}
