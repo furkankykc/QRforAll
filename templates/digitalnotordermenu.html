@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<!-- Mirrored from velikorodnov.com/html/lemar/menu_v3.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 25 Jul 2020 11:55:54 GMT -->
+<head>
+    <!--================ Basic page needs ================-->
+    <title>{{ company.name|title }}</title>
+    <meta charset="UTF-8">
+    <meta name="author" content="">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <!--================ Mobile specific metas ================-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--================ Favicon ================-->
+    <link rel="shortcut icon" href="{% static 'velikorodnov/images/favicon.ico' %}">
+    <!--================ Google web fonts ================-->
+    <link href="https://fonts.googleapis.com/css?family=Asap:400,400i,500,500i,600,600i,700,700%7CSatisfy&amp;display=swap"
+          rel="stylesheet">
+    <!--================ Vendor CSS ================-->
+    <link rel="stylesheet" href="{% static 'velikorodnov/css/fontawesome-all.min.css' %}">
+    <link href="https://fonts.googleapis.com/css?family=Material+Icons%7CMaterial+Icons+Outlined%7CMaterial+Icons+Two+Tone%7CMaterial+Icons+Round%7CMaterial+Icons+Sharp"
+          rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'velikorodnov/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'velikorodnov/css/linearicons.css' %}">
+    <link rel="stylesheet" href="{% static 'velikorodnov/css/animate.min.css' %}">
+    <link rel="stylesheet" href="{% static 'velikorodnov/css/linearicons.css' %}">
+    <link rel="stylesheet" href=" {% static 'velikorodnov/css/owl.carousel.min.css' %}">
+    <!--================ Theme CSS ================-->
+    <link rel="stylesheet" href="{% static 'velikorodnov/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'velikorodnov/css/responsive.css' %}">
+    <!--================ Vendor JS ================-->
+</head>
+<body>
+<div class="mad-preloader"></div>
+<div id="mad-page-wrapper" class="mad-page-wrapper">
+
+    <!--================ Header ================-->
+    <header id="mad-header" class="mad-header mad-header--transparent">
+        <div class="container">
+            <!--================ Section ================-->
+            <div class="mad-header-section">
+                <div class="mad-header-items item-col-3">
+                    <div class="mad-header-item">
+                        <a href="tel:{{ company.phone }}">
+                            <div><i class="material-icons">phone</i>{{ company.phone|phone2numeric }}</div>
+                        </a>
+                    </div>
+                    <div class="mad-header-item">
+                        <a href="#" class="mad-logo"><img
+                                src="{{ company.logo.url }}" alt=""></a>
+                    </div>
+                    <div class="mad-header-item">
+                        <div class="mad-social-icons">
+                            <ul>
+                                <li>
+                                    <a href="{{ company.facebook }}" target="_blank">
+                                        <i class="fab fa-facebook-f"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ company.instagram }}" target="_blank">
+                                        <i class="fab fa-instagram"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ company.twitter }}" target="_blank">
+                                        <i class="fab fa-tripadvisor"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--================ End of Section ================-->
+    </header>
+    <!--================ End of Header ================-->
+    <!--================ Breadcrumb ================-->
+    <div class="mad-breadcrumb with-bg" data-bg-image-src="{% static 'velikorodnov/images/1920x544_bg3.jpg' %}">
+        <div class="container">
+            <nav class="mad-breadcrumb-path"><span><a
+                    href="#">Vroom Restoraunt</a></span> - <span>Menu</span>
+            </nav>
+            <h1 class="mad-page-title">{{ company.name }}</h1>
+        </div>
+    </div>
+    <!--================ End of Breadcrumb ================-->
+    <div class="mad-content no-pd">
+        <div class="container">
+            <div class="mad-section mad-section--stretched mad-colorizer--scheme-">
+                <div class="mad-colorizer-bg-color">
+                    <div class="with-svg-item svg-right-side"><img
+                            src="{% static 'velikorodnov/images/top_half_right.png' %}" alt=""></div>
+                </div>
+                <!--================ Tabs ================-->
+                <div class="mad-tabs">
+                    <!--================ Tabs Navigation ================-->
+                    <div role="tablist" aria-label="Tabs v1" class="mad-tabs-nav justify-content-center">
+                <span class="mad-active"><a id="tab-1-link" href="#tab-1" role="tab" aria-selected="false"
+                                            aria-controls="tab-1"
+                                            class="mad-tab-link">Food Menu</a>
+                </span>
+                        <span><a id="tab-2-link" href="#tab-2" role="tab" aria-selected="true" aria-controls="tab-2"
+                                 class="mad-tab-link">Drink Menu</a>
+                </span>
+                    </div>
+                    <!--================ End of Tabs Navigation ================-->
+                    <!--================ Tabs Container ================-->
+                    <div class="mad-tabs-container">
+                        <!--================ Tab ================-->
+                        <div id="tab-1" tabindex="0" role="tabpanel" aria-labelledby="tab-1-link" class="mad-tab">
+                            <div class="mad-specs-section">
+                                {% regroup entries by category as entries_by_date %}
+                                {% for entry in entries_by_date %}
+
+                                    {% for item in entry.list %}
+                                        {% if forloop.first or forloop.counter0|add:forloop.parentloop.counter0|divisibleby:5 %}
+
+                                            <div class="{% cycle 'row row-lg-reverse' 'row' %}">
+                                            {% if forloop.counter|add:forloop.parentloop.counter0|divisibleby:2 %}
+                                                <div class="col-lg-6">
+                                                    <figure><img
+                                                            src="{{ item.category.image.url }}"
+                                                            alt=""></figure>
+                                                </div>
+                                            {% endif %}
+                                            <div class="col-lg-6">
+                                            <!-- Our Specifications -->
+                                            <div class="mad-specs">
+                                            <h4>{{ entry.grouper }}</h4>
+                                            <div class="mad-col">
+                                            <!-- Specification item -->
+
+                                        {% endif %}
+
+                                    <div class="mad-spec-item">
+                                        <div class="mad-spec-info">
+                                            <div class="mad-spec-header">
+                                                <div class="mad-spec-title">{{ item.name }}</div>
+                                                <div class="mad-line"></div>
+                                                <div class="mad-spec-price">{{ item.price }}₺</div>
+                                            </div>
+                                            <div class="mad-spec-tags">
+                                                <div class="mad-spec-el">{{ item.detail }}
+                                                </div>
+                                                <a href="#" class="mad-link">vegetarian</a>,
+                                                <a href="#" class="mad-link">vegan</a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {% if forloop.last or forloop.counter|add:forloop.parentloop.counter0|divisibleby:5 %}
+                                        <!-- End of Specification item -->
+
+                                        </div>
+                                        </div>
+                                        <!-- End of Our Specifications -->
+                                        </div>
+                                        {% if forloop.counter0|add:forloop.parentloop.counter0|divisibleby:2 %}
+                                            <div class="col-lg-6">
+                                                <figure><img src="{{ item.category.image.url }}"
+                                                             alt=""></figure>
+                                            </div>
+                                        {% endif %}
+                                        </div>
+
+                                    {% endif %}
+                                    {% endfor %}
+
+
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <!--================ End of Tab ================-->
+                        <!--================ Tab ================-->
+                        <div id="tab-2" tabindex="0" role="tabpanel" aria-labelledby="tab-2-link" class="mad-tab">
+                            <div class="mad-specs-section">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <!-- Our Specifications -->
+                                        <div class="mad-specs">
+                                            <h4>Cocktails</h4>
+                                            <div class="mad-col">
+                                                <!-- Specification item -->
+                                                <div class="mad-spec-item">
+                                                    <div class="mad-spec-info">
+                                                        <div class="mad-spec-header">
+                                                            <div class="mad-spec-title">Birds of Paradise</div>
+                                                            <div class="mad-line"></div>
+                                                            <div class="mad-spec-price">$17.00</div>
+                                                        </div>
+                                                        <div class="mad-spec-tags">
+                                                            <div class="mad-spec-el">mezcal, passion fruit, lime, alpine
+                                                                liqueur, firewater bitters
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- End of Specification item -->
+                                            </div>
+                                            <div class="mad-col">
+                                                <!-- Specification item -->
+                                                <div class="mad-spec-item">
+                                                    <div class="mad-spec-info">
+                                                        <div class="mad-spec-header">
+                                                            <div class="mad-spec-title">Northern Exposure</div>
+                                                            <div class="mad-line"></div>
+                                                            <div class="mad-spec-price">$14.00</div>
+                                                        </div>
+                                                        <div class="mad-spec-tags">
+                                                            <div class="mad-spec-el">rye, amaro montenegro,
+                                                                amaretto,orange bitters
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- End of Specification item -->
+                                            </div>
+                                            <div class="mad-col">
+                                                <!-- Specification item -->
+                                                <div class="mad-spec-item">
+                                                    <div class="mad-spec-info">
+                                                        <div class="mad-spec-header">
+                                                            <div class="mad-spec-title">Sherry Barrel Water Wings</div>
+                                                            <div class="mad-line"></div>
+                                                            <div class="mad-spec-price">$15.00</div>
+                                                        </div>
+                                                        <div class="mad-spec-tags">
+                                                            <div class="mad-spec-el">sherry, apricot liqueur, ancho
+                                                                reyez, lemon, dark rum float
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- End of Specification item -->
+                                            </div>
+                                            <div class="mad-col">
+                                                <!-- Specification item -->
+                                                <div class="mad-spec-item">
+                                                    <div class="mad-spec-info">
+                                                        <div class="mad-spec-header">
+                                                            <div class="mad-spec-title">The Pirate Queen</div>
+                                                            <div class="mad-line"></div>
+                                                            <div class="mad-spec-price">$16.00</div>
+                                                        </div>
+                                                        <div class="mad-spec-tags">
+                                                            <div class="mad-spec-el">light rum, creme de cassis, lemon
+                                                                juice,amargo de chile
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- End of Specification item -->
+                                            </div>
+                                            <div class="mad-col">
+                                                <!-- Specification item -->
+                                                <div class="mad-spec-item">
+                                                    <div class="mad-spec-info">
+                                                        <div class="mad-spec-header">
+                                                            <div class="mad-spec-title">Lilly Pad</div>
+                                                            <div class="mad-line"></div>
+                                                            <div class="mad-spec-price">$11.00</div>
+                                                        </div>
+                                                        <div class="mad-spec-tags">
+                                                            <div class="mad-spec-el">gin, peychauds bitters, soda,
+                                                                matcha syrup
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- End of Specification item -->
+                                            </div>
+                                        </div>
+                                        <!-- End of Our Specifications -->
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <figure><img src="{% static 'velikorodnov/images/688x624_img1.jpg' %}"
+                                                     alt=""></figure>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <figure><img src="{% static 'velikorodnov/images/688x624_img2.jpg' %}"
+                                                     alt=""></figure>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <!-- Our Specifications -->
+                                        <div class="mad-specs">
+                                            <h4>Beer & Cider</h4>
+                                            <div class="mad-col">
+                                                <!-- Specification item -->
+                                                <div class="mad-spec-item">
+                                                    <div class="mad-spec-info">
+                                                        <div class="mad-spec-header">
+                                                            <div class="mad-spec-title">Bavik Pilsner (Draft)</div>
+                                                            <div class="mad-line"></div>
+                                                            <div class="mad-spec-price">$7.00</div>
+                                                        </div>
+                                                        <div class="mad-spec-tags">
+                                                            <div class="mad-spec-el">Belgium</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- End of Specification item -->
+                                            </div>
+                                            <div class="mad-col">
+                                                <!-- Specification item -->
+                                                <div class="mad-spec-item">
+                                                    <div class="mad-spec-info">
+                                                        <div class="mad-spec-header">
+                                                            <div class="mad-spec-title">Greenwood Dry Hopped Cider</div>
+                                                            <div class="mad-line"></div>
+                                                            <div class="mad-spec-price">$9.00</div>
+                                                        </div>
+                                                        <div class="mad-spec-tags">
+                                                            <div class="mad-spec-el">Seattle</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- End of Specification item -->
+                                            </div>
+                                            <div class="mad-col">
+                                                <!-- Specification item -->
+                                                <div class="mad-spec-item">
+                                                    <div class="mad-spec-info">
+                                                        <div class="mad-spec-header">
+                                                            <div class="mad-spec-title">Rainmier Tallboy</div>
+                                                            <div class="mad-line"></div>
+                                                            <div class="mad-spec-price">$8.00</div>
+                                                        </div>
+                                                        <div class="mad-spec-tags">
+                                                            <div class="mad-spec-el">California</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- End of Specification item -->
+                                            </div>
+                                            <div class="mad-col">
+                                                <!-- Specification item -->
+                                                <div class="mad-spec-item">
+                                                    <div class="mad-spec-info">
+                                                        <div class="mad-spec-header">
+                                                            <div class="mad-spec-title">Augustiner Edelstoff</div>
+                                                            <div class="mad-line"></div>
+                                                            <div class="mad-spec-price">$8.00</div>
+                                                        </div>
+                                                        <div class="mad-spec-tags">
+                                                            <div class="mad-spec-el">Germany</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- End of Specification item -->
+                                            </div>
+                                            <div class="mad-col">
+                                                <!-- Specification item -->
+                                                <div class="mad-spec-item">
+                                                    <div class="mad-spec-info">
+                                                        <div class="mad-spec-header">
+                                                            <div class="mad-spec-title">Stiegl Radler</div>
+                                                            <div class="mad-line"></div>
+                                                            <div class="mad-spec-price">$10.00</div>
+                                                        </div>
+                                                        <div class="mad-spec-tags">
+                                                            <div class="mad-spec-el">Austria, 16.9 oz can</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- End of Specification item -->
+                                            </div>
+                                        </div>
+                                        <!-- End of Our Specifications -->
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <!-- Our Specifications -->
+                                        <div class="mad-specs">
+                                            <h4>White Wine Bottles</h4>
+                                            <div class="mad-col">
+                                                <!-- Specification item -->
+                                                <div class="mad-spec-item">
+                                                    <div class="mad-spec-info">
+                                                        <div class="mad-spec-header">
+                                                            <div class="mad-spec-title">Laporte “Sauvignon Blanc Le
+                                                                Bouquet”
+                                                            </div>
+                                                            <div class="mad-line"></div>
+                                                            <div class="mad-spec-price">$17.00/$70.00</div>
+                                                        </div>
+                                                        <div class="mad-spec-tags">
+                                                            <div class="mad-spec-el">17 Loire Valley, FR</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- End of Specification item -->
+                                            </div>
+                                            <div class="mad-col">
+                                                <!-- Specification item -->
+                                                <div class="mad-spec-item">
+                                                    <div class="mad-spec-info">
+                                                        <div class="mad-spec-header">
+                                                            <div class="mad-spec-title">Sohm & Kracher “Lion” Gruner
+                                                                Veltliner
+                                                            </div>
+                                                            <div class="mad-line"></div>
+                                                            <div class="mad-spec-price">$15.00/$60.00</div>
+                                                        </div>
+                                                        <div class="mad-spec-tags">
+                                                            <div class="mad-spec-el">17 Niederösterreich, AT
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- End of Specification item -->
+                                            </div>
+                                            <div class="mad-col">
+                                                <!-- Specification item -->
+                                                <div class="mad-spec-item">
+                                                    <div class="mad-spec-info">
+                                                        <div class="mad-spec-header">
+                                                            <div class="mad-spec-title">Jackalope Cellars “Ses
+                                                                Creatures” White Cabernet Franc
+                                                            </div>
+                                                            <div class="mad-line"></div>
+                                                            <div class="mad-spec-price">$13.00/$49.00</div>
+                                                        </div>
+                                                        <div class="mad-spec-tags">
+                                                            <div class="mad-spec-el">18 Willamette Valley, OR</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- End of Specification item -->
+                                            </div>
+                                            <div class="mad-col">
+                                                <!-- Specification item -->
+                                                <div class="mad-spec-item">
+                                                    <div class="mad-spec-info">
+                                                        <div class="mad-spec-header">
+                                                            <div class="mad-spec-title">Maison Roche De Bellene
+                                                                Chardonnay
+                                                            </div>
+                                                            <div class="mad-line"></div>
+                                                            <div class="mad-spec-price">$17.00/$65.00</div>
+                                                        </div>
+                                                        <div class="mad-spec-tags">
+                                                            <div class="mad-spec-el">14 Burgundy, FR</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- End of Specification item -->
+                                            </div>
+                                            <div class="mad-col">
+                                                <!-- Specification item -->
+                                                <div class="mad-spec-item">
+                                                    <div class="mad-spec-info">
+                                                        <div class="mad-spec-header">
+                                                            <div class="mad-spec-title">Orr Chenin Blanc</div>
+                                                            <div class="mad-line"></div>
+                                                            <div class="mad-spec-price">$15.00/$55.00</div>
+                                                        </div>
+                                                        <div class="mad-spec-tags">
+                                                            <div class="mad-spec-el">17 Columbia Valley, WA</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- End of Specification item -->
+                                            </div>
+                                        </div>
+                                        <!-- End of Our Specifications -->
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <figure><img src="{% static 'velikorodnov/images/688x624_img3.jpg' %}"
+                                                     alt=""></figure>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <figure><img src="{% static 'velikorodnov/images/688x624_img4.jpg' %}"
+                                                     alt=""></figure>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <!-- Our Specifications -->
+                                        <div class="mad-specs">
+                                            <h4>Red Wine Bottles</h4>
+                                            <div class="mad-col">
+                                                <!-- Specification item -->
+                                                <div class="mad-spec-item">
+                                                    <div class="mad-spec-info">
+                                                        <div class="mad-spec-header">
+                                                            <div class="mad-spec-title">Brooks “Runaway Red” Pinot
+                                                                Noir
+                                                            </div>
+                                                            <div class="mad-line"></div>
+                                                            <div class="mad-spec-price">$17.00/$75.00</div>
+                                                        </div>
+                                                        <div class="mad-spec-tags">
+                                                            <div class="mad-spec-el">17 Willamette Valley, OR</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- End of Specification item -->
+                                            </div>
+                                            <div class="mad-col">
+                                                <!-- Specification item -->
+                                                <div class="mad-spec-item">
+                                                    <div class="mad-spec-info">
+                                                        <div class="mad-spec-header">
+                                                            <div class="mad-spec-title">Chateau Le Bergey Bordeaux
+                                                                Rouge
+                                                            </div>
+                                                            <div class="mad-line"></div>
+                                                            <div class="mad-spec-price">$13.00/$46.00</div>
+                                                        </div>
+                                                        <div class="mad-spec-tags">
+                                                            <div class="mad-spec-el">18 Bordeaux, FR
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- End of Specification item -->
+                                            </div>
+                                            <div class="mad-col">
+                                                <!-- Specification item -->
+                                                <div class="mad-spec-item">
+                                                    <div class="mad-spec-info">
+                                                        <div class="mad-spec-header">
+                                                            <div class="mad-spec-title">Domaine Pouillon “Katydid” GSM
+                                                            </div>
+                                                            <div class="mad-line"></div>
+                                                            <div class="mad-spec-price">$15.00/$50.00</div>
+                                                        </div>
+                                                        <div class="mad-spec-tags">
+                                                            <div class="mad-spec-el">14 Horse Heaven Hills, WA</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- End of Specification item -->
+                                            </div>
+                                            <div class="mad-col">
+                                                <!-- Specification item -->
+                                                <div class="mad-spec-item">
+                                                    <div class="mad-spec-info">
+                                                        <div class="mad-spec-header">
+                                                            <div class="mad-spec-title">Alvaro Palacios “Camins Del
+                                                                Priorat”
+                                                            </div>
+                                                            <div class="mad-line"></div>
+                                                            <div class="mad-spec-price">$16.00/$55.00</div>
+                                                        </div>
+                                                        <div class="mad-spec-tags">
+                                                            <div class="mad-spec-el">17 Priorat, SP</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- End of Specification item -->
+                                            </div>
+                                            <div class="mad-col">
+                                                <!-- Specification item -->
+                                                <div class="mad-spec-item">
+                                                    <div class="mad-spec-info">
+                                                        <div class="mad-spec-header">
+                                                            <div class="mad-spec-title">Hightower Cabernet Sauvignon
+                                                            </div>
+                                                            <div class="mad-line"></div>
+                                                            <div class="mad-spec-price">$19.00/$85.00</div>
+                                                        </div>
+                                                        <div class="mad-spec-tags">
+                                                            <div class="mad-spec-el">15 Red Mountain, WA</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- End of Specification item -->
+                                            </div>
+                                        </div>
+                                        <!-- End of Our Specifications -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--================ End of Tab ================-->
+
+                    </div>
+                    <!--================ End of Tabs Container ================-->
+                </div>
+                <!--================ End of Tabs ================-->
+            </div>
+        </div>
+    </div>
+    <!--================ Footer ================-->
+    <footer id="mad-footer" class="mad-footer">
+        <!--================ Footer row ================-->
+        <div class="mad-footer-main">
+            <div class="container">
+                <div class="row hr-size-1">
+                    <div class="col-md-4">
+                        <!--================ Widget ================-->
+                        <section class="mad-widget">
+                            <h4 class="mad-widget-title">We Are Open</h4>
+                            <div class="mad-timetable mad-vr-list">
+                                <ul>
+                                    <li>
+                                        <div class="mad-tt-title">Brunch</div>
+                                        Saturday: 10am – 2pm
+                                    </li>
+                                    <li>
+                                        <div class="mad-tt-title">Dinner</div>
+                                        Monday – Thursday: 5pm – 10pm <br>
+                                        Friday – Saturday: 4pm – 11pm
+                                    </li>
+                                    <li>
+                                        <div class="mad-tt-title">Happy Hour</div>
+                                        Monday – Thursday: 5pm – 6pm <br>
+                                        Friday – Saturday: 2pm – 4pm
+                                    </li>
+                                </ul>
+                            </div>
+                        </section>
+                        <!--================ End of Widget ================-->
+                    </div>
+                    <div class="col-md-4">
+                        <!--================ Widget ================-->
+                        <section class="mad-widget">
+                            <a href="#" class="mad-logo content-element-3"><img
+                                    src="{{ company.logo.url }}" alt=""></a>
+                            <div class="mad-vr-list content-element-5">
+                                <ul>
+                                    <li>
+                                        Pasaj, <br>
+                                        Muğla, TURKEY<br>
+                                        <a href="#" class="mad-dir mad-link">Get Direction</a>
+                                    </li>
+                                    <li>
+                                        {{ company.phone }}<br>
+                                        +90 543 332 55 61<br>
+                                        <a href="mailto:furkanfbr@gmail.com" class="mad-link">{{ company.email }}</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="mad-social-icons style-2 size-big">
+                                <ul class="justify-content-center">
+                                    <li>
+                                        <a href="{{ company.facebook }}" target="_blank">
+                                            <i class="fab fa-facebook-f"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ company.twitter }}" target="_blank">
+                                            <i class="fab fa-twitter"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ company.instagram }}" target="_blank">
+                                            <i class="fab fa-instagram"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ company.tripadvisor }}" target="_blank">
+                                            <i class="fab fa-tripadvisor"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ company.youtube }}" target="_blank">
+                                            <i class="fab fa-youtube"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ company.pinterest }}" target="_blank">
+                                            <i class="fab fa-pinterest-p"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </section>
+                        <!--================ End of Widget ================-->
+                    </div>
+                    <div class="col-md-4">
+                        <!--================ Widget ================-->
+                        <section class="mad-widget">
+                            <h4 class="mad-widget-title">Useful Links</h4>
+                            <div class="mad-vr-list">
+                                <ul>
+                                    <li><a href="#" class="mad-link">Home</a></li>
+                                    <li><a href="#" class="mad-link">About</a></li>
+                                    <li><a href="#" class="mad-link">Menu</a></li>
+                                    <li><a href="#" class="mad-link">Events</a></li>
+                                    <li><a href="#" class="mad-link">Contact</a></li>
+                                    <li><a href="#" class="mad-link">News</a></li>
+                                    <li><a href="#" class="mad-link">Reservation</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                        <!--================ End of Widget ================-->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--================ End of Footer row ================-->
+        <p class="copyrights">Copyright © 2020 <a href="#" class="mad-link link-white">LeMar</a>.
+            All Rights Reserved.</p>
+    </footer>
+    <!--================ End of Footer ================-->
+</div>
+<script src="{% static 'velikorodnov/js/modernizr.js' %}"></script>
+<script src="{% static 'velikorodnov/js/jquery-3.3.1.min.js' %}"></script>
+<script src="{% static 'velikorodnov/js/jquery.easing.1.3.min.js' %}"></script>
+<script src="{% static 'velikorodnov/js/monkeysan.jquery.nav.1.0.min.js' %}"></script>
+<script src="{% static 'velikorodnov/js/handlebars-v4.0.5.min.js' %}"></script>
+<script src="{% static 'velikorodnov/js/jquery.parallax-1.1.3.min.js' %}"></script>
+<script src="{% static 'velikorodnov/js/monkeysan.tabs.min.js' %}"></script>
+<script src="{% static 'velikorodnov/js/owl.carousel.min.js' %}"></script>
+<script src="{% static 'velikorodnov/js/retina.min.js' %}"></script>
+<script src="{% static 'velikorodnov/js/mad.sticky-header-section.min.js' %}"></script>
+<script src="{% static 'velikorodnov/js/brands.min.js' %}"></script>
+<script src="{% static 'velikorodnov/js/mad.app.js' %}"></script>
+</body>
+
+<!-- Mirrored from velikorodnov.com/html/lemar/menu_v3.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 25 Jul 2020 11:55:54 GMT -->
+</html>

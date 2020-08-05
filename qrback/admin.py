@@ -8,8 +8,54 @@ from qrback.models import *
 
 admin.site.register(Category)
 admin.site.register(AccountType)
-admin.site.register(FoodCategory)
-admin.site.register(Entry)
+admin.site.register(FoodGroup)
+
+
+# admin.site.register(Entry)
+
+@admin.register(Entry)
+class EntryAdmin(admin.ModelAdmin):
+    list_display = ('name', 'price', 'category', 'company', 'image')
+
+    # def __init__(self, *args, **kwargs):
+    #     super(EntryAdmin, self).__init__(*args, **kwargs)
+    #     self.fields['category'].queryset = FoodCategory.objects.filter(owner=)  # or something else
+    def get_readonly_fields(self, request, obj=None):
+        if obj and not request.user.is_superuser:  # editing an existing object
+            return self.readonly_fields + ('company',)
+        return self.readonly_fields
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if not request.user.is_superuser:
+            if db_field.name == "category":
+                kwargs["queryset"] = FoodCategory.objects.filter(owner=request.user)
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+    def get_queryset(self, request):
+        qs = super(EntryAdmin, self).get_queryset(request)
+        if request.user.is_superuser:
+            return qs
+        # self.fields['category'].queryset = FoodCategory.objects.filter(owner=request.user)  # or something else
+        return qs.filter(company__owner=request.user)
+
+
+@admin.register(FoodCategory)
+class FoodCategoryAdmin(admin.ModelAdmin):
+
+    def get_readonly_fields(self, request, obj=None):
+        if obj and not request.user.is_superuser:  # editing an existing object
+            return self.readonly_fields + ('owner',)
+        return self.readonly_fields
+
+    def save_model(self, request, obj, form, change):
+        if not request.user.is_superuser:
+            obj.owner = request.user
+        super(FoodCategoryAdmin, self).save_model(request, obj, form, change)
+
+    def get_queryset(self, request):
+        qs = super(FoodCategoryAdmin, self).get_queryset(request)
+        if request.user.is_superuser:
+            return qs
+        return qs.filter(owner=request.user)
 
 
 @admin.register(Company)

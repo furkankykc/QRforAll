@@ -1,5 +1,7 @@
 import os
 
+from django.contrib.auth.models import User
+from django.core.validators import RegexValidator
 from django.db import models
 from django.db.models import Sum, QuerySet, F
 from django.db.models.functions import Coalesce
@@ -25,6 +27,7 @@ class AccountType(models.Model):
     name = models.CharField(max_length=20)
     has_unique_tables = models.BooleanField(default=False)
     has_unique_categories = models.BooleanField(default=False)
+    has_digital_menu = models.BooleanField(default=False)
     count_of_max_table = models.IntegerField(default=50)
     extra_fee = models.FloatField(default=0)
     categories = models.ManyToManyField(Category)
@@ -34,11 +37,24 @@ class AccountType(models.Model):
 
 
 class Company(models.Model):
+    owner = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
     name = models.CharField(max_length=20)
     menu = models.ImageField(upload_to=get_image_path, blank=True, null=True)
     logo = models.ImageField(upload_to=get_image_path, blank=True, null=True)
     slug = models.SlugField(blank=True)
     account_type = models.ForeignKey(AccountType, on_delete=models.CASCADE)
+    phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$',
+                                 message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
+    email_regex = RegexValidator(regex=r'^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$',
+                                 message="Email address must be entered in the format: 'example@mail.com'.")
+    phone = models.CharField(validators=[phone_regex], max_length=17, blank=True)  # validators should be a list
+    instagram = models.URLField(blank=True)
+    facebook = models.URLField(blank=True)
+    twitter = models.URLField(blank=True)
+    tripadvisor = models.URLField(blank=True)
+    youtube = models.URLField(blank=True)
+    pinterest = models.URLField(blank=True)
+    email = models.CharField(validators=[email_regex], max_length=50, blank=True)
 
     def get_menu_num(self):
         return range(1, self.account_type.count_of_max_table)
@@ -57,9 +73,18 @@ class Company(models.Model):
         return self.name
 
 
+class FoodGroup(models.Model):
+    name = models.CharField(max_length=20)
+    owner = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+
 class FoodCategory(models.Model):
     name = models.CharField(max_length=20)
     image = models.ImageField(upload_to=get_image_path, blank=True, null=True)
+    owner = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
+    group = models.ForeignKey(FoodGroup, on_delete=models.SET_NULL, blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -70,15 +95,20 @@ class FoodCategory(models.Model):
 
 
 class Entry(models.Model):
+    class Meta:
+        verbose_name = 'My Food'
+        verbose_name_plural = 'My Foods'
+
     name = models.CharField(max_length=30)
+    detail = models.CharField(max_length=100)
     price = models.FloatField()
     image = models.ImageField(upload_to=get_image_path, blank=True, null=True)
-    category = models.ManyToManyField(FoodCategory)
-    company = models.ForeignKey(Company, on_delete=models.CASCADE,related_name='comp_entry')
+    category = models.ForeignKey(FoodCategory, on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='comp_entry')
 
     @property
     def get_image(self):
-        return self.image or self.category.first().image
+        return self.image or self.category.image
 
     def __str__(self):
         return self.name

@@ -7,7 +7,7 @@ from rest_framework import serializers
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = FoodCategory
-        fields = ['name','image']
+        fields = ['name', 'image']
 
 
 class EntrySerializer(serializers.ModelSerializer):
