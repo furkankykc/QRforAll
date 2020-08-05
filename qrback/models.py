@@ -71,14 +71,15 @@ class FoodCategory(models.Model):
 
 class Entry(models.Model):
     name = models.CharField(max_length=30)
+    detail = models.CharField(max_length=100)
     price = models.FloatField()
     image = models.ImageField(upload_to=get_image_path, blank=True, null=True)
-    category = models.ManyToManyField(FoodCategory)
-    company = models.ForeignKey(Company, on_delete=models.CASCADE,related_name='comp_entry')
+    category = models.ForeignKey(FoodCategory, on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='comp_entry')
 
     @property
     def get_image(self):
-        return self.image or self.category.first().image
+        return self.image or self.category.image
 
     def __str__(self):
         return self.name

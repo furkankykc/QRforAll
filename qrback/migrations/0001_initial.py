@@ -42,4 +42,64 @@ class Migration(migrations.Migration):
                 ('categories', models.ManyToManyField(to='qrback.Category')),
             ],
         ),
+        migrations.CreateModel(
+            name='Account_Entry',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('name', models.CharField(max_length=20)),
+                ('price', models.FloatField(default=0)),
+                ('count', models.IntegerField(default=0)),
+            ],
+        ),
+        migrations.CreateModel(
+            name='FoodCategory',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('name', models.CharField(max_length=20)),
+                ('image', models.ImageField(blank=True, null=True, upload_to=qrback.models.get_image_path)),
+            ],
+        ),
+        migrations.RemoveField(
+            model_name='company',
+            name='categories',
+        ),
+        migrations.AddField(
+            model_name='accounttype',
+            name='categories',
+            field=models.ManyToManyField(to='qrback.Category'),
+        ),
+        migrations.AddField(
+            model_name='company',
+            name='logo',
+            field=models.ImageField(blank=True, null=True, upload_to=qrback.models.get_image_path),
+        ),
+        migrations.AlterField(
+            model_name='company',
+            name='slug',
+            field=models.SlugField(blank=True),
+        ),
+        migrations.CreateModel(
+            name='Entry',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('name', models.CharField(max_length=30)),
+                ('price', models.FloatField()),
+                ('image', models.ImageField(blank=True, null=True, upload_to=qrback.models.get_image_path)),
+                ('category', models.ManyToManyField(to='qrback.FoodCategory')),
+                ('company', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='comp_entry', to='qrback.Company')),
+            ],
+        ),
+        migrations.CreateModel(
+            name='Accounting',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('table', models.IntegerField()),
+                ('first_order_time', models.DateTimeField(auto_now_add=True)),
+                ('closed_at', models.DateTimeField(auto_now=True)),
+                ('is_closed', models.BooleanField(default=False)),
+                ('checked_money', models.FloatField(default=0)),
+                ('company', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='qrback.Company')),
+                ('order_list', models.ManyToManyField(blank=True, to='qrback.Account_Entry')),
+            ],
+        ),
     ]

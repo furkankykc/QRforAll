@@ -68,19 +68,26 @@ def menu(request, *args, **kwargs):
 
         account.add_entry(entry, count)
     eid = Entry.objects.filter(company__slug=slug).values('category').distinct()
-
     categories = FoodCategory.objects.filter(id__in=eid)
+    return render(request, template_name='digitalnotordermenu.html',
+                  context={'company': company, 'entries': Entry.objects.filter(company=company.id)})
 
-    if company.account_type.has_unique_tables:
-        if category_id != 0:
-            return render(request, template_name='digitalmenu.html',
-                          context={'categories': Entry.objects.filter(company_id=company.id, category=category_id),
-                                   'company': company, 'table_id': table_id, 'category_id': category_id})
+    if company.account_type.has_digital_menu:
+        if company.account_type.has_unique_tables:
+            if category_id != 0:
+                return render(request, template_name='digitalmenu.html',
+                              context={'categories': Entry.objects.filter(company_id=company.id, category=category_id),
+                                       'company': company, 'table_id': table_id, 'category_id': category_id})
+            else:
+                return render(request, template_name='digitalchooser.html',
+                              context={'categories': categories, 'company': company, 'table_id': table_id,
+                                       'category_id': category_id})
         else:
-            return render(request, template_name='digitalchooser.html',
-                          context={'categories': categories, 'company': company, 'table_id': table_id,
-                                   'category_id': category_id})
+            return render(request, template_name='digitalnotordermenu.html',
+                          context={'company': company, 'entries': Entry.objects.filter(company=company.id)})
+
     else:
+
         return render(request, template_name='menu.html', context={'company': company})
 
 
