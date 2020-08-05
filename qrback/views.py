@@ -84,7 +84,7 @@ def menu(request, *args, **kwargs):
                                        'category_id': category_id})
         else:
             return render(request, template_name='digitalnotordermenu.html',
-                          context={'company': company, 'entries': Entry.objects.filter(company=company.id)})
+                          context={'company': company, 'entries': Entry.objects.filter(company=company.id).order_by('category__group')})
 
     else:
 

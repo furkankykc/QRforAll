@@ -85,6 +85,7 @@
             <h1 class="mad-page-title">{{ company.name }}</h1>
         </div>
     </div>
+    {% regroup entries by category.group as entries_by_date %}
     <!--================ End of Breadcrumb ================-->
     <div class="mad-content no-pd">
         <div class="container">
@@ -95,83 +96,102 @@
                 </div>
                 <!--================ Tabs ================-->
                 <div class="mad-tabs">
+
                     <!--================ Tabs Navigation ================-->
                     <div role="tablist" aria-label="Tabs v1" class="mad-tabs-nav justify-content-center">
-                <span class="mad-active"><a id="tab-1-link" href="#tab-1" role="tab" aria-selected="false"
-                                            aria-controls="tab-1"
-                                            class="mad-tab-link">Food Menu</a>
-                </span>
-                        <span><a id="tab-2-link" href="#tab-2" role="tab" aria-selected="true" aria-controls="tab-2"
-                                 class="mad-tab-link">Drink Menu</a>
-                </span>
+{#                <span class="mad-active">#}
+{#                    <a id="tab-1-link" href="#tab-1" role="tab" aria-selected="false" aria-controls="tab-1"#}
+{#                       class="mad-tab-link">Food Menu</a>#}
+{#                </span>#}
+                        {% for ent in entries_by_date %}
+
+                            {% if forloop.first %}
+                                <span class="mad-active">
+                            {% else %}
+                                <span>
+                            {% endif %}
+                        <a id="tab-{{ forloop.counter }}-link" href="#tab-{{ forloop.counter }}" role="tab"
+                           aria-selected="true" aria-controls="tab-{{ forloop.counter }}"
+                           class="mad-tab-link">{{ ent.grouper }} Menu</a>
+                        </span>
+                        {% endfor %}
                     </div>
                     <!--================ End of Tabs Navigation ================-->
                     <!--================ Tabs Container ================-->
                     <div class="mad-tabs-container">
                         <!--================ Tab ================-->
-                        <div id="tab-1" tabindex="0" role="tabpanel" aria-labelledby="tab-1-link" class="mad-tab">
-                            <div class="mad-specs-section">
-                                {% regroup entries by category as entries_by_date %}
-                                {% for entry in entries_by_date %}
 
-                                    {% for item in entry.list %}
-                                        {% if forloop.first or forloop.counter0|add:forloop.parentloop.counter0|divisibleby:5 %}
 
-                                            <div class="{% cycle 'row row-lg-reverse' 'row' %}">
-                                            {% if forloop.counter|add:forloop.parentloop.counter0|divisibleby:2 %}
+                        {% for ent in entries_by_date %}
+                            {#                            <h4>{{ ent.grouper }}</h4>#}
+                            {% regroup ent.list by category as entries_by_tab %}
+
+                            <div id="tab-{{ forloop.counter }}" tabindex="0" role="tabpanel"
+                                 aria-labelledby="tab-{{ forloop.counter }}-link" class="mad-tab">
+                                <div class="mad-specs-section">
+
+                                    {% for entry in entries_by_tab %}
+
+                                        {% for item in entry.list %}
+                                            {% if forloop.first or forloop.counter0|add:forloop.parentloop.counter0|divisibleby:5 %}
+
+                                                <div class="{% cycle 'row row-lg-reverse' 'row' %}">
+                                                {% if forloop.counter|add:forloop.parentloop.counter0|divisibleby:2 %}
+                                                    <div class="col-lg-6">
+                                                        <figure><img
+                                                                src="{{ item.category.image.url }}"
+                                                                alt=""></figure>
+                                                    </div>
+                                                {% endif %}
                                                 <div class="col-lg-6">
-                                                    <figure><img
-                                                            src="{{ item.category.image.url }}"
-                                                            alt=""></figure>
+                                                <!-- Our Specifications -->
+                                                <div class="mad-specs">
+                                                <h4>{{ entry.grouper }}</h4>
+                                                <div class="mad-col">
+                                                <!-- Specification item -->
+
+                                            {% endif %}
+
+                                        <div class="mad-spec-item">
+                                            <div class="mad-spec-info">
+                                                <div class="mad-spec-header">
+                                                    <div class="mad-spec-title">{{ item.name }}</div>
+                                                    <div class="mad-line"></div>
+                                                    <div class="mad-spec-price">{{ item.price }}₺</div>
+                                                </div>
+                                                <div class="mad-spec-tags">
+                                                    <div class="mad-spec-el">{{ item.detail }}
+                                                    </div>
+                                                    <a href="#" class="mad-link">vegetarian</a>,
+                                                    <a href="#" class="mad-link">vegan</a>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {% if forloop.last or forloop.counter|add:forloop.parentloop.counter0|divisibleby:5 %}
+                                            <!-- End of Specification item -->
+
+                                            </div>
+                                            </div>
+                                            <!-- End of Our Specifications -->
+                                            </div>
+                                            {% if forloop.counter0|add:forloop.parentloop.counter0|divisibleby:2 %}
+                                                <div class="col-lg-6">
+                                                    <figure><img src="{{ item.category.image.url }}"
+                                                                 alt=""></figure>
                                                 </div>
                                             {% endif %}
-                                            <div class="col-lg-6">
-                                            <!-- Our Specifications -->
-                                            <div class="mad-specs">
-                                            <h4>{{ entry.grouper }}</h4>
-                                            <div class="mad-col">
-                                            <!-- Specification item -->
+                                            </div>
 
                                         {% endif %}
+                                        {% endfor %}
 
-                                    <div class="mad-spec-item">
-                                        <div class="mad-spec-info">
-                                            <div class="mad-spec-header">
-                                                <div class="mad-spec-title">{{ item.name }}</div>
-                                                <div class="mad-line"></div>
-                                                <div class="mad-spec-price">{{ item.price }}₺</div>
-                                            </div>
-                                            <div class="mad-spec-tags">
-                                                <div class="mad-spec-el">{{ item.detail }}
-                                                </div>
-                                                <a href="#" class="mad-link">vegetarian</a>,
-                                                <a href="#" class="mad-link">vegan</a>
-                                            </div>
-                                        </div>
-                                    </div>
 
-                                    {% if forloop.last or forloop.counter|add:forloop.parentloop.counter0|divisibleby:5 %}
-                                        <!-- End of Specification item -->
-
-                                        </div>
-                                        </div>
-                                        <!-- End of Our Specifications -->
-                                        </div>
-                                        {% if forloop.counter0|add:forloop.parentloop.counter0|divisibleby:2 %}
-                                            <div class="col-lg-6">
-                                                <figure><img src="{{ item.category.image.url }}"
-                                                             alt=""></figure>
-                                            </div>
-                                        {% endif %}
-                                        </div>
-
-                                    {% endif %}
                                     {% endfor %}
 
-
-                                {% endfor %}
+                                </div>
                             </div>
-                        </div>
+                        {% endfor %}
                         <!--================ End of Tab ================-->
                         <!--================ Tab ================-->
                         <div id="tab-2" tabindex="0" role="tabpanel" aria-labelledby="tab-2-link" class="mad-tab">
