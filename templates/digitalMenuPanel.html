@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script
+            src="https://code.jquery.com/jquery-3.5.1.js"
+            integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+            crossorigin="anonymous"></script>
+</head>
+{#<script>#}
+{#    setInterval(function () {#}
+{##}
+{#        $("#data").load("/panel/coffee-break/");#}
+{##}
+{#    }, 5000); // This reloads the <div> every 1 second.#}
+{#</script>#}
+<body>
+<div class="content" id="data">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    {% for orders in accounting %}
+        <h1>Masa : {{ orders.table }}</h1>
+        {% for order in orders.order_list.all %}
+                <h4> {{ order.count }}x {{ order.name }} = {%widthratio order.price 1 order.count %}₺
+                {% if order.is_checked %}
+{#                    <i class="material-icons">check_box</i>#}
+
+                    <a href="{% url 'delete' order.id %}"> <i class="material-icons">delete_forever</i>
+                    </a>
+                {% else %}
+                    <a href="{% url 'check' order.id %}"> <i class="material-icons">check_box_outline_blank</i>
+                    </a>
+                    <i class="material-icons">delete_outline</i>
+                {% endif %}
+            </h4>
+        {% endfor %}
+        <h5>Total: {{ orders.get_borrow }}₺</h5>
+
+    {% endfor %}
+
+</div>
+</body>
+</html>

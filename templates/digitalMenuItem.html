@@ -91,41 +91,42 @@
 {% if category_id == 0 %}
     <h2>{{ company.name }}</h2>
 {% endif %}
+<script>
+    function myFcheckunction() {
+        $confirm("Sipariş verme işleminizi onaylıyormusunuz?", "#26a69a ")
+            .then(() => {
+                $toast("Siparişiniz verildi", "#26a69a");
+            })
+    }
+</script>
 
 {% for category in categories %}
-    <script>
-        function myFunction() {
-            $confirm("Sipariş verme işleminizi onaylıyormusunuz?", "#26a69a ")
-                .then(() => {
-                    $toast("Siparişiniz verildi", "#26a69a");
-                })
-        }
-    </script>
 
     <div class="card">
         <div class="card-image waves-effect waves-block waves-light">
 
 
-                <img class="activator" src="{{ category.get_image.url }}">
+            <img class="activator" src="{{ category.get_image.url }}">
 
         </div>
-            <div class="card-reveal">
-                <span class="card-title grey-text text-darken-4">{{ category.name }}<i class="material-icons right">close</i></span>
-                <p>Sipariş ver butonuna tıklayarak {{ category.name }} siparişi verebilirsiniz</p>
-                <div class="row1">
-                    <form action="{% url 'order' company.slug table_id category_id %}" method="post">
-                        {% csrf_token %}
-                        <input prefix="Adet" class="quantity" id="count" min="0" name="count"
-                               value="1" type="number">
-                        <input class="btn waves-effect waves-light" type="submit" value="Sipariş ver">
-                    </form>
-                </div>
+        <div class="card-reveal">
+            <span class="card-title grey-text text-darken-4">{{ category.name }}<i
+                    class="material-icons right">close</i></span>
+            <p>Sipariş ver butonuna tıklayarak {{ category.name }} siparişi verebilirsiniz</p>
+            <div class="row1">
+                <form action="{% url 'order' company.slug category_id table_id %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="chosen_entry" id="entry_id" value="{{ category.id }}">
+                    <input prefix="Adet" class="quantity" id="count" min="0" name="count"
+                           value="1" type="number">
+                    <input class="btn waves-effect waves-light" type="submit" value="Sipariş ver">
+                </form>
             </div>
-            <div class="card-content">
-                <span class="card-title activator grey-text text-darken-4">{{ category.name }}<i
+        </div>
+        <div class="card-content">
+                <span class="card-title activator grey-text text-darken-4">{{ category.name }}|{{ category.id }}<i
                         class="right">{{ category.price|floatformat }}₺</i></span>
-            </div>
-
+        </div>
 
 
     </div>

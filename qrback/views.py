@@ -2,17 +2,38 @@ import os
 from shutil import make_archive
 
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import DetailView
 
 from qrback import service
-from qrback.models import Company, Entry, FoodCategory, Accounting, Category
+from qrback.models import Company, Entry, FoodCategory, Accounting, Category, Account_Entry
 from qrforall import settings
 
 
 def index(request):
     context = {}
     return render(request, template_name='index.html', context=context)
+
+
+def check_accounting_entry(request, order_id):
+    Account_Entry.objects.get(id=order_id).checked()
+
+    return redirect('panel', 'coffee-break')
+
+
+def delete_accounting_entry(request, order_id):
+    Account_Entry.objects.get(id=order_id).delete()
+
+    return redirect('panel', 'coffee-break')
+
+
+def panel(request, slug):
+    # accounting_all = Accounting.objects.filter(company__slug=slug, is_closed=False)
+    # Account_Entry.objects.filter(id_in)
+    context = {
+        # .filter(order_list__count__gt=0)
+        'accounting': Accounting.objects.filter(company__slug=slug, is_closed=False).order_by('-last_order_time')}
+    return render(request, template_name='digitalMenuPanel.html', context=context)
 
 
 def test(request, slug):
@@ -28,7 +49,7 @@ def orderDetail(request, *args, **kwargs):
     company = Company.objects.get(slug=slug)
     accounting = Accounting.get_table_account(company, table_id)
     context = {'accounting': accounting}
-    return render(request, template_name='digitalorderlist.html', context=context)
+    return render(request, template_name='digitalAccounting.html', context=context)
 
 
 def download(request, *args, **kwargs):
@@ -62,36 +83,40 @@ def menu(request, *args, **kwargs):
     company = Company.objects.get(slug__exact=slug)
     if request.method == "POST":
         count = int(request.POST['count'])
+        item_id = int(request.POST['chosen_entry'])
 
         account = Accounting.get_table_account(company, table_id)
-        entry = Entry.objects.get(id=category_id)
+        entry = Entry.objects.get(id=item_id)
 
         account.add_entry(entry, count)
+        print(entry, '|', count, '| table=', table_id)
+        return redirect("category", slug, category_id, table_id)
     eid = Entry.objects.filter(company__slug=slug).values('category').distinct()
     categories = FoodCategory.objects.filter(id__in=eid)
-    # return render(request, template_name='digitalnotordermenu.html',
+    # return render(request, template_name='digitalMenuNotOrder.html',
     #               context={'company': company, 'entries': Entry.objects.filter(company=company.id)})
 
     if company.account_type.has_digital_menu:
         if company.account_type.has_unique_tables:
             if category_id != 0:
-                return render(request, template_name='digitalmenu.html',
+                return render(request, template_name='digitalMenuItem.html',
                               context={'categories': Entry.objects.filter(company_id=company.id, category=category_id),
                                        'company': company, 'table_id': table_id, 'category_id': category_id})
             else:
-                return render(request, template_name='digitalchooser.html',
+                return render(request, template_name='digitalMenuCategory.html',
                               context={'categories': categories, 'company': company, 'table_id': table_id,
                                        'category_id': category_id})
         else:
-            return render(request, template_name='digitalnotordermenu.html',
-                          context={'company': company, 'entries': Entry.objects.filter(company=company.id).order_by('category__group')})
+            return render(request, template_name='digitalMenuNotOrder.html',
+                          context={'company': company,
+                                   'entries': Entry.objects.filter(company=company.id).order_by('category__group')})
 
     else:
 
-        return render(request, template_name='menu.html', context={'company': company})
+        return render(request, template_name='paperMenu.html', context={'company': company})
 
 
 class MenuDetailView(DetailView):
     model = Company
-    template_name = 'menu.html'
+    template_name = 'paperMenu.html'
     context_object_name = 'company'

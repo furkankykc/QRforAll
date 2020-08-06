@@ -80,6 +80,7 @@ class FoodGroup(models.Model):
     def __str__(self):
         return self.name
 
+
 class FoodCategory(models.Model):
     name = models.CharField(max_length=20)
     image = models.ImageField(upload_to=get_image_path, blank=True, null=True)
@@ -118,12 +119,19 @@ class Account_Entry(models.Model):
     name = models.CharField(max_length=20)
     price = models.FloatField(default=0)
     count = models.IntegerField(default=0)
+    is_checked = models.BooleanField(default=False)
+    time = models.DateTimeField(auto_now_add=True)
+
+    def checked(self):
+        self.is_checked = True
+        self.save()
 
 
 class Accounting(models.Model):
     table = models.IntegerField()
     order_list = models.ManyToManyField(Account_Entry, blank=True)
-    first_order_time = models.DateTimeField(auto_now_add=True)
+    first_order_time = models.DateTimeField(auto_now=True)
+    last_order_time = models.DateTimeField(auto_now_add=True)
     closed_at = models.DateTimeField(auto_now=True)
     is_closed = models.BooleanField(default=False)
     checked_money = models.FloatField(default=0)
@@ -165,3 +173,6 @@ class Accounting(models.Model):
             ses_table.company = company
             ses_table.save()
         return ses_table
+
+    def __str__(self):
+        return 'Accounting table {}'.format(self.table)
