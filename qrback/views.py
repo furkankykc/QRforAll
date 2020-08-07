@@ -1,6 +1,7 @@
 import os
 from shutil import make_archive
 
+from django.db.models import Count
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views.generic import DetailView
@@ -15,24 +16,32 @@ def index(request):
     return render(request, template_name='index.html', context=context)
 
 
-def check_accounting_entry(request, order_id):
+def check_accounting_entry(request, slug, order_id):
     Account_Entry.objects.get(id=order_id).checked()
 
-    return redirect('panel', 'coffee-break')
+    return redirect('panel', slug)
 
 
-def delete_accounting_entry(request, order_id):
+def delete_accounting_entry(request, slug, order_id):
     Account_Entry.objects.get(id=order_id).delete()
 
-    return redirect('panel', 'coffee-break')
+    return redirect('panel', slug)
+
+
+def check_out_table(request, slug, table_id: int):
+    company = Company.objects.get(slug=slug)
+    Accounting.get_table_account(company, table_id).withdraw()
+    return redirect('panel', slug)
 
 
 def panel(request, slug):
     # accounting_all = Accounting.objects.filter(company__slug=slug, is_closed=False)
     # Account_Entry.objects.filter(id_in)
+    acc = Accounting.objects.filter(company__slug=slug, is_closed=False)
+    acc = acc.annotate(num_participants=Count('order_list')).filter(num_participants__gt=0).order_by('-last_order_time')
     context = {
         # .filter(order_list__count__gt=0)
-        'accounting': Accounting.objects.filter(company__slug=slug, is_closed=False).order_by('-last_order_time')}
+        'accounting': acc}
     return render(request, template_name='digitalMenuPanel.html', context=context)
 
 

@@ -10,6 +10,7 @@ from django.utils.text import slugify
 
 from qrback import service
 from qrforall import settings
+from django.utils import timezone
 
 
 def get_image_path(instance, filename):
@@ -120,48 +121,60 @@ class Account_Entry(models.Model):
     price = models.FloatField(default=0)
     count = models.IntegerField(default=0)
     is_checked = models.BooleanField(default=False)
-    time = models.DateTimeField(auto_now_add=True)
+    time = models.DateTimeField(default=timezone.now)
+    is_delivered = models.BooleanField(default=False)
 
     def checked(self):
-        self.is_checked = True
+        if self.is_checked:
+            self.is_delivered = True
+        else:
+            self.is_checked = True
         self.save()
 
 
 class Accounting(models.Model):
     table = models.IntegerField()
     order_list = models.ManyToManyField(Account_Entry, blank=True)
-    first_order_time = models.DateTimeField(auto_now=True)
-    last_order_time = models.DateTimeField(auto_now_add=True)
-    closed_at = models.DateTimeField(auto_now=True)
+    first_order_time = models.DateTimeField(default=timezone.now)
+    last_order_time = models.DateTimeField(auto_now=True)
+    closed_at = models.DateTimeField()
     is_closed = models.BooleanField(default=False)
     checked_money = models.FloatField(default=0)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
     def add_entry(self, entry: Entry, count: int = 1):
-        obj, _ = self.order_list.get_or_create(name=entry.name)
+        obj, _ = self.order_list.get_or_create(name=entry.name, is_checked=False)
+
         obj.price = entry.price
         obj.name = entry.name
         obj.count = obj.count + count
         obj.save()
+        self.last_order_time = timezone.now()
+        self.save()
 
     def withdraw(self, money=0):
         borrowed = 0
         if money != 0:
             borrowed = self.get_borrow() - money
         else:
-            self.checked_money = self.get_borrow()
+            self.checked_money = self.get_borrow
+            self.save()
         if borrowed == 0:
             self.is_closed = True
+            self.closed_at = timezone.now()
+            self.save()
 
     @property
     def get_borrow(self):
         sum = 0
         if self.order_list.exists():
-            sum = list(self.order_list.all().annotate(total_spent=Sum(
-                F('price') *
-                F('count'),
-                output_field=models.FloatField()
-            )).aggregate(Sum('total_spent')).values())[0] - self.checked_money
+            order_list = self.order_list.filter( is_checked=True)
+            if order_list.count() > 0:
+                sum = list(order_list.annotate(total_spent=Sum(
+                    F('price') *
+                    F('count'),
+                    output_field=models.FloatField()
+                )).aggregate(Sum('total_spent')).values())[0] - self.checked_money
         return sum
 
     @classmethod

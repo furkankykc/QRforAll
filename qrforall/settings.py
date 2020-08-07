@@ -36,7 +36,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'qrback',
-    'rest_framework'
+    'rest_framework',
+    'django.contrib.humanize',
 ]
 
 MIDDLEWARE = [
