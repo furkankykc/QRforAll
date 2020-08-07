@@ -123,7 +123,10 @@ class Account_Entry(models.Model):
     is_checked = models.BooleanField(default=False)
     time = models.DateTimeField(default=timezone.now)
     is_delivered = models.BooleanField(default=False)
-
+    is_deleted = models.BooleanField(default=False)
+    def delete_order(self):
+        self.is_deleted=True
+        self.save()
     def checked(self):
         if self.is_checked:
             self.is_delivered = True
@@ -168,7 +171,7 @@ class Accounting(models.Model):
     def get_borrow(self):
         sum = 0
         if self.order_list.exists():
-            order_list = self.order_list.filter( is_checked=True)
+            order_list = self.order_list.filter(is_deleted=False, is_checked=True)
             if order_list.count() > 0:
                 sum = list(order_list.annotate(total_spent=Sum(
                     F('price') *

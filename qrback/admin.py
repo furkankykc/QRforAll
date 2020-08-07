@@ -9,9 +9,22 @@ from qrback.models import *
 
 # admin.site.register(Entry)
 class CustomAdminSite(admin.AdminSite):
-    site_title = "Furkankykc"
-    site_header = "Furkankykc"
-    index_title = "Furkan Kıyıkcı"
+    site_title = "Karekod Yazılımı"
+    site_header = "Karekod Yazılımı"
+    index_title = "Karekod Yazılımı"
+
+    def each_context(self, request):
+        context = super().each_context(request)
+        if request.user.is_authenticated:
+            try:
+                comp = Company.objects.get(owner=request.user).slug
+            except Company.DoesNotExist:
+                comp = ""
+
+            context.update({
+                'slug': comp
+            })
+        return context
 
 
 customAdminSite = CustomAdminSite()
@@ -46,7 +59,7 @@ class EntryAdmin(admin.ModelAdmin):
         return qs.filter(company__owner=request.user)
 
 
-@admin.register(FoodCategory,site=customAdminSite)
+@admin.register(FoodCategory, site=customAdminSite)
 class FoodCategoryAdmin(admin.ModelAdmin):
 
     def get_readonly_fields(self, request, obj=None):
@@ -66,7 +79,7 @@ class FoodCategoryAdmin(admin.ModelAdmin):
         return qs.filter(owner=request.user)
 
 
-@admin.register(Company,site=customAdminSite)
+@admin.register(Company, site=customAdminSite)
 class CompanyAdmin(admin.ModelAdmin):
     # fields = ('slug', 'name', 'account_type', 'categories', 'menu')
     prepopulated_fields = {'slug': ('name',)}
@@ -92,7 +105,7 @@ class CompanyAdmin(admin.ModelAdmin):
         form.base_fields['slug'].help_text = "This field is not editable"
         return form
 
-    change_form_template = "admin/change_form.html"
+    change_form_template = "admin/base_site.html"
 
     def response_change(self, request, obj):
         if "_make-unique" in request.POST:

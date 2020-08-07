@@ -1,6 +1,7 @@
 import os
 from shutil import make_archive
 
+from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -13,7 +14,7 @@ from qrforall import settings
 
 def index(request):
     context = {}
-    return render(request, template_name='index.html', context=context)
+    return render(request, template_name='test/index.html', context=context)
 
 
 def check_accounting_entry(request, slug, order_id):
@@ -23,7 +24,13 @@ def check_accounting_entry(request, slug, order_id):
 
 
 def delete_accounting_entry(request, slug, order_id):
-    Account_Entry.objects.get(id=order_id).delete()
+    Account_Entry.objects.get(id=order_id).delete_order()
+
+    return redirect('panel', slug)
+
+
+def remove_accounting_entry(request, slug, order_id):
+    Account_Entry.objects.get(id=order_id).delete_order()
 
     return redirect('panel', slug)
 
@@ -34,14 +41,25 @@ def check_out_table(request, slug, table_id: int):
     return redirect('panel', slug)
 
 
+@login_required
 def panel(request, slug):
     # accounting_all = Accounting.objects.filter(company__slug=slug, is_closed=False)
     # Account_Entry.objects.filter(id_in)
+    try:
+        _slug = Company.objects.get(owner=request.user).slug
+    except Company.DoesNotExist:
+        _slug = "-1"
+    if not request.user.is_superuser:
+        if _slug != slug:
+            return redirect('index')
+
     acc = Accounting.objects.filter(company__slug=slug, is_closed=False)
     acc = acc.annotate(num_participants=Count('order_list')).filter(num_participants__gt=0).order_by('-last_order_time')
     context = {
         # .filter(order_list__count__gt=0)
-        'accounting': acc}
+        'accounting': acc,
+        'company': Company.objects.get(slug=slug)
+    }
     return render(request, template_name='digitalMenuPanel.html', context=context)
 
 

@@ -2,13 +2,33 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>{{ company.name }}| Panel</title>
 
     <script
             src="https://code.jquery.com/jquery-3.5.1.js"
             integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
             crossorigin="anonymous"></script>
 </head>
+<style>
+    i:hover {
+        border: 1px solid;
+        padding: 0px;
+    {#padding: 10px;#}{#box-shadow: 5px 10px;#}
+    }
+
+    i {
+        padding: 1px;
+    }
+
+    .chck:hover::before {
+        content: "check_box";
+    }
+
+    .chck::before {
+        content: "check_box_out_blank";
+    }
+
+</style>
 {#<script>#}
 {#    setInterval(function () {#}
 {##}
@@ -16,30 +36,87 @@
 {##}
 {#    }, 5000); // This reloads the <div> every 1 second.#}
 {#</script>#}
+{% load humanize %}
 <body>
 <div class="content" id="data">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+            integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"
+            integrity="sha384-1CmrxMRARb6aLqgBO7yyAxTOQE2AKb9GfXnEo760AUcUmFx3ibVJJAzGytlQcNXd"
+            crossorigin="anonymous"></script>
+    <div class="container">
+        <div class="card-deck">
+            {% for orders in accounting %}
 
-    {% for orders in accounting %}
-        <h1>Masa : {{ orders.table }}</h1>
-        {% for order in orders.order_list.all %}
-                <h4> {{ order.count }}x {{ order.name }} = {%widthratio order.price 1 order.count %}₺
-                {% if order.is_checked %}
-{#                    <i class="material-icons">check_box</i>#}
+                <div class="card mb-4" style="width: 18rem;min-width: 18rem;">
+                    <div class="card-header" style="text-align:center;font-size: 2rem">
+                        Masa {{ orders.table }}
+                    </div>
+                    <ul class="list-group list-group-flush ">
+                        {% for order in orders.order_list.all reversed %}
+                            {% if not order.is_deleted %}
+                                <li class="list-group-item"
+                                    style="{% if order.is_delivered %}text-decoration: line-through;{% endif %} min-height: 51px"> {{ order.count }}x {{ order.name }}({{ order.price|floatformat }}₺)
+                                    = {% widthratio order.price 1 order.count %}₺
+                                    {% if order.is_checked %}
+                                        {% if order.is_delivered %}
+                                            <a style="float:right;line-height: 1px;color: darkred"
+                                               href="{% url 'remove' orders.company.slug order.id %}">
+                                                <i class="material-icons">delete_outline</i>
+                                            </a>
+                                        {% else %}
+                                            <a style="float:right;line-height: 1px;color: darkgreen"
+                                               href="{% url 'check' orders.company.slug order.id %}">
+                                                <i class="material-icons">check_box_outline_blank</i>
+                                            </a>
+                                        {% endif %}
+                                    {% else %}
 
-                    <a href="{% url 'delete' order.id %}"> <i class="material-icons">delete_forever</i>
-                    </a>
-                {% else %}
-                    <a href="{% url 'check' order.id %}"> <i class="material-icons">check_box_outline_blank</i>
-                    </a>
-                    <i class="material-icons">delete_outline</i>
-                {% endif %}
-            </h4>
-        {% endfor %}
-        <h5>Total: {{ orders.get_borrow }}₺</h5>
+                                        <a href="{% url 'delete' orders.company.slug  order.id %}"
+                                           style="float:right;line-height: 1px;color: darkred">
 
-    {% endfor %}
+                                            <i class="material-icons">close</i>
 
+                                        </a>
+                                        <a href="{% url 'check' orders.company.slug  order.id %}"
+                                           style="float:right;line-height: 1px;color: darkgreen">
+                                            <i class="material-icons">check</i>
+
+                                        </a>
+                                    {% endif %}
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                    <div class="card-footer" style="margin-top: auto;font-size: 1rem;text-align: left">
+
+                        <div>
+                            <small class="text-muted"
+                                   style="line-height: 1px;">
+                                Total: {{ orders.get_borrow|floatformat }}₺</small>
+
+
+                        </div>
+                        <div>
+                            <small class="text-muted"
+                                   style="line-height: 1px;padding-right:10px;">{{ orders.last_order_time|naturaltime }}</small>
+                            <a href="{% url 'check-out-table' orders.company.slug orders.table %}"
+                               style="float:right;line-height: 1px;color: darkred">
+                                <i class="material-icons">library_add_check</i>
+
+                            </a>
+                        </div>
+
+                    </div>
+
+                </div>
+            {% endfor %}
+
+        </div>
+    </div>
 </div>
 </body>
 </html>
