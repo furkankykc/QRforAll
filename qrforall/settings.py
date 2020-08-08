@@ -24,7 +24,7 @@ SECRET_KEY = 'dwqb^(a=(m&9xttk(bmp6)5mge8&i%zd3+$$49=b$2ovy1(@u-'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.1.10', '127.0.0.1', '0.0.0.0']
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'qrback',
     'rest_framework',
     'django.contrib.humanize',
+
 ]
 
 MIDDLEWARE = [

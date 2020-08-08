@@ -4,23 +4,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Title</title>
     {% load static %}
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-          rel="stylesheet">
-
-    <!-- Compiled and minified CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-
-    <!-- Compiled and minified JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <script src="{% static 'js/asteroid-alert.js' %}"></script>
-    <script src="{% static 'js/custom.js' %}"></script>
-    <!-- Compiled and minified CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-
-    <!-- Compiled and minified JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-
-
+    {% block css %}
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+              rel="stylesheet">
+        <!-- Compiled and minified CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+        <!-- Compiled and minified JavaScript -->
+        <script src="{% static 'js/asteroid-alert.js' %}"></script>
+        <script src="{% static 'js/custom.js' %}"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script src="{% static 'js/bootstrap-input-spinner.js' %}"></script>
+    {% endblock %}
 </head>
 
 <style>
@@ -74,10 +69,34 @@
     {#.card{#}
     {#    margin-bottom: 0.1px;#}
     {#    margin-top: 0.1px;#}
+    .npt-group {
+        display: flex;
+        width: initial;
+    }
 
+    .btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        display: flex;
+        width: initial;
+    }
+
+    .waves-button-input {
+        color: white;
+    }
 </style>
 <body>
-
+                <!-- Modal Structure -->
+                <div id="modal1" class="modal">
+                    <div class="modal-content">
+                        <h4>Modal Header</h4>
+                        <p>A bunch of text</p>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
+                    </div>
+                </div>
 <div class="fixed-action-btn" style="size: 1px">
     <a class="btn-floating btn-large red" style="size: 1px">
         <i class="large material-icons">mode_edit</i>
@@ -91,36 +110,32 @@
 {% if category_id == 0 %}
     <h2>{{ company.name }}</h2>
 {% endif %}
-<script>
-    function myFcheckunction() {
-        $confirm("Sipariş verme işleminizi onaylıyormusunuz?", "#26a69a ")
-            .then(() => {
-                $toast("Siparişiniz verildi", "#26a69a");
-            })
-    }
-</script>
 
+
+{#todo: sipariş onayı eklenecek#}
 {% for category in categories %}
 
     <div class="card">
         <div class="card-image waves-effect waves-block waves-light">
-
-
             <img class="activator" src="{{ category.get_image.url }}">
-
         </div>
         <div class="card-reveal">
             <span class="card-title grey-text text-darken-4">{{ category.name }}<i
                     class="material-icons right">close</i></span>
             <p>Sipariş ver butonuna tıklayarak {{ category.name }} siparişi verebilirsiniz</p>
-            <div class="row1">
+            <div class="row1" style="padding-top: inherit">
                 <form action="{% url 'order' company.slug category_id table_id %}" method="post">
                     {% csrf_token %}
                     <input type="hidden" name="chosen_entry" id="entry_id" value="{{ category.id }}">
-                    <input prefix="Adet" class="quantity" id="count" min="0" name="count"
-                           value="1" type="number">
-                    <input class="btn waves-effect waves-light" type="submit" value="Sipariş ver">
+                    <input class="quantity" type="number" name="count" value="1" min="1" max="10" step="1"/>
+
+                    <input onclick="" class="btn waves-effect waves-light" type="submit" value="Sipariş ver">
                 </form>
+
+                <!-- Modal Trigger -->
+                <a class="waves-effect waves-light btn modal-trigger" href="#modal1">Modal</a>
+
+
             </div>
         </div>
         <div class="card-content">
@@ -134,4 +149,16 @@
     {#    <a href="{% url 'category' company.slug category.id table_id %}">{{ category.name }}</a>#}
 {% endfor %}
 </body>
+<script>
+    function myFcheckunction() {
+        $confirm("Sipariş verme işleminizi onaylıyormusunuz?", "#26a69a ")
+            .then(() => {
+                $toast("Siparişiniz verildi", "#26a69a");
+            })
+    }
+
+    $("input[type='number']").inputSpinner()
+
+</script>
+
 </html>

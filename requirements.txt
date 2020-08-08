@@ -5,6 +5,8 @@ blinker==1.4
 Brlapi==0.7.0
 certifi==2019.11.28
 chardet==3.0.4
+Click==7.0
+colorama==0.4.3
 command-not-found==0.3
 cryptography==2.8
 cupshelpers==1.0
@@ -13,6 +15,7 @@ defer==1.0.6
 distro==1.4.0
 distro-info===0.23ubuntu1
 Django==3.0.8
+django-bstrap-modals==1.0.1
 djangorestframework==3.11.0
 duplicity==0.8.12.0
 entrypoints==0.3

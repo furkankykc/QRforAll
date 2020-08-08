@@ -140,7 +140,7 @@ class Accounting(models.Model):
     order_list = models.ManyToManyField(Account_Entry, blank=True)
     first_order_time = models.DateTimeField(default=timezone.now)
     last_order_time = models.DateTimeField(auto_now=True)
-    closed_at = models.DateTimeField()
+    closed_at = models.DateTimeField(auto_now_add=True)
     is_closed = models.BooleanField(default=False)
     checked_money = models.FloatField(default=0)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)

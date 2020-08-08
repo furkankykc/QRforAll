@@ -6,86 +6,87 @@
     {% load static %}
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
           rel="stylesheet">
-
-    <!-- Compiled and minified CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-    <link rel="stylesheet" href="{% static 'css/menu.css' %}">
-    <!-- Compiled and minified JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <script src="{% static 'js/asteroid-alert.js' %}"></script>
-    <script src="{% static 'js/custom.js' %}"></script>
-    <link rel="stylesheet" href="{% static 'velikorodnov/css/fontawesome-all.min.css' %}">
-    <link href="https://fonts.googleapis.com/css?family=Material+Icons%7CMaterial+Icons+Outlined%7CMaterial+Icons+Two+Tone%7CMaterial+Icons+Round%7CMaterial+Icons+Sharp"
-          rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Asap:400,400i,500,500i,600,600i,700,700%7CSatisfy&amp;display=swap"
-          rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'velikorodnov/css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'velikorodnov/css/linearicons.css' %}">
-    <link rel="stylesheet" href="{% static 'velikorodnov/css/animate.min.css' %}">
-    <link rel="stylesheet" href="{% static 'velikorodnov/css/linearicons.css' %}">
-    <link rel="stylesheet" href=" {% static 'velikorodnov/css/owl.carousel.min.css' %}">
-    <!--================ Theme CSS ================-->
-    <link rel="stylesheet" href="{% static 'velikorodnov/css/style.css' %}">
-    <link rel="stylesheet" href="{% static 'velikorodnov/css/responsive.css' %}">
-
+    {% block css %}
+        <!-- Compiled and minified CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+        <link rel="stylesheet" href="{% static 'css/menu.css' %}">
+        <!-- Compiled and minified JavaScript -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+        <script src="{% static 'js/asteroid-alert.js' %}"></script>
+        <script src="{% static 'js/custom.js' %}"></script>
+        <link rel="stylesheet" href="{% static 'velikorodnov/css/fontawesome-all.min.css' %}">
+        <link href="https://fonts.googleapis.com/css?family=Material+Icons%7CMaterial+Icons+Outlined%7CMaterial+Icons+Two+Tone%7CMaterial+Icons+Round%7CMaterial+Icons+Sharp"
+              rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Asap:400,400i,500,500i,600,600i,700,700%7CSatisfy&amp;display=swap"
+              rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'velikorodnov/css/bootstrap.min.css' %}">
+        <link rel="stylesheet" href="{% static 'velikorodnov/css/linearicons.css' %}">
+        <link rel="stylesheet" href="{% static 'velikorodnov/css/animate.min.css' %}">
+        <link rel="stylesheet" href="{% static 'velikorodnov/css/linearicons.css' %}">
+        <link rel="stylesheet" href=" {% static 'velikorodnov/css/owl.carousel.min.css' %}">
+        <!--================ Theme CSS ================-->
+        <link rel="stylesheet" href="{% static 'velikorodnov/css/style.css' %}">
+        <link rel="stylesheet" href="{% static 'velikorodnov/css/responsive.css' %}">
+    {% endblock %}
 </head>
+{% block extra_style %}
+    <style>
+        html, body {
+            margin: 0;
+            height: 100%;
+        }
 
-<style>
-    html, body {
-        margin: 0;
-        height: 100%;
-    }
+        img {
+            display: block;
+            width: 100%;
+            object-fit: cover;
+        }
 
-    img {
-        display: block;
-        width: 100%;
-        object-fit: cover;
-    }
+        nav {
+            box-shadow: none;
+        }
 
-    nav {
-        box-shadow: none;
-    }
+        * {
+            box-sizing: border-box;
+        }
 
-    * {
-        box-sizing: border-box;
-    }
-
-    .centered {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-    }
+        .centered {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
 
 
-    .overlay {
-        position: absolute;
-        bottom: 0;
-        background: rgb(0, 0, 0);
-        background: rgba(0, 0, 0, 0.5); /* Black see-through */
-        color: #f1f1f1;
-        width: 100%;
-        transition: .5s ease;
-        opacity: 0;
-        color: white;
-        font-size: 20px;
-        padding: 20px;
-        text-align: center;
-    }
+        .overlay {
+            position: absolute;
+            bottom: 0;
+            background: rgb(0, 0, 0);
+            background: rgba(0, 0, 0, 0.5); /* Black see-through */
+            color: #f1f1f1;
+            width: 100%;
+            transition: .5s ease;
+            opacity: 0;
+            color: white;
+            font-size: 20px;
+            padding: 20px;
+            text-align: center;
+        }
 
-    .container:hover .overlay {
-        opacity: 1;
-    }
+        .container:hover .overlay {
+            opacity: 1;
+        }
 
-    a.btn-floating {
-        font-size: 10px;
-    }
+        a.btn-floating {
+            font-size: 10px;
+        }
 
-    {#.card{#}
-    {#    margin-bottom: 0.1px;#}
-    {#    margin-top: 0.1px;#}
+        {#.card{#}
+        {#    margin-bottom: 0.1px;#}
+        {#    margin-top: 0.1px;#}
 
-</style>
+    </style>
+{% endblock %}
 <body>
 
 <div class="fixed-action-btn" style="size: 1px">
@@ -140,42 +141,37 @@
             <h1 class="mad-page-title">{{ company.name }} </h1>
         </div>
     </div>
-
-
-    <div class="cards-list">
-        {% for category in categories %}
-
-            <a href="{% url 'category' company.slug category.id table_id %}">
-
-                <div class="card 1">
-                    <div class="card_image">
-
-                        <img src="{{ category.get_image.url }}"/>
+    {% block content %}
+        <div class="cards-list">
+            {% for category in categories %}
+                <a href="{% url 'category' company.slug category.id table_id %}">
+                    <div class="card 1">
+                        <div class="card_image">
+                            <img src="{{ category.get_image.url }}"/>
+                        </div>
+                        <div class="card_title title-white">
+                            <p>{{ category.name }}</p>
+                        </div>
                     </div>
-                    <div class="card_title title-white">
-                        <p>{{ category.name }}</p>
-                    </div>
-                </div>
-            </a>
+                </a>
+            {% endfor %}
+        </div>
+    {% endblock %}
 
-
-
-            {#    <a href="{% url 'category' company.slug category.id table_id %}">{{ category.name }}</a>#}
-        {% endfor %}
-
-    </div>
 </div>
-<script src="{% static 'velikorodnov/js/modernizr.js' %}"></script>
-<script src="{% static 'velikorodnov/js/jquery-3.3.1.min.js' %}"></script>
-<script src="{% static 'velikorodnov/js/jquery.easing.1.3.min.js' %}"></script>
-<script src="{% static 'velikorodnov/js/monkeysan.jquery.nav.1.0.min.js' %}"></script>
-<script src="{% static 'velikorodnov/js/handlebars-v4.0.5.min.js' %}"></script>
-<script src="{% static 'velikorodnov/js/jquery.parallax-1.1.3.min.js' %}"></script>
-<script src="{% static 'velikorodnov/js/monkeysan.tabs.min.js' %}"></script>
-<script src="{% static 'velikorodnov/js/owl.carousel.min.js' %}"></script>
-<script src="{% static 'velikorodnov/js/retina.min.js' %}"></script>
-<script src="{% static 'velikorodnov/js/mad.sticky-header-section.min.js' %}"></script>
-<script src="{% static 'velikorodnov/js/brands.min.js' %}"></script>
-<script src="{% static 'velikorodnov/js/mad.app.js' %}"></script>
+{% block js %}
+    <script src="{% static 'velikorodnov/js/modernizr.js' %}"></script>
+    <script src="{% static 'velikorodnov/js/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'velikorodnov/js/jquery.easing.1.3.min.js' %}"></script>
+    <script src="{% static 'velikorodnov/js/monkeysan.jquery.nav.1.0.min.js' %}"></script>
+    <script src="{% static 'velikorodnov/js/handlebars-v4.0.5.min.js' %}"></script>
+    <script src="{% static 'velikorodnov/js/jquery.parallax-1.1.3.min.js' %}"></script>
+    <script src="{% static 'velikorodnov/js/monkeysan.tabs.min.js' %}"></script>
+    <script src="{% static 'velikorodnov/js/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'velikorodnov/js/retina.min.js' %}"></script>
+    <script src="{% static 'velikorodnov/js/mad.sticky-header-section.min.js' %}"></script>
+    <script src="{% static 'velikorodnov/js/brands.min.js' %}"></script>
+    <script src="{% static 'velikorodnov/js/mad.app.js' %}"></script>
+{% endblock %}
 </body>
 </html>
