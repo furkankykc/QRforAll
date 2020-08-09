@@ -38,7 +38,7 @@ class AccountType(models.Model):
 
 
 class Company(models.Model):
-    owner = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     name = models.CharField(max_length=20)
     menu = models.ImageField(upload_to=get_image_path, blank=True, null=True)
     logo = models.ImageField(upload_to=get_image_path, blank=True, null=True)
@@ -48,14 +48,14 @@ class Company(models.Model):
                                  message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
     email_regex = RegexValidator(regex=r'^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$',
                                  message="Email address must be entered in the format: 'example@mail.com'.")
-    phone = models.CharField(validators=[phone_regex], max_length=17, blank=True)  # validators should be a list
+    phone = models.CharField(validators=[phone_regex], max_length=17, blank=True,null=True)  # validators should be a list
+    email = models.CharField(validators=[email_regex], max_length=50, blank=True)
     instagram = models.URLField(blank=True)
     facebook = models.URLField(blank=True)
     twitter = models.URLField(blank=True)
     tripadvisor = models.URLField(blank=True)
     youtube = models.URLField(blank=True)
     pinterest = models.URLField(blank=True)
-    email = models.CharField(validators=[email_regex], max_length=50, blank=True)
 
     def get_menu_num(self):
         return range(1, self.account_type.count_of_max_table)
@@ -124,9 +124,11 @@ class Account_Entry(models.Model):
     time = models.DateTimeField(default=timezone.now)
     is_delivered = models.BooleanField(default=False)
     is_deleted = models.BooleanField(default=False)
+
     def delete_order(self):
-        self.is_deleted=True
+        self.is_deleted = True
         self.save()
+
     def checked(self):
         if self.is_checked:
             self.is_delivered = True

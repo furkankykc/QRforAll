@@ -105,7 +105,7 @@ class CompanyAdmin(admin.ModelAdmin):
         form.base_fields['slug'].help_text = "This field is not editable"
         return form
 
-    change_form_template = "admin/base_site.html"
+    # change_form_template = "admin/base_site.html"
 
     def response_change(self, request, obj):
         if "_make-unique" in request.POST:
