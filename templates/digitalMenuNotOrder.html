@@ -133,25 +133,26 @@
                                     {% for entry in entries_by_tab %}
 
                                         {% for item in entry.list %}
-                                            {% if forloop.first or forloop.counter0|add:forloop.parentloop.counter0|divisibleby:5 %}
+                                            {% if forloop.first %}
 
-                                                <div class="{% cycle 'row row-lg-reverse' 'row' %}">
-                                                {% if forloop.counter|add:forloop.parentloop.counter0|divisibleby:2 %}
+                                                <div class="{% cycle 'row row-lg-reverse' 'row' as val %}">
+                                                {% ifequal val 'row row-lg-reverse' %}
                                                     <div class="col-lg-6">
                                                         <figure><img
                                                                 src="{{ item.category.image.url }}"
-                                                                alt=""></figure>
+                                                                alt="{{ forloop.counter|add:forloop.parentloop.counter0 }}">
+                                                        </figure>
                                                     </div>
-                                                {% endif %}
+                                                {% endifequal %}
                                                 <div class="col-lg-6">
                                                 <!-- Our Specifications -->
                                                 <div class="mad-specs">
                                                 <h4>{{ entry.grouper }}</h4>
-                                                <div class="mad-col">
+
                                                 <!-- Specification item -->
 
                                             {% endif %}
-
+    <div class="mad-col">
                                         <div class="mad-spec-item">
                                             <div class="mad-spec-info">
                                                 <div class="mad-spec-header">
@@ -162,25 +163,28 @@
                                                 <div class="mad-spec-tags">
                                                     <div class="mad-spec-el">{{ item.detail }}
                                                     </div>
-                                                    <a href="#" class="mad-link">vegetarian</a>,
-                                                    <a href="#" class="mad-link">vegan</a>
+                                                    {#                                                    <a href="#" class="mad-link">vegetarian</a>,#}
+                                                    {#                                                    <a href="#" class="mad-link">vegan</a>#}
                                                 </div>
                                             </div>
                                         </div>
+    </div>
 
-                                        {% if forloop.last or forloop.counter|add:forloop.parentloop.counter0|divisibleby:5 %}
+                                        {% if forloop.last %}
                                             <!-- End of Specification item -->
 
                                             </div>
-                                            </div>
                                             <!-- End of Our Specifications -->
                                             </div>
-                                            {% if forloop.counter0|add:forloop.parentloop.counter0|divisibleby:2 %}
+                                            {% ifequal val 'row' %}
+
                                                 <div class="col-lg-6">
                                                     <figure><img src="{{ item.category.image.url }}"
-                                                                 alt=""></figure>
+                                                                 alt="{{ forloop.counter0|add:forloop.parentloop.counter0 }}">
+                                                    </figure>
                                                 </div>
-                                            {% endif %}
+
+                                            {% endifequal %}
                                             </div>
 
                                         {% endif %}

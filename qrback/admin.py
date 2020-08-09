@@ -63,7 +63,7 @@ class EntryAdmin(admin.ModelAdmin):
 
 @admin.register(FoodCategory, site=customAdminSite)
 class FoodCategoryAdmin(admin.ModelAdmin):
-
+    list_display = ('name','group')
     def get_readonly_fields(self, request, obj=None):
         if obj and not request.user.is_superuser:  # editing an existing object
             return self.readonly_fields + ('owner',)

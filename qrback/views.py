@@ -136,7 +136,7 @@ def menu(request, *args, **kwargs):
         else:
             return render(request, template_name='digitalMenuNotOrder.html',
                           context={'company': company,
-                                   'entries': Entry.objects.filter(company=company.id).order_by('category__group')})
+                                   'entries': Entry.objects.filter(company=company.id).order_by('category__group','category__name')})
 
     else:
 
