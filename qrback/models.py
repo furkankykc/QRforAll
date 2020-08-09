@@ -48,7 +48,8 @@ class Company(models.Model):
                                  message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
     email_regex = RegexValidator(regex=r'^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$',
                                  message="Email address must be entered in the format: 'example@mail.com'.")
-    phone = models.CharField(validators=[phone_regex], max_length=17, blank=True,null=True)  # validators should be a list
+    phone = models.CharField(validators=[phone_regex], max_length=17, blank=True,
+                             null=True)  # validators should be a list
     email = models.CharField(validators=[email_regex], max_length=50, blank=True)
     instagram = models.URLField(blank=True)
     facebook = models.URLField(blank=True)
@@ -145,7 +146,16 @@ class Accounting(models.Model):
     closed_at = models.DateTimeField(auto_now_add=True)
     is_closed = models.BooleanField(default=False)
     checked_money = models.FloatField(default=0)
+    requesting_garson = models.BooleanField(default=False)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
+
+    def request_garson(self):
+        self.requesting_garson = True
+        self.save()
+
+    def garson_has_requested(self):
+        self.requesting_garson = False
+        self.save()
 
     def add_entry(self, entry: Entry, count: int = 1):
         obj, _ = self.order_list.get_or_create(name=entry.name, is_checked=False)

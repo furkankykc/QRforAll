@@ -98,18 +98,27 @@
                                    style="line-height: 1px;">
                                 Total: {{ orders.get_borrow|floatformat }}₺</small>
 
-
                         </div>
+
+
                         <div>
+
                             <small class="text-muted"
-                                   style="line-height: 1px;padding-right:10px;">{{ orders.last_order_time|naturaltime }}</small>
+                                   style="floatline-height: 1px;padding-right:10px;">{{ orders.last_order_time|naturaltime }}</small>
                             <a href="{% url 'check-out-table' orders.company.slug orders.table %}"
                                style="float:right;line-height: 1px;color: darkred">
                                 <i class="material-icons">library_add_check</i>
 
                             </a>
                         </div>
+                            {% if orders.requesting_garson %}
+                                <a href="{% url 'check_garson' orders.company.slug orders.table %}"
+                                   style="float:left;color: darkgreen">
+                                    Garson istiyoruz
+                                    <i class="material-icons">check</i>
 
+                                </a>
+                            {% endif %}
                     </div>
 
                 </div>

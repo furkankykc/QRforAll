@@ -3,13 +3,14 @@ from shutil import make_archive
 
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import render, redirect
 from django.views.generic import DetailView
 
 from qrback import service
 from qrback.models import Company, Entry, FoodCategory, Accounting, Category, Account_Entry
 from qrforall import settings
+from django.db.models import Q
 
 
 def index(request):
@@ -41,6 +42,18 @@ def check_out_table(request, slug, table_id: int):
     return redirect('panel', slug)
 
 
+def request_garson(request, slug, table_id: int):
+    company = Company.objects.get(slug=slug)
+    Accounting.get_table_account(company, table_id).request_garson()
+    return redirect('menu-detail', slug, table_id)
+
+
+def garson_is_on_the_way(request, slug, table_id: int):
+    company = Company.objects.get(slug=slug)
+    Accounting.get_table_account(company, table_id).garson_has_requested()
+    return redirect('panel', slug)
+
+
 @login_required
 def panel(request, slug):
     # accounting_all = Accounting.objects.filter(company__slug=slug, is_closed=False)
@@ -54,7 +67,8 @@ def panel(request, slug):
             return redirect('index')
 
     acc = Accounting.objects.filter(company__slug=slug, is_closed=False)
-    acc = acc.annotate(num_participants=Count('order_list')).filter(num_participants__gt=0).order_by('-last_order_time')
+    acc = acc.annotate(num_participants=Count('order_list')).filter(
+        Q(num_participants__gt=0) | Q(requesting_garson=True)).order_by('-last_order_time')
     context = {
         # .filter(order_list__count__gt=0)
         'accounting': acc,
@@ -107,7 +121,10 @@ def menu(request, *args, **kwargs):
         table_id = kwargs['table_id']
     if 'category_id' in kwargs:
         category_id = kwargs['category_id']
+
     company = Company.objects.get(slug__exact=slug)
+    max_table_count = company.account_type.count_of_max_table
+
     if request.method == "POST":
         count = int(request.POST['count'])
         item_id = int(request.POST['chosen_entry'])
@@ -130,13 +147,18 @@ def menu(request, *args, **kwargs):
                               context={'categories': Entry.objects.filter(company_id=company.id, category=category_id),
                                        'company': company, 'table_id': table_id, 'category_id': category_id})
             else:
+
+                if table_id == 0 or table_id > max_table_count:
+                    return HttpResponseNotFound("Masa sayısı aşıldı")
+
                 return render(request, template_name='digitalMenuCategory.html',
                               context={'categories': categories, 'company': company, 'table_id': table_id,
                                        'category_id': category_id})
         else:
             return render(request, template_name='digitalMenuNotOrder.html',
                           context={'company': company,
-                                   'entries': Entry.objects.filter(company=company.id).order_by('category__group','category__name')})
+                                   'entries': Entry.objects.filter(company=company.id).order_by('category__group',
+                                                                                                'category__name')})
 
     else:
 
