@@ -3,6 +3,7 @@ from django.http import HttpResponseRedirect
 from django.template.defaultfilters import title
 from django.urls import reverse
 from django.utils.safestring import mark_safe
+from django.contrib.auth.models import Group
 
 from qrback.models import *
 
@@ -30,7 +31,8 @@ class CustomAdminSite(admin.AdminSite):
 customAdminSite = CustomAdminSite()
 customAdminSite.register(Category)
 customAdminSite.register(AccountType)
-customAdminSite.register(FoodGroup)
+customAdminSite.register(User)
+customAdminSite.register(Group)
 
 
 @admin.register(Entry, site=customAdminSite)
@@ -72,8 +74,40 @@ class FoodCategoryAdmin(admin.ModelAdmin):
             obj.owner = request.user
         super(FoodCategoryAdmin, self).save_model(request, obj, form, change)
 
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if not request.user.is_superuser:
+            if db_field.name == "owner":
+                kwargs["queryset"] = User.objects.filter(id=request.user.id)
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
     def get_queryset(self, request):
         qs = super(FoodCategoryAdmin, self).get_queryset(request)
+        if request.user.is_superuser:
+            return qs
+        return qs.filter(owner=request.user)
+
+
+@admin.register(FoodGroup, site=customAdminSite)
+class FoodGroupAdmin(admin.ModelAdmin):
+
+    def get_readonly_fields(self, request, obj=None):
+        if obj and not request.user.is_superuser:  # editing an existing object
+            return self.readonly_fields + ('owner',)
+        return self.readonly_fields
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if not request.user.is_superuser:
+            if db_field.name == "owner":
+                kwargs["queryset"] = User.objects.filter(id=request.user.id)
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+    def save_model(self, request, obj, form, change):
+        if not request.user.is_superuser:
+            obj.owner = request.user
+        super(FoodGroupAdmin, self).save_model(request, obj, form, change)
+
+    def get_queryset(self, request):
+        qs = super(FoodGroupAdmin, self).get_queryset(request)
         if request.user.is_superuser:
             return qs
         return qs.filter(owner=request.user)
