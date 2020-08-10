@@ -23,19 +23,20 @@ def create_qr(obj, num=None):
     url.png(os.path.join(settings.MEDIA_ROOT, imgname), scale=scale)
     im = Image.open(os.path.join(settings.MEDIA_ROOT, imgname))
     im = im.convert("RGBA")
-    logo = Image.open(obj.logo.path)
-    logo_size = 41 * 0.3 * scale
-    width, height = im.size
-    # Calculate xmin, ymin, xmax, ymax to put the logo
-    xmin = ymin = int((width / 2) - (logo_size / 2))
-    xmax = ymax = int((width / 2) + (logo_size / 2))
-    # resize the logo as calculated
-    logo = logo.resize((xmax - xmin, ymax - ymin))
-    if num == None:
-        im.paste(Image.new('RGB', logo.size, (255, 255, 255)), (xmin, ymin, xmax, ymax))
-        im.paste(logo, (xmin, ymin, xmax, ymax), logo)
-    else:
-        im.paste(generate_num(num, logo.size), (xmin, ymin, xmax, ymax))
+    if obj.logo and hasattr(obj.logo, 'url'):
+        logo = Image.open(obj.logo.path)
+        logo_size = 41 * 0.3 * scale
+        width, height = im.size
+        # Calculate xmin, ymin, xmax, ymax to put the logo
+        xmin = ymin = int((width / 2) - (logo_size / 2))
+        xmax = ymax = int((width / 2) + (logo_size / 2))
+        # resize the logo as calculated
+        logo = logo.resize((xmax - xmin, ymax - ymin))
+        if num == None:
+            im.paste(Image.new('RGB', logo.size, (255, 255, 255)), (xmin, ymin, xmax, ymax))
+            im.paste(logo, (xmin, ymin, xmax, ymax), logo)
+        else:
+            im.paste(generate_num(num, logo.size), (xmin, ymin, xmax, ymax))
 
     # im.paste(generate_num(1), (xmin, ymin, xmax, ymax))
     # im.show()
