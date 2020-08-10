@@ -13,11 +13,13 @@ def create_qr(obj, num=None):
     if not os.path.exists(os.path.join(settings.MEDIA_ROOT, 'photos', str(obj.slug))):
         os.makedirs(os.path.join(settings.MEDIA_ROOT, 'photos', str(obj.slug)))
     if num == None:
-        url = pyqrcode.QRCode("http://127.0.0.1" + reverse('menu-detail', args=(obj.slug,)), error='H')
+        url = pyqrcode.QRCode(
+            "{}://{}".format(settings.HTTP_METHOD, settings.SITE_URL) + reverse('menu-detail', args=(obj.slug,)),
+            error='H')
 
     else:
         imgname = os.path.join('photos', str(obj.slug), '{}-{}.png'.format(obj.slug, num))
-        url = pyqrcode.QRCode("http://127.0.0.1" + reverse('menu-detail', args=(obj.slug, num)), error='H')
+        url = pyqrcode.QRCode("{}://{}".format(settings.HTTP_METHOD, settings.SITE_URL) + reverse('menu-detail', args=(obj.slug, num)), error='H')
 
     scale = 10
     url.png(os.path.join(settings.MEDIA_ROOT, imgname), scale=scale)
@@ -55,5 +57,3 @@ def generate_num(num, size):
     d.text(((size[0] - w) / 2, (size[1] - h - h / 2) / 2), str(num), font=font, fill="black")
 
     return img
-
-

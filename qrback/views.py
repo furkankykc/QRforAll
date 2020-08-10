@@ -78,10 +78,13 @@ def panel(request, slug):
 
 
 def test(request, slug):
-    eid = Entry.objects.filter(company__slug=slug).values('category').distinct()
-    categories = FoodCategory.objects.filter(id__in=eid)
-    context = {'category': Entry.objects.filter(company__slug=slug, category=categories.first())}
-    return render(request, template_name='menu/velidrodnov.html', context=context)
+
+    company = Company.objects.get(slug__exact=slug)
+
+    return render(request, template_name='digitalMenuNotOrder.html',
+                  context={'company': company,
+                           'entries': Entry.objects.filter(company=company.id).order_by('category__group',
+                                                                                        'category__name')})
 
 
 def orderDetail(request, *args, **kwargs):
