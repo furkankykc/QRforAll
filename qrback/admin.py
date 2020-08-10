@@ -51,6 +51,8 @@ class EntryAdmin(admin.ModelAdmin):
         if not request.user.is_superuser:
             if db_field.name == "category":
                 kwargs["queryset"] = FoodCategory.objects.filter(owner=request.user)
+            if db_field.name == "company":
+                kwargs["queryset"] = Company.objects.filter(owner=request.user)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
     def get_queryset(self, request):
@@ -63,7 +65,8 @@ class EntryAdmin(admin.ModelAdmin):
 
 @admin.register(FoodCategory, site=customAdminSite)
 class FoodCategoryAdmin(admin.ModelAdmin):
-    list_display = ('name','group')
+    list_display = ('name', 'group')
+
     def get_readonly_fields(self, request, obj=None):
         if obj and not request.user.is_superuser:  # editing an existing object
             return self.readonly_fields + ('owner',)

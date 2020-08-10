@@ -76,18 +76,26 @@ class Company(models.Model):
 
 
 class FoodGroup(models.Model):
-    name = models.CharField(max_length=20)
-    owner = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
+    class Meta:
+        verbose_name = 'Menü Grubu'
+        verbose_name_plural = 'Menü Grupları'
+
+    name = models.CharField(max_length=20, verbose_name='isim')
+    owner = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='sahip')
 
     def __str__(self):
         return self.name
 
 
 class FoodCategory(models.Model):
-    name = models.CharField(max_length=20)
-    image = models.ImageField(upload_to=get_image_path, blank=True, null=True)
-    owner = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
-    group = models.ForeignKey(FoodGroup, on_delete=models.SET_NULL, blank=True, null=True)
+    class Meta:
+        verbose_name = 'Menü Kategorisi'
+        verbose_name_plural = 'Menü Kategorileri'
+
+    name = models.CharField(max_length=20, verbose_name='isim')
+    image = models.ImageField(upload_to=get_image_path, blank=True, null=True, verbose_name='kapak fotoğrafı')
+    owner = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='sahip')
+    group = models.ForeignKey(FoodGroup, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='grup')
 
     def __str__(self):
         return self.name
@@ -99,15 +107,15 @@ class FoodCategory(models.Model):
 
 class Entry(models.Model):
     class Meta:
-        verbose_name = 'My Food'
-        verbose_name_plural = 'My Foods'
+        verbose_name = 'Menü Ürünü'
+        verbose_name_plural = 'Menü Ürünleri'
 
-    name = models.CharField(max_length=30)
-    detail = models.CharField(max_length=100)
-    price = models.FloatField()
-    image = models.ImageField(upload_to=get_image_path, blank=True, null=True)
+    name = models.CharField(max_length=30, verbose_name='isim')
+    detail = models.CharField(max_length=100, verbose_name='ürün detayı')
+    price = models.FloatField(verbose_name='fiyat')
+    image = models.ImageField(upload_to=get_image_path, blank=True, null=True,verbose_name='kapak fotoğrafı')
     category = models.ForeignKey(FoodCategory, on_delete=models.CASCADE)
-    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='comp_entry')
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='comp_entry',verbose_name='sirket')
 
     @property
     def get_image(self):

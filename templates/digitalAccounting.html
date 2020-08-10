@@ -1,8 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% load static %}
     <meta charset="UTF-8">
-    <title>test</title>
+    <meta name="viewport"
+          content="width=device-width,
+                       initial-scale=1"/>
+    <title>{{ accounting.company }} | Hesap Defteri </title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
             integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
@@ -10,30 +17,68 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"
             integrity="sha384-1CmrxMRARb6aLqgBO7yyAxTOQE2AKb9GfXnEo760AUcUmFx3ibVJJAzGytlQcNXd"
             crossorigin="anonymous"></script>
+    <script src="{% static 'js/custom.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
 </head>
 <body>
 <style>
-    .card {
-    . . .;
-        max-width: 1200px;
-        min-width: 1200px;
-        margin: 0 auto;
+    a.btn-floating {
+        font-size: 10px;
     }
 
 </style>
+<div class="fixed-action-btn" style="size: 1px">
+    <a class="btn-floating btn-large red" style="size: 1px">
+        <i class="large material-icons">mode_edit</i>
+    </a>
+    <ul>
+        <li><a class="btn-floating red"
+                {#               href="{% url 'order-detail' accounting.company.slug accounting.table %}">Hesap</a></li>#}
+               href="{% url 'menu-detail' accounting.company.slug accounting.table %}">Menu</a></li>
 
-
-        <div class="card w-100" style="width: 18rem;min-width: max-content">
-            <div class="card-header">
-                {{ accounting.company }}
-            </div>
-            <ul class="list-group list-group-flush">
-                {% for order_list in accounting.order_list.all %}
-                    <li class="list-group-item">{{ order_list.count }}x {{ order_list.name }}({{ order_list.price }}₺)</li>
-                {% endfor %}
-            </ul>
+        {#        <li><a class="btn-floating yellow darken-1">Hesap<i class="material-icons">format_quote</i></a></li>#}
+        <li><a class="btn-floating green" href="{% url 'garson' accounting.company.slug accounting.table %}">Garson</a>
+        </li>
+        {#        <li><a class="btn-floating blue"><i class="material-icons">attach_file</i></a></li>#}
+    </ul>
+</div>
+<div class="container">
+    <div class="card w-100" style="width: auto;min-width: max-content">
+        <div class="card-header">
+            {{ accounting.company }}
+            <span style="float: right">Masa {{ accounting.table }}</span>
         </div>
-
+        <ul class="list-group list-group-flush">
+            {% if accounting.order_list.count < 1 %}
+                <li class="list-group-item">Her hangi bir ürün siparişiniz bulunmamaktadır</li>
+            {% endif %}
+            {% for order_list in accounting.order_list.all %}
+                <li class="list-group-item">{{ order_list.count }}x {{ order_list.name }}({{ order_list.price|floatformat }}₺)
+                    <div style="float: right">
+                        {% if order_list.is_deleted %}
+                            <i class="material-icons" style="color: darkgreen"
+                               title="siparişiniz iptal edildi">check </i>
+                        {% else %}
+                            {% if order_list.is_checked %}
+                                <i class="material-icons"
+                                   title="siparişiniz onaylandı,yolda">check</i>
+                            {% else %}
+                                {#                                <i class="material-icons" title="siparişiniz alındı">check</i>#}
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </li>
+                {% if forloop.last %}
+                    <li class="list-group-item">
+                        <small class="text-muted" style="float: right">Toplam: {{ accounting.get_borrow|floatformat }}₺
+                        </small>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+</div>
 
 
 </body>

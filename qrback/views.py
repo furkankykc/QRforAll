@@ -25,7 +25,7 @@ def check_accounting_entry(request, slug, order_id):
 
 
 def delete_accounting_entry(request, slug, order_id):
-    Account_Entry.objects.get(id=order_id).delete_order()
+    Account_Entry.objects.get(id=order_id).delete()
 
     return redirect('panel', slug)
 
