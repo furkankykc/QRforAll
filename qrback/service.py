@@ -1,4 +1,5 @@
 import os
+from django.contrib.staticfiles.storage import staticfiles_storage
 
 from django.urls import reverse
 
@@ -52,7 +53,10 @@ def generate_num(num, size):
 
     img = Image.new('RGB', size, color=(255, 255, 255))
     d = ImageDraw.Draw(img)
-    font = ImageFont.truetype('/usr/share/fonts/truetype/freefont/MuktiNarrowBold.ttf', 64)
+    font = ImageFont.truetype(settings.STATIC_URL+'/fonts/MuktiNarrowBold.ttf', 64)
+    with open(staticfiles_storage.path('fonts/Mukti_Narrow_Bold.ttf')) as file:
+        print(file)
+
     w, h = d.textsize(str(num), font=font)
     d.text(((size[0] - w) / 2, (size[1] - h - h / 2) / 2), str(num), font=font, fill="black")
 

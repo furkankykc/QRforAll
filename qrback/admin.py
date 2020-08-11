@@ -131,7 +131,7 @@ class CompanyAdmin(admin.ModelAdmin):
     def generate_qr(self, obj):
         return mark_safe(
             '<a class="button" title="Generate QR codes" name="index" href="{}">Generate QR</a>'.format(
-                'http://127.0.0.1:8000' + reverse('generate_qr', args=([obj.slug]))))
+                "{}://{}".format(settings.HTTP_METHOD, settings.SITE_URL) + reverse('generate_qr', args=([obj.slug]))))
 
     title.short_description = 'Action'
     title.allow_tags = True
