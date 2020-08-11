@@ -113,9 +113,9 @@ class Entry(models.Model):
     name = models.CharField(max_length=30, verbose_name='isim')
     detail = models.CharField(max_length=100, verbose_name='ürün detayı')
     price = models.FloatField(verbose_name='fiyat')
-    image = models.ImageField(upload_to=get_image_path, blank=True, null=True,verbose_name='kapak fotoğrafı')
-    category = models.ForeignKey(FoodCategory, on_delete=models.CASCADE)
-    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='comp_entry',verbose_name='sirket')
+    image = models.ImageField(upload_to=get_image_path, blank=True, null=True, verbose_name='kapak fotoğrafı')
+    category = models.ForeignKey(FoodCategory, on_delete=models.CASCADE, verbose_name='Kategori')
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='comp_entry', verbose_name='sirket')
 
     @property
     def get_image(self):
