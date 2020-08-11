@@ -53,9 +53,7 @@ def generate_num(num, size):
 
     img = Image.new('RGB', size, color=(255, 255, 255))
     d = ImageDraw.Draw(img)
-    font = ImageFont.truetype(settings.STATIC_URL+'/fonts/MuktiNarrowBold.ttf', 64)
-    with open(staticfiles_storage.path('fonts/Mukti_Narrow_Bold.ttf')) as file:
-        print(file)
+    font = ImageFont.truetype(staticfiles_storage.path('fonts/Mukti_Narrow_Bold.ttf'), 64)
 
     w, h = d.textsize(str(num), font=font)
     d.text(((size[0] - w) / 2, (size[1] - h - h / 2) / 2), str(num), font=font, fill="black")
