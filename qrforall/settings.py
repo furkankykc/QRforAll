@@ -121,5 +121,7 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 HTTP_METHOD = 'http'
 SITE_URL = '192.168.1.3:8000'
-# STATICFILES_DIRS = (os.path.join('static'),)
-STATIC_ROOT = os.path.join('static')
+if DEBUG:
+    STATICFILES_DIRS = (os.path.join('static'),)
+else:
+    STATIC_ROOT = os.path.join('static')
