@@ -22,9 +22,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'dwqb^(a=(m&9xttk(bmp6)5mge8&i%zd3+$$49=b$2ovy1(@u-'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+if DEBUG:
+    ALLOWED_HOSTS = ['*']
+else:
+    ALLOWED_HOSTS = ['karekodyazilimi.com', 'www.karekodyazilimi.com']
 
 # Application definition
 LOGIN_URL = '/login'
@@ -119,9 +122,12 @@ USE_TZ = True
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
-HTTP_METHOD = 'http'
-SITE_URL = '192.168.1.3:8000'
+
 if DEBUG:
+    HTTP_METHOD = 'http'
+    SITE_URL = '192.168.1.3:8000'
     STATICFILES_DIRS = (os.path.join('static'),)
 else:
     STATIC_ROOT = os.path.join('static')
+    HTTP_METHOD = 'https'
+    SITE_URL = 'karekodyazilimi.com'
