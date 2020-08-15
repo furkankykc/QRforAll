@@ -7,8 +7,10 @@ from django.contrib.auth.models import Group
 
 from qrback.models import *
 
-
 # admin.site.register(Entry)
+from qrforall import settings
+
+
 class CustomAdminSite(admin.AdminSite):
     site_title = "Karekod Yazılımı"
     site_header = "Karekod Yazılımı"
@@ -120,6 +122,7 @@ class FoodGroupAdmin(admin.ModelAdmin):
 class CompanyAdmin(admin.ModelAdmin):
     # fields = ('slug', 'name', 'account_type', 'categories', 'menu')
     prepopulated_fields = {'slug': ('name',)}
+
     list_display = ('name', 'account_type', 'generate_qr')
 
     # def menuPreview(self, obj):
@@ -128,6 +131,12 @@ class CompanyAdmin(admin.ModelAdmin):
     #                                                             os.path.join(settings.MEDIA_URL, obj.logo.url))
     #     )
 
+    def get_queryset(self, request):
+        qs = super(CompanyAdmin, self).get_queryset(request)
+        if request.user.is_superuser:
+            return qs
+        return qs.filter(owner=request.user)
+
     def generate_qr(self, obj):
         return mark_safe(
             '<a class="button" title="Generate QR codes" name="index" href="{}">Generate QR</a>'.format(
@@ -135,6 +144,12 @@ class CompanyAdmin(admin.ModelAdmin):
 
     title.short_description = 'Action'
     title.allow_tags = True
+
+    def get_readonly_fields(self, request, obj=None):
+
+        if obj and not request.user.is_superuser:  # editing an existing object
+            return self.readonly_fields + ('owner', 'account_type', 'menu')
+        return self.readonly_fields
 
     def get_form(self, request, obj=None, **kwargs):
         form = super(CompanyAdmin, self).get_form(request, obj, **kwargs)

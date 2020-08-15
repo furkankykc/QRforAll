@@ -3,13 +3,10 @@ import os
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 from django.db import models
-from django.db.models import Sum, QuerySet, F
-from django.db.models.functions import Coalesce
-from django.forms import FloatField
+from django.db.models import Sum, F
 from django.utils.text import slugify
 
 from qrback import service
-from qrforall import settings
 from django.utils import timezone
 
 
