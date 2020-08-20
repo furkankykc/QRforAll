@@ -50,8 +50,11 @@
                     <div class="mad-header-item">
 
                         {% if company.logo %}
-                            <a href="#" class="mad-logo"><img
-                                    src="{{ company.logo.url }}" alt=""></a>
+                            <a href="#" class="mad-logo">
+                                {% if company.logo %}
+                                    <img src="{{ company.logo.url }}" alt="">
+                                {% endif %}
+                            </a>
                         {% endif %}
                     </div>
                     <div class="mad-header-item">
@@ -101,7 +104,8 @@
                 </div>
                 <!--================ Tabs ================-->
                 {% if entries.count < 1 %}
-                    <a class="center" style="text-align: center;">Bu restaurantin her hangi bir ürünü bulunmamaktadır</a>
+                    <a class="center" style="text-align: center;">Bu restaurantin her hangi bir ürünü
+                        bulunmamaktadır</a>
 
                 {% endif %}
                 <div class="mad-tabs">
@@ -148,9 +152,13 @@
                                                 <div class="{% cycle 'row row-lg-reverse' 'row' as val %}">
                                                 {% ifequal val 'row row-lg-reverse' %}
                                                     <div class="col-lg-6">
-                                                        <figure><img
-                                                                src="{{ item.category.image.url }}"
-                                                                alt="{{ forloop.counter|add:forloop.parentloop.counter0 }}">
+
+                                                        <figure>
+                                                            {% if item.category.image %}
+                                                                <img
+                                                                        src="{{ item.category.image.url }}"
+                                                                        alt="{{ forloop.counter|add:forloop.parentloop.counter0 }}">
+                                                            {% endif %}
                                                         </figure>
                                                     </div>
                                                 {% endifequal %}
@@ -189,8 +197,11 @@
                                             {% ifequal val 'row' %}
 
                                                 <div class="col-lg-6">
-                                                    <figure><img src="{{ item.category.image.url }}"
+                                                    <figure>
+                                                        {% if item.category.image %}
+                                                            <img src="{{ item.category.image.url }}"
                                                                  alt="{{ forloop.counter0|add:forloop.parentloop.counter0 }}">
+                                                        {% endif %}
                                                     </figure>
                                                 </div>
 
@@ -250,8 +261,12 @@
                         <!--================ Widget ================-->
                         <section class="mad-widget">
                             {% if company.logo %}
-                                <a href="#" class="mad-logo content-element-3"><img
-                                        src="{{ company.logo.url }}" alt=""></a>
+                                <a href="#" class="mad-logo content-element-3">
+                                    {% if company.logo %}
+                                        <img
+                                                src="{{ company.logo.url }}" alt="">
+                                    {% endif %}
+                                </a>
                             {% endif %}
                             <div class="mad-vr-list content-element-5">
                                 <ul>
