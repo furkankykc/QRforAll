@@ -88,9 +88,7 @@
 
     <div class="mad-breadcrumb with-bg"
          data-bg-image-src=
-                 "{% if company.menu_background %}
-                 {{ company.menu_background.url }}
-            {% else %}{% static 'velikorodnov/images/1920x544_bg3.jpg' %}{% endif %}">
+                 "{% if company.menu_background %}{{ company.menu_background.url }}{% else %}{% static 'velikorodnov/images/1920x544_bg3.jpg' %}{% endif %}">
         <div class="container">
             <nav class="mad-breadcrumb-path"><span><a
                     href="#">{{ company.name }}</a></span> - <span>Menu</span>
