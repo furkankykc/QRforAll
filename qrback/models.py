@@ -6,6 +6,8 @@ from django.db import models
 from django.db.models import Sum, F
 from django.utils.text import slugify
 
+from django.utils.translation import ugettext as _
+
 from qrback import service
 from django.utils import timezone
 
@@ -37,7 +39,8 @@ class AccountType(models.Model):
 class Company(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     name = models.CharField(max_length=20)
-    menu = models.ImageField(upload_to=get_image_path, blank=True, null=True)
+    menu = models.ImageField(upload_to=get_image_path, blank=True, null=True,
+                             help_text=_("Bu kısım resim bazlı menü kullanan kullanıcılarımıza özeldir"))
     logo = models.ImageField(upload_to=get_image_path, blank=True, null=True)
     slug = models.SlugField(blank=True)
     account_type = models.ForeignKey(AccountType, on_delete=models.CASCADE)
@@ -48,6 +51,10 @@ class Company(models.Model):
     phone = models.CharField(validators=[phone_regex], max_length=17, blank=True,
                              null=True)  # validators should be a list
     email = models.CharField(validators=[email_regex], max_length=50, blank=True)
+    menu_background = models.ImageField(upload_to=get_image_path, blank=True, null=True,
+                                        help_text="Bu kısım sadece dijital menü kullanan kullanıcılarımıza özeldir")
+    not_order_background = models.ImageField(upload_to=get_image_path, blank=True, null=True,
+                                             help_text="Bu kısım sadece siparişsiz dijital menü kullanan kullanıcılarımıza özeldir")
     instagram = models.URLField(blank=True)
     facebook = models.URLField(blank=True)
     twitter = models.URLField(blank=True)

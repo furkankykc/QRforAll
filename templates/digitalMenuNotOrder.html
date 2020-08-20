@@ -85,7 +85,12 @@
     </header>
     <!--================ End of Header ================-->
     <!--================ Breadcrumb ================-->
-    <div class="mad-breadcrumb with-bg" data-bg-image-src="{% static 'velikorodnov/images/1920x544_bg3.jpg' %}">
+
+    <div class="mad-breadcrumb with-bg"
+         data-bg-image-src=
+                 "{% if company.menu_background %}
+                 {{ company.menu_background.url }}
+            {% else %}{% static 'velikorodnov/images/1920x544_bg3.jpg' %}{% endif %}">
         <div class="container">
             <nav class="mad-breadcrumb-path"><span><a
                     href="#">{{ company.name }}</a></span> - <span>Menu</span>
@@ -99,8 +104,15 @@
         <div class="container">
             <div class="mad-section mad-section--stretched mad-colorizer--scheme-">
                 <div class="mad-colorizer-bg-color">
-                    <div class="with-svg-item svg-right-side"><img
-                            src="{% static 'velikorodnov/images/top_half_right.png' %}" alt=""></div>
+                    <div class="with-svg-item svg-right-side">
+                        {% if not company.not_order_background %}
+                            <img
+                                    src="{% static 'velikorodnov/images/top_half_right.png' %}" alt="">
+                        {% else %}
+                            <img
+                                    src="{{ company.not_order_background.url }}" alt="">
+                        {% endif %}
+                    </div>
                 </div>
                 <!--================ Tabs ================-->
                 {% if entries.count < 1 %}
