@@ -1,12 +1,11 @@
 from django.contrib import admin
+from django.contrib.auth.hashers import check_password, make_password
 from django.http import HttpResponseRedirect
 from django.template.defaultfilters import title
 from django.urls import reverse
 from django.utils.safestring import mark_safe
-from django.contrib.auth.models import Group
 
 from qrback.models import *
-
 # admin.site.register(Entry)
 from qrforall import settings
 
@@ -33,8 +32,29 @@ class CustomAdminSite(admin.AdminSite):
 customAdminSite = CustomAdminSite()
 customAdminSite.register(Category)
 customAdminSite.register(AccountType)
-customAdminSite.register(User)
-customAdminSite.register(Group)
+
+
+# customAdminSite.register(User)
+# customAdminSite.register(Group)
+
+# admin.site.unregister(User)
+
+@admin.register(User, site=customAdminSite)
+class UserModelAdmin(admin.ModelAdmin):
+    """
+        User for overriding the normal user admin panel, and add the extra fields added to the user
+        """
+
+    def save_model(self, request, obj, form, change):
+        # Override this to set the password to the value in the field if it's
+        # changed.
+        if obj.pk:
+            orig_obj = User.objects.get(pk=obj.pk)
+            if obj.password != orig_obj.password:
+                obj.set_password(obj.password)
+        else:
+            obj.set_password(obj.password)
+        obj.save()
 
 
 @admin.register(Entry, site=customAdminSite)
