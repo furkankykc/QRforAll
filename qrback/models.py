@@ -60,7 +60,7 @@ class Company(models.Model):
     twitter = models.URLField(blank=True)
     tripadvisor = models.URLField(blank=True)
     youtube = models.URLField(blank=True)
-    pinterest = models.URLField(blank=True)
+    whatsapp = models.URLField(blank=True)
 
     def get_menu_num(self):
         return range(1, self.account_type.count_of_max_table)

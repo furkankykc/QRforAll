@@ -133,7 +133,7 @@
     </header>
     <!--================ End of Header ================-->
     <!--================ Breadcrumb ================-->
-    <div class="mad-breadcrumb with-bg" data-bg-image-src="{% static 'velikorodnov/images/1920x544_bg3.jpg' %}">
+    <div class="mad-breadcrumb with-bg" data-bg-image-src="{% if company.menu_background %}{{ company.menu_background.url }}{% else %}{% static 'velikorodnov/images/1920x544_bg3.jpg' %}{% endif %}">
         <div class="container">
             <nav class="mad-breadcrumb-path"><span><a
                     href="#">Vroom Restoraunt</a></span> - <span>Menu</span>
