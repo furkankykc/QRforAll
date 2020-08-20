@@ -42,12 +42,17 @@
                 <div class="mad-header-items item-col-3">
                     <div class="mad-header-item">
                         <a href="tel:{{ company.phone }}">
-                            <div><i class="material-icons">phone</i>{{ company.phone|phone2numeric }}</div>
+                            {% if company.phone %}
+                                <div><i class="material-icons">phone</i>{{ company.phone|phone2numeric }}</div>
+                            {% endif %}
                         </a>
                     </div>
                     <div class="mad-header-item">
-                        <a href="#" class="mad-logo"><img
-                                src="{{ company.logo.url }}" alt=""></a>
+
+                        {% if company.logo %}
+                            <a href="#" class="mad-logo"><img
+                                    src="{{ company.logo.url }}" alt=""></a>
+                        {% endif %}
                     </div>
                     <div class="mad-header-item">
                         <div class="mad-social-icons">
@@ -80,7 +85,7 @@
     <div class="mad-breadcrumb with-bg" data-bg-image-src="{% static 'velikorodnov/images/1920x544_bg3.jpg' %}">
         <div class="container">
             <nav class="mad-breadcrumb-path"><span><a
-                    href="#">Vroom Restoraunt</a></span> - <span>Menu</span>
+                    href="#">{{ company.name }}</a></span> - <span>Menu</span>
             </nav>
             <h1 class="mad-page-title">{{ company.name }}</h1>
         </div>
@@ -95,6 +100,10 @@
                             src="{% static 'velikorodnov/images/top_half_right.png' %}" alt=""></div>
                 </div>
                 <!--================ Tabs ================-->
+                {% if entries.count < 1 %}
+                    <a class="center" style="text-align: center;">Bu restaurantin her hangi bir ürünü bulunmamaktadır</a>
+
+                {% endif %}
                 <div class="mad-tabs">
 
                     <!--================ Tabs Navigation ================-->
@@ -103,6 +112,7 @@
                         {#                    <a id="tab-1-link" href="#tab-1" role="tab" aria-selected="false" aria-controls="tab-1"#}
                         {#                       class="mad-tab-link">Food Menu</a>#}
                         {#                </span>#}
+
                         {% for ent in entries_by_date %}
 
                             {% if forloop.first %}
@@ -152,23 +162,23 @@
                                                 <!-- Specification item -->
 
                                             {% endif %}
-    <div class="mad-col">
-                                        <div class="mad-spec-item">
-                                            <div class="mad-spec-info">
-                                                <div class="mad-spec-header">
-                                                    <div class="mad-spec-title">{{ item.name }}</div>
-                                                    <div class="mad-line"></div>
-                                                    <div class="mad-spec-price">{{ item.price }}₺</div>
-                                                </div>
-                                                <div class="mad-spec-tags">
-                                                    <div class="mad-spec-el">{{ item.detail }}
+                                        <div class="mad-col">
+                                            <div class="mad-spec-item">
+                                                <div class="mad-spec-info">
+                                                    <div class="mad-spec-header">
+                                                        <div class="mad-spec-title">{{ item.name }}</div>
+                                                        <div class="mad-line"></div>
+                                                        <div class="mad-spec-price">{{ item.price }}₺</div>
                                                     </div>
-                                                    {#                                                    <a href="#" class="mad-link">vegetarian</a>,#}
-                                                    {#                                                    <a href="#" class="mad-link">vegan</a>#}
+                                                    <div class="mad-spec-tags">
+                                                        <div class="mad-spec-el">{{ item.detail }}
+                                                        </div>
+                                                        {#                                                    <a href="#" class="mad-link">vegetarian</a>,#}
+                                                        {#                                                    <a href="#" class="mad-link">vegan</a>#}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-    </div>
 
                                         {% if forloop.last %}
                                             <!-- End of Specification item -->
@@ -239,8 +249,10 @@
                     <div class="col-md-4">
                         <!--================ Widget ================-->
                         <section class="mad-widget">
-                            <a href="#" class="mad-logo content-element-3"><img
-                                    src="{{ company.logo.url }}" alt=""></a>
+                            {% if company.logo %}
+                                <a href="#" class="mad-logo content-element-3"><img
+                                        src="{{ company.logo.url }}" alt=""></a>
+                            {% endif %}
                             <div class="mad-vr-list content-element-5">
                                 <ul>
                                     <li>
