@@ -50,11 +50,14 @@ class Company(models.Model):
                                  message="Email address must be entered in the format: 'example@mail.com'.")
     phone = models.CharField(validators=[phone_regex], max_length=17, blank=True,
                              null=True)  # validators should be a list
+    phonesecond = models.CharField(validators=[phone_regex], max_length=17, blank=True,
+                                   null=True)  # validators should be a list
     email = models.CharField(validators=[email_regex], max_length=50, blank=True)
     menu_background = models.ImageField(upload_to=get_image_path, blank=True, null=True,
                                         help_text="Bu kısım sadece dijital menü kullanan kullanıcılarımıza özeldir")
     not_order_background = models.ImageField(upload_to=get_image_path, blank=True, null=True,
                                              help_text="Bu kısım sadece siparişsiz dijital menü kullanan kullanıcılarımıza özeldir")
+    address = models.CharField(max_length=200, blank=True)
     instagram = models.URLField(blank=True)
     facebook = models.URLField(blank=True)
     twitter = models.URLField(blank=True)
@@ -115,7 +118,7 @@ class Entry(models.Model):
         verbose_name_plural = 'Menü Ürünleri'
 
     name = models.CharField(max_length=30, verbose_name='isim')
-    detail = models.CharField(max_length=100, verbose_name='ürün detayı')
+    detail = models.CharField(max_length=100, verbose_name='ürün detayı', blank=True)
     price = models.FloatField(verbose_name='fiyat')
     image = models.ImageField(upload_to=get_image_path, blank=True, null=True, verbose_name='kapak fotoğrafı')
     category = models.ForeignKey(FoodCategory, on_delete=models.CASCADE, verbose_name='Kategori')

@@ -142,7 +142,7 @@ class FoodGroupAdmin(admin.ModelAdmin):
 class CompanyAdmin(admin.ModelAdmin):
     # fields = ('slug', 'name', 'account_type', 'categories', 'menu')
     prepopulated_fields = {'slug': ('name',)}
-
+    # exclude = ['not_order_background']
     list_display = ('name', 'account_type', 'generate_qr')
 
     # def menuPreview(self, obj):
@@ -168,7 +168,7 @@ class CompanyAdmin(admin.ModelAdmin):
     def get_readonly_fields(self, request, obj=None):
 
         if obj and not request.user.is_superuser:  # editing an existing object
-            return self.readonly_fields + ('owner', 'account_type', 'menu')
+            return self.readonly_fields + ('owner', 'account_type', 'menu','not_order_background')
         return self.readonly_fields
 
     def get_form(self, request, obj=None, **kwargs):
