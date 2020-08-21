@@ -133,7 +133,7 @@
                 <div class="mad-tabs">
 
                     <!--================ Tabs Navigation ================-->
-                    <div role="tablist" aria-label="Tabs v1" class="mad-tabs-nav justify-content-center">
+                    <div role="tablist" aria-label="Tabs v1" class="mad-tabs-nav justify-content-lg-start">
                         {#                <span class="mad-active">#}
                         {#                    <a id="tab-1-link" href="#tab-1" role="tab" aria-selected="false" aria-controls="tab-1"#}
                         {#                       class="mad-tab-link">Food Menu</a>#}
@@ -292,9 +292,9 @@
                             {% endif %}
                             <div class="mad-vr-list content-element-5">
                                 <ul>
-                                    {% if company.address %}
-                                        <li>{{ company.address }}<br>
-                                    {% endif %}
+                                {% if company.address %}
+                                    <li>{{ company.address }}<br>
+{% endif %}
                                     </li>
                                     <li>
                                         {% if company.phone %}
