@@ -65,6 +65,7 @@ class Company(models.Model):
     youtube = models.URLField(blank=True)
     whatsapp = models.URLField(blank=True)
     counter = models.IntegerField(default=0)
+    slogan = models.CharField(max_length=40, blank=True, null=True)
 
     def count(self):
         count = self.counter

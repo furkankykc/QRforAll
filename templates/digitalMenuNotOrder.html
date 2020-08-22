@@ -54,41 +54,49 @@
                             {% endif %}
                         </a>
                     </div>
+
                     <div class="mad-header-item">
 
                         {% if company.logo %}
-                            <a href="#" class="mad-logo">
+                            <p href="#" class="mad-logo">
                                 {% if company.logo %}
                                     <img width="210px" src="{{ company.logo.url }}" alt="">
                                 {% endif %}
-                            </a>
+                            </p>
                         {% endif %}
                     </div>
-                    <div class="mad-header-item">
-                        <div class="mad-social-icons">
-                            <ul>
-                                <li>
-                                    <a href="{{ company.facebook }}" target="_blank">
-                                        <i class="fab fa-facebook-f"></i>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{{ company.instagram }}" target="_blank">
-                                        <i class="fab fa-instagram"></i>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{{ company.twitter }}" target="_blank">
-                                        <i class="fab fa-tripadvisor"></i>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
+                    {% if company.slogan %}
+                        <div class="mad-header-item" style="padding-top: 0;">
+                        <a style="font-weight: bold;">
+                        {{ company.slogan }}
+                        </a>
+                    {% else %}
+                        <div class="mad-header-item">
+                    {% endif %}
+                    <div class="mad-social-icons">
+                        <ul>
+                            <li>
+                                <a href="{{ company.facebook }}" target="_blank">
+                                    <i class="fab fa-facebook-f"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ company.instagram }}" target="_blank">
+                                    <i class="fab fa-instagram"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ company.twitter }}" target="_blank">
+                                    <i class="fab fa-tripadvisor"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <!--================ End of Section ================-->
+            <!--================ End of Section ================-->
     </header>
     <!--================ End of Header ================-->
     <!--================ Breadcrumb ================-->
@@ -292,9 +300,9 @@
                             {% endif %}
                             <div class="mad-vr-list content-element-5">
                                 <ul>
-                                {% if company.address %}
-                                    <li>{{ company.address }}<br>
-{% endif %}
+                                    {% if company.address %}
+                                        <li>{{ company.address }}<br>
+                                    {% endif %}
                                     </li>
                                     <li>
                                         {% if company.phone %}
