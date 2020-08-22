@@ -6,6 +6,7 @@ from qrback.views import *
 urlpatterns = [
     path('menu/<slug:slug>/', menu, name='menu-detail'),
     path('menu/<slug:slug>/<int:table_id>', menu, name='menu-detail'),
+    path('menu/<slug:slug>/category/<int:category_id>', menu_no_table, name='category'),
     path('menu/<slug:slug>/<int:category_id>/<int:table_id>/', menu, name='category'),
     path('order/<slug:slug>/<int:category_id>/<int:table_id>/', menu, name='order'),
     path('panel/<slug:slug>/', panel, name='panel'),

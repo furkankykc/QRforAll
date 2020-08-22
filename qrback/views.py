@@ -115,9 +115,16 @@ class QRDetailView(DetailView):
     context_object_name = 'company'
 
 
+def menu_no_table(request, slug, category_id):
+    company = Company.objects.get(slug__exact=slug)
+    return render(request, template_name='digitalMenuItem.html',
+                  context={'categories': Entry.objects.filter(company_id=company.id, category=category_id),
+                           'company': company, 'category_id': category_id})
+
+
 def menu(request, *args, **kwargs):
     slug = kwargs['slug']
-    table_id = 0
+    table_id = -1
     category_id = 0
     if 'table_id' in kwargs:
         table_id = kwargs['table_id']
@@ -152,6 +159,10 @@ def menu(request, *args, **kwargs):
 
                 if table_id == 0 or table_id > max_table_count:
                     return HttpResponseNotFound("Masa sayısı aşıldı")
+                elif table_id == -1:
+                    return render(request, template_name='digitalMenuCategory.html',
+                                  context={'categories': categories, 'company': company,
+                                           'category_id': category_id})
 
                 return render(request, template_name='digitalMenuCategory.html',
                               context={'categories': categories, 'company': company, 'table_id': table_id,
