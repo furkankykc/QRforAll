@@ -63,7 +63,7 @@ class Company(models.Model):
     twitter = models.URLField(blank=True)
     tripadvisor = models.URLField(blank=True)
     youtube = models.URLField(blank=True)
-    whatsapp = models.URLField(blank=True)
+    whatsapp = models.URLField(blank=True,help_text='http://api.whatsapp.com/send?phone=+90********** şeklinde girilmelidir')
     counter = models.IntegerField(default=0)
     slogan = models.CharField(max_length=40, blank=True, null=True)
     hide_on_referances = models.BooleanField(default=False,
