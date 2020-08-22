@@ -66,6 +66,8 @@ class Company(models.Model):
     whatsapp = models.URLField(blank=True)
     counter = models.IntegerField(default=0)
     slogan = models.CharField(max_length=40, blank=True, null=True)
+    hide_on_referances = models.BooleanField(default=False,
+                                             help_text="Referanslarimiz içerisinde gözükmek istemiyorsanız bu kutucuğu işaretleyerek bunu belirtebilirsiniz.")
 
     def count(self):
         count = self.counter

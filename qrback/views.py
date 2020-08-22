@@ -14,7 +14,7 @@ from django.db.models import Q
 
 
 def index(request):
-    context = {}
+    context = {'companies': Company.objects.filter(hide_on_referances=False).exclude(logo__exact='')}
     return render(request, template_name='test/index.html', context=context)
 
 
