@@ -179,7 +179,7 @@ class CompanyAdmin(admin.ModelAdmin):
     def get_readonly_fields(self, request, obj=None):
 
         if obj and not request.user.is_superuser:  # editing an existing object
-            return self.readonly_fields + ('owner', 'account_type', 'menu', 'not_order_background')
+            return self.readonly_fields + ['owner', 'account_type', 'menu', 'not_order_background']
         return self.readonly_fields
 
     def get_form(self, request, obj=None, **kwargs):
@@ -187,7 +187,6 @@ class CompanyAdmin(admin.ModelAdmin):
         form.base_fields['slug'].disabled = True
         form.base_fields['slug'].help_text = "This field is not editable"
         return form
-
     # change_form_template = "admin/base_site.html"
 
     def response_change(self, request, obj):

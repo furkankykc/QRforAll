@@ -37,37 +37,44 @@ class AccountType(models.Model):
 
 
 class Company(models.Model):
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
-    name = models.CharField(max_length=20)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True,verbose_name='sahip')
+    slug = models.SlugField(blank=True,verbose_name='url')
+
+    name = models.CharField(max_length=20,verbose_name='İsim')
+    slogan = models.CharField(max_length=40, blank=True, null=True)
     menu = models.ImageField(upload_to=get_image_path, blank=True, null=True,
                              help_text=_("Bu kısım resim bazlı menü kullanan kullanıcılarımıza özeldir"))
-    logo = models.ImageField(upload_to=get_image_path, blank=True, null=True)
-    slug = models.SlugField(blank=True)
-    account_type = models.ForeignKey(AccountType, on_delete=models.CASCADE)
+    account_type = models.ForeignKey(AccountType, on_delete=models.CASCADE,verbose_name='Hesap tipi')
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$',
                                  message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
     email_regex = RegexValidator(regex=r'^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$',
                                  message="Email address must be entered in the format: 'example@mail.com'.")
     phone = models.CharField(validators=[phone_regex], max_length=17, blank=True,
-                             null=True)  # validators should be a list
+                             null=True,verbose_name='telefon')  # validators should be a list
     phonesecond = models.CharField(validators=[phone_regex], max_length=17, blank=True,
-                                   null=True)  # validators should be a list
+                                   null=True,verbose_name='telefon 2')  # validators should be a list
     email = models.CharField(validators=[email_regex], max_length=50, blank=True)
+    address = models.CharField(max_length=200, blank=True,verbose_name='adres')
+    logo = models.ImageField(upload_to=get_image_path, blank=True, null=True)
+
     menu_background = models.ImageField(upload_to=get_image_path, blank=True, null=True,
-                                        help_text="Bu kısım sadece dijital menü kullanan kullanıcılarımıza özeldir")
+                                        help_text="Bu kısım sadece dijital menü kullanan kullanıcılarımıza özeldir",
+                                        verbose_name='dijital menü banner'
+                                        )
     not_order_background = models.ImageField(upload_to=get_image_path, blank=True, null=True,
-                                             help_text="Bu kısım sadece siparişsiz dijital menü kullanan kullanıcılarımıza özeldir")
-    address = models.CharField(max_length=200, blank=True)
+                                             help_text="Bu kısım sadece siparişsiz dijital menü kullanan kullanıcılarımıza özeldir",
+                                             verbose_name='siparissiz menü arkaplani'
+                                             )
     instagram = models.URLField(blank=True)
     facebook = models.URLField(blank=True)
     twitter = models.URLField(blank=True)
     tripadvisor = models.URLField(blank=True)
     youtube = models.URLField(blank=True)
     whatsapp = models.URLField(blank=True,help_text='http://api.whatsapp.com/send?phone=+90********** şeklinde girilmelidir')
-    counter = models.IntegerField(default=0)
-    slogan = models.CharField(max_length=40, blank=True, null=True)
+    counter = models.IntegerField(default=0,verbose_name='Menü görüntülenme sayısı')
     hide_on_referances = models.BooleanField(default=False,
-                                             help_text="Referanslarimiz içerisinde gözükmek istemiyorsanız bu kutucuğu işaretleyerek bunu belirtebilirsiniz.")
+                                             help_text="Referanslarimiz içerisinde gözükmek istemiyorsanız bu kutucuğu işaretleyerek bunu belirtebilirsiniz.",
+                                             verbose_name='referanslar listesinden gizle')
 
     def count(self):
         count = self.counter
