@@ -64,6 +64,16 @@ class Company(models.Model):
     tripadvisor = models.URLField(blank=True)
     youtube = models.URLField(blank=True)
     whatsapp = models.URLField(blank=True)
+    counter = models.IntegerField(default=0)
+
+    def count(self):
+        count = self.counter
+        if count is None:
+            count = 1
+        else:
+            count = count + 1
+        self.counter = count
+        self.save()
 
     def get_menu_num(self):
         return range(1, self.account_type.count_of_max_table)

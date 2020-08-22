@@ -143,7 +143,7 @@ class CompanyAdmin(admin.ModelAdmin):
     # fields = ('slug', 'name', 'account_type', 'categories', 'menu')
     prepopulated_fields = {'slug': ('name',)}
     # exclude = ['not_order_background']
-    list_display = ('name', 'account_type', 'generate_qr')
+    list_display = ('name', 'menu_url', 'generate_qr')
 
     # def menuPreview(self, obj):
     #     return mark_safe(
@@ -162,13 +162,19 @@ class CompanyAdmin(admin.ModelAdmin):
             '<a class="button" title="Generate QR codes" name="index" href="{}">Generate QR</a>'.format(
                 "{}://{}".format(settings.HTTP_METHOD, settings.SITE_URL) + reverse('generate_qr', args=([obj.slug]))))
 
+    def menu_url(self, obj):
+        return mark_safe(
+            '<a class="button" title="Generate QR codes" name="index" href="{}">{}</a>'.format(
+                "{}://{}".format(settings.HTTP_METHOD, settings.SITE_URL) + reverse('menu-detail', args=([obj.slug])),
+                reverse('menu-detail', args=[obj.slug])))
+
     title.short_description = 'Action'
     title.allow_tags = True
 
     def get_readonly_fields(self, request, obj=None):
 
         if obj and not request.user.is_superuser:  # editing an existing object
-            return self.readonly_fields + ('owner', 'account_type', 'menu','not_order_background')
+            return self.readonly_fields + ('owner', 'account_type', 'menu', 'not_order_background', 'counter')
         return self.readonly_fields
 
     def get_form(self, request, obj=None, **kwargs):

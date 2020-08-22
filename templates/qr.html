@@ -23,9 +23,7 @@
     <a href="{% url 'download' company.slug %}">Download All!</a>
 </div>
 {% for cmp in company.create_qr %}
-<img height="50" width="50" src="{{ cmp}}" >
-
-
+    <img height="50" width="50" src="{{ cmp }}">
 {% endfor %}
 </body>
 </html>
