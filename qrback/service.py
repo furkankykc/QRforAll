@@ -20,14 +20,16 @@ def create_qr(obj, num=None):
 
     else:
         imgname = os.path.join('photos', str(obj.slug), '{}-{}.png'.format(obj.slug, num))
-        url = pyqrcode.QRCode("{}://{}".format(settings.HTTP_METHOD, settings.SITE_URL) + reverse('menu-detail', args=(obj.slug, num)), error='H')
+        url = pyqrcode.QRCode(
+            "{}://{}".format(settings.HTTP_METHOD, settings.SITE_URL) + reverse('menu-detail', args=(obj.slug, num)),
+            error='H')
 
     scale = 10
     url.png(os.path.join(settings.MEDIA_ROOT, imgname), scale=scale)
     im = Image.open(os.path.join(settings.MEDIA_ROOT, imgname))
     im = im.convert("RGBA")
     if obj.logo and hasattr(obj.logo, 'url'):
-        logo = Image.open(obj.logo.path)
+        logo = Image.open(obj.logo.path).convert("RGBA")
         logo_size = 41 * 0.3 * scale
         width, height = im.size
         # Calculate xmin, ymin, xmax, ymax to put the logo

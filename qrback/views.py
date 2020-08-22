@@ -78,7 +78,6 @@ def panel(request, slug):
 
 
 def test(request, slug):
-
     company = Company.objects.get(slug__exact=slug)
 
     return render(request, template_name='digitalMenuNotOrder.html',
@@ -142,7 +141,7 @@ def menu(request, *args, **kwargs):
     categories = FoodCategory.objects.filter(id__in=eid)
     # return render(request, template_name='digitalMenuNotOrder.html',
     #               context={'company': company, 'entries': Entry.objects.filter(company=company.id)})
-
+    company.count()
     if company.account_type.has_digital_menu:
         if company.account_type.has_unique_tables:
             if category_id != 0:
