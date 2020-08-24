@@ -124,8 +124,8 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
 # Security
-SECURE_SSL_HOST = 'karekodyazilimi.com'
-SECURE_SSL_REDIRECT = True
+# SECURE_SSL_HOST = 'karekodyazilimi.com'
+# SECURE_SSL_REDIRECT = True
 # SESSION_COOKIE_SECURE = True
 # CSRF_COOKIE_SECURE = True
 # SECURE_HSTS_SECONDS = 3600
