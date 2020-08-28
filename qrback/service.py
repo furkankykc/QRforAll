@@ -46,7 +46,7 @@ def create_qr(obj, num=None):
     # im.paste(generate_num(1), (xmin, ymin, xmax, ymax))
     # im.show()
     im.save(os.path.join(settings.MEDIA_ROOT, imgname))
-    print(settings.MEDIA_URL + imgname)
+    # print(settings.MEDIA_URL + imgname)
     return settings.MEDIA_URL + imgname
 
 

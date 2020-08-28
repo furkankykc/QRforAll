@@ -99,9 +99,11 @@ class Company(models.Model):
 
     @property
     def create_qr(self):
+        qr_list = [service.create_qr(self)]
         if self.account_type.has_unique_tables:
-            return [service.create_qr(self, i) for i in range(1, self.account_type.count_of_max_table + 1)]
-        return [service.create_qr(self)]
+            qr_list.extend([service.create_qr(self, i) for i in range(1, self.account_type.count_of_max_table + 1)])
+
+        return qr_list
 
     def __str__(self):
         return self.name
