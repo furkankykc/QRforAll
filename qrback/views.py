@@ -36,21 +36,24 @@ def remove_accounting_entry(request, slug, order_id):
     return redirect('panel', slug)
 
 
-def check_out_table(request, slug, table_id: int):
+def check_out_table(request, slug, category_slug, table_id: int):
     company = Company.objects.get(slug=slug)
-    Accounting.get_table_account(company, table_id).withdraw()
+    category = Category.objects.get(slug=category_slug)
+    Accounting.get_table_account(company, table_id, category).withdraw()
     return redirect('panel', slug)
 
 
-def request_garson(request, slug, table_id: int):
+def request_garson(request, slug, category_slug, table_id: int):
     company = Company.objects.get(slug=slug)
-    Accounting.get_table_account(company, table_id).request_garson()
-    return redirect('menu-detail', slug, table_id)
+    category = Category.objects.get(slug=category_slug)
+    Accounting.get_table_account(company, table_id, category).request_garson()
+    return redirect('menu-detail', slug,category_slug, table_id)
 
 
-def garson_is_on_the_way(request, slug, table_id: int):
+def garson_is_on_the_way(request, slug, category_slug, table_id: int):
     company = Company.objects.get(slug=slug)
-    Accounting.get_table_account(company, table_id).garson_has_requested()
+    category = Category.objects.get(slug=category_slug)
+    Accounting.get_table_account(company, table_id, category).garson_has_requested()
     return redirect('panel', slug)
 
 
@@ -89,8 +92,10 @@ def test(request, slug):
 def orderDetail(request, *args, **kwargs):
     slug = kwargs['slug']
     table_id = kwargs['table_id']
+    category_slug = kwargs['category_slug']
+    category = Category.objects.get(slug=category_slug)
     company = Company.objects.get(slug=slug)
-    accounting = Accounting.get_table_account(company, table_id)
+    accounting = Accounting.get_table_account(company, table_id, category)
     context = {'accounting': accounting}
     return render(request, template_name='digitalAccounting.html', context=context)
 
@@ -124,6 +129,9 @@ def menu_no_table(request, slug, category_id):
 
 def menu(request, *args, **kwargs):
     slug = kwargs['slug']
+    category_slug = None
+    if 'category_slug' in kwargs:
+        category_slug = kwargs['category_slug']
     table_id = -1
     category_id = 0
     if 'table_id' in kwargs:
@@ -133,28 +141,36 @@ def menu(request, *args, **kwargs):
 
     company = Company.objects.get(slug__exact=slug)
     max_table_count = company.account_type.count_of_max_table
-
+    table_category = None
+    if company.account_type.categories.filter(slug=category_slug).exists():
+        table_category = Category.objects.get(slug=category_slug)
     if request.method == "POST":
         count = int(request.POST['count'])
         item_id = int(request.POST['chosen_entry'])
-
-        account = Accounting.get_table_account(company, table_id)
+        if table_category is not None:
+            account = Accounting.get_table_account(company, table_id, table_category)
+        else:
+            return HttpResponseNotFound("invalid category")
         entry = Entry.objects.get(id=item_id)
 
         account.add_entry(entry, count)
         print(entry, '|', count, '| table=', table_id)
-        return redirect("category", slug, category_id, table_id)
+        return redirect("category", slug, category_slug, category_id, table_id)
+    print('table_category=', category_slug, '| table=', table_id)
+
     eid = Entry.objects.filter(company__slug=slug).values('category').distinct()
     categories = FoodCategory.objects.filter(id__in=eid)
     # return render(request, template_name='digitalMenuNotOrder.html',
     #               context={'company': company, 'entries': Entry.objects.filter(company=company.id)})
     company.count()
+
     if company.account_type.has_digital_menu:
         if company.account_type.has_unique_tables:
             if category_id != 0:
                 return render(request, template_name='digitalMenuItem.html',
                               context={'categories': Entry.objects.filter(company_id=company.id, category=category_id),
-                                       'company': company, 'table_id': table_id, 'category_id': category_id})
+                                       'company': company, 'table_id': table_id, 'category_slug': category_slug,
+                                       'category_id': category_id})
             else:
 
                 if table_id == 0 or table_id > max_table_count:
@@ -166,6 +182,7 @@ def menu(request, *args, **kwargs):
 
                 return render(request, template_name='digitalMenuCategory.html',
                               context={'categories': categories, 'company': company, 'table_id': table_id,
+                                       'category_slug': category_slug,
                                        'category_id': category_id})
         else:
             return render(request, template_name='digitalMenuNotOrder.html',

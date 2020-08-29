@@ -53,7 +53,7 @@
 
                 <div class="card mb-4" style="width: 18rem;min-width: 18rem;">
                     <div class="card-header" style="text-align:center;font-size: 2rem">
-                        Masa {{ orders.table }}
+                        {{ orders.category.name|title }} {{ orders.table }}
                     </div>
                     <ul class="list-group list-group-flush ">
                         {% for order in orders.order_list.all reversed %}
@@ -81,7 +81,7 @@
                                             <i class="material-icons">close</i>
 
                                         </a>
-                                        <a href="{% url 'check' orders.company.slug  order.id %}"
+                                        <a href="{% url 'check' orders.company.slug order.id %}"
                                            style="float:right;line-height: 1px;color: darkgreen">
                                             <i class="material-icons">check</i>
 
@@ -105,20 +105,20 @@
 
                             <small class="text-muted"
                                    style="floatline-height: 1px;padding-right:10px;">{{ orders.last_order_time|naturaltime }}</small>
-                            <a href="{% url 'check-out-table' orders.company.slug orders.table %}"
+                            <a href="{% url 'check-out-table' orders.company.slug orders.category.slug orders.table %}"
                                style="float:right;line-height: 1px;color: darkred">
                                 <i class="material-icons">library_add_check</i>
 
                             </a>
                         </div>
-                            {% if orders.requesting_garson %}
-                                <a href="{% url 'check_garson' orders.company.slug orders.table %}"
-                                   style="float:left;color: darkgreen">
-                                    Garson istiyoruz
-                                    <i class="material-icons">check</i>
+                        {% if orders.requesting_garson %}
+                            <a href="{% url 'check_garson' orders.company.slug orders.category.slug orders.table %}"
+                               style="float:left;color: darkgreen">
+                                Garson istiyoruz
+                                <i class="material-icons">check</i>
 
-                                </a>
-                            {% endif %}
+                            </a>
+                        {% endif %}
                     </div>
 
                 </div>

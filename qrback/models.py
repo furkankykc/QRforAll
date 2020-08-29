@@ -18,6 +18,11 @@ def get_image_path(instance, filename):
 
 class Category(models.Model):
     name = models.CharField(max_length=20)
+    slug = models.SlugField(blank=True)
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(Category, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.name.title()
@@ -189,6 +194,7 @@ class Accounting(models.Model):
     is_closed = models.BooleanField(default=False)
     checked_money = models.FloatField(default=0)
     requesting_garson = models.BooleanField(default=False)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
     def request_garson(self):
@@ -235,12 +241,18 @@ class Accounting(models.Model):
         return sum
 
     @classmethod
-    def get_table_account(cls, company, table_id):
-        ses_table = cls.objects.filter(company=company, is_closed=False, table=table_id).last()
+    def get_table_account(cls, company, table_id, category):
+        if category is not None:
+            ses_table = cls.objects.filter(company=company, is_closed=False, table=table_id,
+                                           category=category).last()
+        else:
+            ses_table = cls.objects.filter(company=company, is_closed=False, table=table_id).last()
+
         if ses_table == None:
             ses_table = cls()
             ses_table.table = table_id
             ses_table.company = company
+            ses_table.category = category
             ses_table.save()
         return ses_table
 
