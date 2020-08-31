@@ -172,7 +172,6 @@ def menu(request, *args, **kwargs):
                                        'company': company, 'table_id': table_id, 'category_slug': category_slug,
                                        'category_id': category_id})
             else:
-
                 if table_id == 0 or table_id > max_table_count:
                     return HttpResponseNotFound("Masa sayısı aşıldı")
                 elif table_id == -1:

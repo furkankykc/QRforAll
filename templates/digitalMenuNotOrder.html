@@ -4,6 +4,9 @@
 <head>
     <!--================ Basic page needs ================-->
     <title>{{ company.name|title }} | Digital Menu</title>
+    <meta name="description"
+          content="{{ company.name|title }} olarak menümüzü karekodyazilimi.com ile tanışıp dijitale taşıdık.QR menümüzü bu sayfada bulabilirsiniz.">
+
     <meta charset="UTF-8">
     <meta name="author" content="">
     <meta name="keywords" content="">
@@ -74,7 +77,7 @@
                         <div class="mad-header-item">
                     {% endif %}
 
-                    <div class="mad-social-icons"   >
+                    <div class="mad-social-icons">
                         <ul>
                             <li>
                                 <a href="{{ company.facebook }}" target="_blank">
@@ -135,11 +138,7 @@
                     </div>
                 </div>
                 <!--================ Tabs ================-->
-                {% if entries.count < 1 %}
-                    <a class="center" style="text-align: center;">Bu restaurantin her hangi bir ürünü
-                        bulunmamaktadır</a>
 
-                {% endif %}
                 <div class="mad-tabs">
 
                     <!--================ Tabs Navigation ================-->
@@ -248,6 +247,9 @@
 
                                 </div>
                             </div>
+                        {% empty %}
+                            <a class="center" style="text-align: center;">Bu restaurant'ın her hangi bir ürünü
+                                bulunmamaktadır</a>
                         {% endfor %}
                         <!--================ End of Tab ================-->
 

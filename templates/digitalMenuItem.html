@@ -3,6 +3,9 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ company.name }} | Digital Menu</title>
+    <meta name="description"
+          content="{{ company.name|title }} olarak menümüzü karekodyazilimi.com ile tanışıp dijitale taşıdık.QR menümüzü bu sayfada bulabilirsiniz.">
+
     {% load static %}
     {% block css %}
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
@@ -93,8 +96,10 @@
             <i class="large material-icons">mode_edit</i>
         </a>
         <ul>
-            <li><a class="btn-floating red" href="{% url 'order-detail' company.slug category_slug table_id %}">Hesap</a></li>
-            <li><a class="btn-floating green" href="{% url 'garson' company.slug category_slug table_id %}">Garson</a></li>
+            <li><a class="btn-floating red"
+                   href="{% url 'order-detail' company.slug category_slug table_id %}">Hesap</a></li>
+            <li><a class="btn-floating green" href="{% url 'garson' company.slug category_slug table_id %}">Garson</a>
+            </li>
             {#        <li><a class="btn-floating blue"><i class="material-icons">attach_file</i></a></li>#}
         </ul>
     </div>
@@ -138,7 +143,9 @@
 
 
     </div>
-
+{% empty %}
+    <a class="center" style="text-align: center;">Bu kategorinin her hangi bir ürünü
+        bulunmamaktadır</a>
     {#    <a href="{% url 'category' company.slug category.id table_id %}">{{ category.name }}</a>#}
 {% endfor %}
 </body>
