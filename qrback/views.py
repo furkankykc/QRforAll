@@ -83,7 +83,7 @@ def panel(request, slug):
 def test(request, slug):
     company = Company.objects.get(slug__exact=slug)
 
-    return render(request, template_name='digitalMenuNotOrder.html',
+    return render(request, template_name='menu/digitalMenuNotOrder.html.html',
                   context={'company': company,
                            'entries': Entry.objects.filter(company=company.id).order_by('category__group',
                                                                                         'category__name')})
@@ -175,16 +175,16 @@ def menu(request, *args, **kwargs):
                 if table_id == 0 or table_id > max_table_count:
                     return HttpResponseNotFound("Masa sayısı aşıldı")
                 elif table_id == -1:
-                    return render(request, template_name='digitalMenuCategory.html',
+                    return render(request, template_name='menu/digitalMenuCategory.html',
                                   context={'categories': categories, 'company': company,
                                            'category_id': category_id})
 
-                return render(request, template_name='digitalMenuCategory.html',
+                return render(request, template_name='menu/digitalMenuCategory.html',
                               context={'categories': categories, 'company': company, 'table_id': table_id,
                                        'category_slug': category_slug,
                                        'category_id': category_id})
         else:
-            return render(request, template_name='digitalMenuNotOrder.html',
+            return render(request, template_name='menu/digitalMenuNotOrder.html',
                           context={'company': company,
                                    'entries': Entry.objects.filter(company=company.id).order_by('category__group',
                                                                                                 'category__name')})

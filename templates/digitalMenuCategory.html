@@ -116,22 +116,29 @@
             <div class="mad-header-section">
                 <div class="mad-header-items item-col-3">
                     <div class="mad-header-item">
-                        <div><i class="material-icons">phone</i>+90 543 332 55 61</div>
+                        {% if company.phone %}
+                            <div><i class="material-icons">phone</i>{{ company.phone }}</div>{% endif %}
                     </div>
                     <div class="mad-header-item">
-                        <a href="#" class="mad-logo">
-                            {% if company.logo %}
-                                <img
-                                        src="{{ company.logo.url }}" alt=""></a>
-                            {% endif %}
+                        {% if company.logo %}
+                            <a href="#" class="mad-logo"><img src="{{ company.logo.url }}" alt=""></a>
+                        {% endif %}
                     </div>
                     <div class="mad-header-item">
                         <div class="mad-social-icons">
                             <ul>
-                                <li><a target="_blank" href="#"><i class="fab fa-facebook-f"></i></a></li>
-                                <li><a target="_blank" href="https://www.instagram.com/vrgamingroom"><i
-                                        class="fab fa-instagram"></i></a></li>
-                                <li><a target="_blank" href="#"><i class="fab fa-tripadvisor"></i></a></li>
+                                {% if company.facebook %}
+                                    <li>
+                                        <a target="_blank" href="{{ company.facebook }}"><i class="fab fa-facebook-f"></i></a>
+                                    </li>{% endif %}
+                                {% if company.instagram %}
+                                    <li>
+                                        <a target="_blank" href="{{ company.instagram }}"><i class="fab fa-instagram"></i></a>
+                                    </li>{% endif %}
+                                {% if company.tripadvisor %}
+                                    <li>
+                                        <a target="_blank" href="{{ company.whatsapp }}"><i class="fab fa-whatsapp"></i></a>
+                                    </li>{% endif %}
                             </ul>
                         </div>
                     </div>
@@ -142,18 +149,19 @@
     </header>
     <!--================ End of Header ================-->
     <!--================ Breadcrumb ================-->
-    <div class="mad-breadcrumb with-bg" data-bg-image-src="
 
-
-
-
-            {% if company.menu_background %}{{ company.menu_background.url }}{% else %}{% static 'velikorodnov/images/1920x544_bg3.jpg' %}{% endif %}">
-        <div class="container">
-            <nav class="mad-breadcrumb-path"><span><a
-                    href="#">{{ company.name }}</a></span> - <span>Menu</span>
-            </nav>
-            <h1 class="mad-page-title">{{ company.name }} </h1>
-        </div>
+    {% if company.menu_background %}
+        <div class="mad-breadcrumb with-bg" data-bg-image-src="{{ company.menu_background.url }}">
+    {% else %}
+        <div class="mad-breadcrumb with-bg" data-bg-image-src="{% static 'velikorodnov/images/1920x544_bg3.jpg' %}">
+    {% endif %}
+    <div class="container">
+         {% if company.slogan %}
+        <nav class="mad-breadcrumb-path"><span>{{ company.slogan }}</span>
+        </nav>
+        {% endif %}
+        <h1 class="mad-page-title">{{ company.name }} </h1>
+    </div>
     </div>
     {% block content %}
         <div class="cards-list">
@@ -180,20 +188,20 @@
         </div>
     {% endblock %}
 
-</div>
-{% block js %}
-    <script src="{% static 'velikorodnov/js/modernizr.js' %}"></script>
-    <script src="{% static 'velikorodnov/js/jquery-3.3.1.min.js' %}"></script>
-    <script src="{% static 'velikorodnov/js/jquery.easing.1.3.min.js' %}"></script>
-    <script src="{% static 'velikorodnov/js/monkeysan.jquery.nav.1.0.min.js' %}"></script>
-    <script src="{% static 'velikorodnov/js/handlebars-v4.0.5.min.js' %}"></script>
-    <script src="{% static 'velikorodnov/js/jquery.parallax-1.1.3.min.js' %}"></script>
-    <script src="{% static 'velikorodnov/js/monkeysan.tabs.min.js' %}"></script>
-    <script src="{% static 'velikorodnov/js/owl.carousel.min.js' %}"></script>
-    <script src="{% static 'velikorodnov/js/retina.min.js' %}"></script>
-    <script src="{% static 'velikorodnov/js/mad.sticky-header-section.min.js' %}"></script>
-    <script src="{% static 'velikorodnov/js/brands.min.js' %}"></script>
-    <script src="{% static 'velikorodnov/js/mad.app.js' %}"></script>
-{% endblock %}
+    </div>
+    {% block js %}
+        <script src="{% static 'velikorodnov/js/modernizr.js' %}"></script>
+        <script src="{% static 'velikorodnov/js/jquery-3.3.1.min.js' %}"></script>
+        <script src="{% static 'velikorodnov/js/jquery.easing.1.3.min.js' %}"></script>
+        <script src="{% static 'velikorodnov/js/monkeysan.jquery.nav.1.0.min.js' %}"></script>
+        <script src="{% static 'velikorodnov/js/handlebars-v4.0.5.min.js' %}"></script>
+        <script src="{% static 'velikorodnov/js/jquery.parallax-1.1.3.min.js' %}"></script>
+        <script src="{% static 'velikorodnov/js/monkeysan.tabs.min.js' %}"></script>
+        <script src="{% static 'velikorodnov/js/owl.carousel.min.js' %}"></script>
+        <script src="{% static 'velikorodnov/js/retina.min.js' %}"></script>
+        <script src="{% static 'velikorodnov/js/mad.sticky-header-section.min.js' %}"></script>
+        <script src="{% static 'velikorodnov/js/brands.min.js' %}"></script>
+        <script src="{% static 'velikorodnov/js/mad.app.js' %}"></script>
+    {% endblock %}
 </body>
 </html>
