@@ -114,15 +114,20 @@
 
     <div class="card">
         <div class="card-image waves-effect waves-block waves-light">
-            <img class="{% if table_id %}activator {% endif %}" src="{{ category.get_image.url }}">
+            <img class="activator" src="{{ category.get_image.url }}">
         </div>
         <div class="card-reveal">
             <span class="card-title grey-text text-darken-4">{{ category.name }}<i
                     class="material-icons right">close</i></span>
-            <p>Sipariş ver butonuna tıklayarak {{ category.name }} siparişi verebilirsiniz</p>
+            {% if category.detail %}
+                <p>{{ category.detail }}</p>
+            {% endif %}
+            {% if table_id %}
+                <p>Sipariş ver butonuna tıklayarak {{ category.name }} siparişi verebilirsiniz</p>
+            {% endif %}
             <div class="row1" style="padding-top: inherit">
                 {% if table_id %}
-                    <form action="{% url 'order' company.slug category_slug table_id category_id  %}" method="post">
+                    <form action="{% url 'order' company.slug category_slug table_id category_id %}" method="post">
                         {% csrf_token %}
                         <input type="hidden" name="chosen_entry" id="entry_id" value="{{ category.id }}">
                         <input class="quantity" type="number" name="count" value="1" min="1" max="10" step="1"/>
