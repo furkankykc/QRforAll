@@ -32,6 +32,7 @@ else:
 # Application definition
 LOGIN_URL = '/login'
 INSTALLED_APPS = [
+    'modeltranslation',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -41,6 +42,7 @@ INSTALLED_APPS = [
     'qrback',
     'rest_framework',
     'django.contrib.humanize',
+    'django_translation_flags',
 
 ]
 
@@ -52,6 +54,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
 ]
 
 ROOT_URLCONF = 'qrforall.urls'
@@ -107,7 +110,20 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
 LANGUAGE_CODE = 'tr'
-
+gettext = lambda s: s
+LANGUAGES = (
+    ('tr', gettext('Turkish')),
+    ('en', gettext('English')),
+    ('ar', gettext('Arabic')),
+    ('ru', gettext('Russian')),
+)
+MODELTRANSLATION_FALLBACK_LANGUAGES = {
+    'default': ('tr', 'en'),
+    'ru': ('en',),
+    'ar': ('en',)
+}
+LOCALE_PATHS = (os.path.join(BASE_DIR, 'locale'),
+                )
 TIME_ZONE = 'Europe/Istanbul'
 
 USE_I18N = True
