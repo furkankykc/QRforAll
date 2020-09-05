@@ -17,12 +17,12 @@ urlpatterns = [
     # path('checkout/<slug:slug>/<int:table_id>/', check_out_table, name='check-out-table'),
 
     path('menu/<slug:slug>/<slug:category_slug>/<int:table_id>', menu, name='menu-detail'),
-    path('menu/<slug:slug>/<slug:category_slug>/<int:category_id>/<int:table_id>/', menu, name='category'),
-    path('order/<slug:slug>/<slug:category_slug>/<int:category_id>/<int:table_id>/', menu, name='order'),
+    path('menu/<slug:slug>/<slug:category_slug>/<int:table_id>/category/<int:category_id>', menu, name='category'),
+    path('order/<slug:slug>/<slug:category_slug>/<int:table_id>/category/<int:category_id>', menu, name='order'),
     path('detail/<slug:slug>/<slug:category_slug>/<int:table_id>', orderDetail, name='order-detail'),
     path('garson/<slug:slug>/<slug:category_slug>/<int:table_id>', request_garson, name='garson'),
     path('send/garson/<slug:slug>/<slug:category_slug>/<int:table_id>', garson_is_on_the_way, name='check_garson'),
-    path('checkout/<slug:slug>/<slug:category_slug>/<int:table_id>/', check_out_table, name='check-out-table'),
+    path('checkout/<slug:slug>/<slug:category_slug>/<int:table_id>', check_out_table, name='check-out-table'),
 
     path('check/<slug:slug>/<int:order_id>/', check_accounting_entry, name='check'),
     path('delete/<slug:slug>/<int:order_id>/', delete_accounting_entry, name='delete'),

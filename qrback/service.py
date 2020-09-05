@@ -9,11 +9,11 @@ from PIL import Image, ImageDraw
 from qrforall import settings
 
 
-def create_qr(obj, num=None):
+def create_qr(obj, category=None, num=None):
     imgname = os.path.join('photos', str(obj.slug), '{}.png'.format(obj.slug))
     if not os.path.exists(os.path.join(settings.MEDIA_ROOT, 'photos', str(obj.slug))):
         os.makedirs(os.path.join(settings.MEDIA_ROOT, 'photos', str(obj.slug)))
-    if num == None:
+    if num == None or category == None:
         url = pyqrcode.QRCode(
             "{}://{}".format(settings.HTTP_METHOD, settings.SITE_URL) + reverse('menu-detail', args=(obj.slug,)),
             error='H')
@@ -21,9 +21,9 @@ def create_qr(obj, num=None):
     else:
         imgname = os.path.join('photos', str(obj.slug), '{}-{}.png'.format(obj.slug, num))
         url = pyqrcode.QRCode(
-            "{}://{}".format(settings.HTTP_METHOD, settings.SITE_URL) + reverse('menu-detail', args=(obj.slug, num)),
+            "{}://{}".format(settings.HTTP_METHOD, settings.SITE_URL) + reverse('menu-detail',
+                                                                                args=(obj.slug, category, num)),
             error='H')
-
     scale = 10
     url.png(os.path.join(settings.MEDIA_ROOT, imgname), scale=scale)
     im = Image.open(os.path.join(settings.MEDIA_ROOT, imgname))

@@ -47,7 +47,7 @@ def request_garson(request, slug, category_slug, table_id: int):
     company = Company.objects.get(slug=slug)
     category = Category.objects.get(slug=category_slug)
     Accounting.get_table_account(company, table_id, category).request_garson()
-    return redirect('menu-detail', slug,category_slug, table_id)
+    return redirect('menu-detail', slug, category_slug, table_id)
 
 
 def garson_is_on_the_way(request, slug, category_slug, table_id: int):
@@ -92,8 +92,10 @@ def test(request, slug):
 def orderDetail(request, *args, **kwargs):
     slug = kwargs['slug']
     table_id = kwargs['table_id']
-    category_slug = kwargs['category_slug']
-    category = Category.objects.get(slug=category_slug)
+    category = None
+    if 'category_slug' in kwargs:
+        category_slug = kwargs['category_slug']
+        category = Category.objects.get(slug=category_slug)
     company = Company.objects.get(slug=slug)
     accounting = Accounting.get_table_account(company, table_id, category)
     context = {'accounting': accounting}
@@ -144,6 +146,9 @@ def menu(request, *args, **kwargs):
     table_category = None
     if company.account_type.categories.filter(slug=category_slug).exists():
         table_category = Category.objects.get(slug=category_slug)
+        category_slug = table_category.slug
+    else:
+        category_slug = company.account_type.categories.first().slug
     if request.method == "POST":
         count = int(request.POST['count'])
         item_id = int(request.POST['chosen_entry'])
@@ -155,14 +160,14 @@ def menu(request, *args, **kwargs):
 
         account.add_entry(entry, count)
         print(entry, '|', count, '| table=', table_id)
-        return redirect("category", slug, category_slug, category_id, table_id)
+        return redirect("category", slug, category_slug, table_id,category_id)
     print('table_category=', category_slug, '| table=', table_id)
 
     eid = Entry.objects.filter(company__slug=slug).values('category').distinct()
     categories = FoodCategory.objects.filter(id__in=eid)
     # return render(request, template_name='digitalMenuNotOrder.html',
     #               context={'company': company, 'entries': Entry.objects.filter(company=company.id)})
-    company.count()
+
 
     if company.account_type.has_digital_menu:
         if company.account_type.has_unique_tables:
@@ -175,10 +180,11 @@ def menu(request, *args, **kwargs):
                 if table_id == 0 or table_id > max_table_count:
                     return HttpResponseNotFound("Masa sayısı aşıldı")
                 elif table_id == -1:
+                    company.count()
                     return render(request, template_name='menu/digitalMenuCategory.html',
                                   context={'categories': categories, 'company': company,
                                            'category_id': category_id})
-
+                company.count()
                 return render(request, template_name='menu/digitalMenuCategory.html',
                               context={'categories': categories, 'company': company, 'table_id': table_id,
                                        'category_slug': category_slug,
@@ -190,7 +196,7 @@ def menu(request, *args, **kwargs):
                                                                                                 'category__name')})
 
     else:
-
+        company.count()
         return render(request, template_name='paperMenu.html', context={'company': company})
 
 

@@ -106,7 +106,9 @@ class Company(models.Model):
     def create_qr(self):
         qr_list = [service.create_qr(self)]
         if self.account_type.has_unique_tables:
-            qr_list.extend([service.create_qr(self, i) for i in range(1, self.account_type.count_of_max_table + 1)])
+            for j in self.account_type.categories.all():
+                qr_list.extend(
+                    [service.create_qr(self, j.slug, i) for i in range(1, self.account_type.count_of_max_table + 1)])
 
         return qr_list
 
@@ -252,6 +254,8 @@ class Accounting(models.Model):
             ses_table = cls()
             ses_table.table = table_id
             ses_table.company = company
+            if category is None:
+                category = company.account_type.categories.first()
             ses_table.category = category
             ses_table.save()
         return ses_table
