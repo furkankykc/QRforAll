@@ -89,5 +89,84 @@ class Migration(migrations.Migration):
             model_name='company',
             name='whatsapp',
             field=models.URLField(blank=True, help_text='http://api.whatsapp.com/send?phone=+90********** şeklinde girilmelidir'),
+        ),       migrations.AddField(
+            model_name='entry',
+            name='detail_ar',
+            field=models.CharField(blank=True, max_length=100, null=True, verbose_name='ürün detayı'),
+        ),
+        migrations.AddField(
+            model_name='entry',
+            name='detail_en',
+            field=models.CharField(blank=True, max_length=100, null=True, verbose_name='ürün detayı'),
+        ),
+        migrations.AddField(
+            model_name='entry',
+            name='detail_ru',
+            field=models.CharField(blank=True, max_length=100, null=True, verbose_name='ürün detayı'),
+        ),
+        migrations.AddField(
+            model_name='entry',
+            name='detail_tr',
+            field=models.CharField(blank=True, max_length=100, null=True, verbose_name='ürün detayı'),
+        ),
+        migrations.AddField(
+            model_name='entry',
+            name='name_ar',
+            field=models.CharField(max_length=30, null=True, verbose_name='isim'),
+        ),
+        migrations.AddField(
+            model_name='entry',
+            name='name_en',
+            field=models.CharField(max_length=30, null=True, verbose_name='isim'),
+        ),
+        migrations.AddField(
+            model_name='entry',
+            name='name_ru',
+            field=models.CharField(max_length=30, null=True, verbose_name='isim'),
+        ),
+        migrations.AddField(
+            model_name='entry',
+            name='name_tr',
+            field=models.CharField(max_length=30, null=True, verbose_name='isim'),
+        ),
+        migrations.AddField(
+            model_name='foodcategory',
+            name='name_ar',
+            field=models.CharField(max_length=20, null=True, verbose_name='isim'),
+        ),
+        migrations.AddField(
+            model_name='foodcategory',
+            name='name_en',
+            field=models.CharField(max_length=20, null=True, verbose_name='isim'),
+        ),
+        migrations.AddField(
+            model_name='foodcategory',
+            name='name_ru',
+            field=models.CharField(max_length=20, null=True, verbose_name='isim'),
+        ),
+        migrations.AddField(
+            model_name='foodcategory',
+            name='name_tr',
+            field=models.CharField(max_length=20, null=True, verbose_name='isim'),
+        ),
+        migrations.AddField(
+            model_name='foodgroup',
+            name='name_ar',
+            field=models.CharField(max_length=20, null=True, verbose_name='isim'),
+        ),
+        migrations.AddField(
+            model_name='foodgroup',
+            name='name_en',
+            field=models.CharField(max_length=20, null=True, verbose_name='isim'),
+        ),
+        migrations.AddField(
+            model_name='foodgroup',
+            name='name_ru',
+            field=models.CharField(max_length=20, null=True, verbose_name='isim'),
+        ),
+        migrations.AddField(
+            model_name='foodgroup',
+            name='name_tr',
+            field=models.CharField(max_length=20, null=True, verbose_name='isim'),
         ),
     ]

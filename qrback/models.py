@@ -135,6 +135,8 @@ class FoodCategory(models.Model):
 
     name = models.CharField(max_length=20, verbose_name=_('isim'))
     image = models.ImageField(upload_to=get_image_path, blank=True, null=True, verbose_name='kapak fotoğrafı')
+    is_abstract = models.BooleanField(default=False, verbose_name='soyut',
+                                      help_text='Aktifleştirildiğinde bu kategoride bulunan ürünlerin fiyatları müşterilere gösterilmez.(sadece dijital siparişli menü içindir)')
     owner = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='sahip')
     group = models.ForeignKey(FoodGroup, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='grup')
 
