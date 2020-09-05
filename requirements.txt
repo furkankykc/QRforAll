@@ -4,3 +4,5 @@ djangorestframework==3.11.0
 pypng==0.0.20
 PyQRCode==1.2.1
 django-split-settings==1.0.1
+django-modeltranslation
+django-translation-flags

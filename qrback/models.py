@@ -121,7 +121,7 @@ class FoodGroup(models.Model):
         verbose_name = 'Menü Grubu'
         verbose_name_plural = 'Menü Grupları'
 
-    name = models.CharField(max_length=20, verbose_name='isim')
+    name = models.CharField(max_length=20, verbose_name=_('isim'))
     owner = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='sahip')
 
     def __str__(self):
@@ -133,7 +133,7 @@ class FoodCategory(models.Model):
         verbose_name = 'Menü Kategorisi'
         verbose_name_plural = 'Menü Kategorileri'
 
-    name = models.CharField(max_length=20, verbose_name='isim')
+    name = models.CharField(max_length=20, verbose_name=_('isim'))
     image = models.ImageField(upload_to=get_image_path, blank=True, null=True, verbose_name='kapak fotoğrafı')
     owner = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='sahip')
     group = models.ForeignKey(FoodGroup, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='grup')
@@ -146,13 +146,14 @@ class FoodCategory(models.Model):
         return self.image
 
 
+# python manage.py sync_translation_fields
 class Entry(models.Model):
     class Meta:
         verbose_name = 'Menü Ürünü'
         verbose_name_plural = 'Menü Ürünleri'
 
-    name = models.CharField(max_length=30, verbose_name='isim')
-    detail = models.CharField(max_length=100, verbose_name='ürün detayı', blank=True)
+    name = models.CharField(max_length=30, verbose_name=_('isim'))
+    detail = models.CharField(max_length=100, verbose_name=_('ürün detayı'), blank=True)
     price = models.FloatField(verbose_name='fiyat')
     image = models.ImageField(upload_to=get_image_path, blank=True, null=True, verbose_name='kapak fotoğrafı')
     category = models.ForeignKey(FoodCategory, on_delete=models.CASCADE, verbose_name='Kategori')
