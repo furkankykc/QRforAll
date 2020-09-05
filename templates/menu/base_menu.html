@@ -47,9 +47,27 @@
                     background: #000000;
                 }
             }
+
+            .flags {
+                width: 200px;
+                height: 32px;
+                /* sağa almak için "float: right;" kullanabilirsiniz*/
+                float: left;
+            }
+
+            .flags ul {
+                list-style-type: none;
+                padding: 0;
+                margin: 0;
+            }
+
+            .flags ul li {
+                display: inline;
+            }
         </style>
     {% endblock %}
-
+    {% load i18n %}
+    {% load flags %}
 </head>
 
 
@@ -57,71 +75,79 @@
 <div class="mad-preloader"></div>
 <div id="mad-page-wrapper" class="mad-page-wrapper">
     <header id="mad-header" class="mad-header mad-header--transparent">
-        <div class="container">
-            <div class="mad-header-section">
-                <div class="mad-header-items item-col-3">
-                    <div class="mad-header-item">
-                        {% if company.phone %}
-                            <a href="tel:{{ company.phone }}">
-                                <div><i class="material-icons">phone</i>{{ company.phone }}</div>
-                            </a>
-                        {% endif %}
+
+        <div class="mad-header-section">
+
+            <div class="mad-header-items item-col-3">
+                <div class="mad-header-item">
+                    {% if company.phone %}
+                        <a href="tel:{{ company.phone }}">
+                            <div><i class="material-icons">phone</i>{{ company.phone }}</div>
+                        </a>
+                    {% endif %}
+                </div>
+                <div class="mad-header-item">
+                    {% if company.logo %}
+                        <p href="#" class="mad-logo">
+                            {% if company.logo %}
+                                <img width="210px" src="{{ company.logo.url }}" alt="">
+                            {% endif %}
+                        </p>
+                    {% endif %}
+                </div>
+
+                <div class="mad-header-item" style="padding-top: 0;">
+                    {% if company.slogan %}
+                        <a style="font-weight: bold;">
+                            {{ company.slogan }}
+                        </a>
+                    {% endif %}
+                                    <div class="flags">
+                        <ul style="display: block">
+                            {% languages 'square' %}
+                        </ul>
                     </div>
                     <div class="mad-header-item">
-                        {% if company.logo %}
-                            <p href="#" class="mad-logo">
-                                {% if company.logo %}
-                                    <img width="210px" src="{{ company.logo.url }}" alt="">
+                        <div class="mad-social-icons">
+                            <ul>
+                                {% if company.facebook %}
+                                    <li>
+                                        <a target="_blank" href="{{ company.facebook }}"><i class="fab fa-facebook-f"></i></a>
+                                    </li>
                                 {% endif %}
-                            </p>
-                        {% endif %}
-                    </div>
-                    <div class="mad-header-item" style="padding-top: 0;">
-                        {% if company.slogan %}
-                            <a style="font-weight: bold;">
-                                {{ company.slogan }}
-                            </a>
-                        {% endif %}
-                        <div class="mad-header-item">
-                            <div class="mad-social-icons">
-                                <ul>
-                                    {% if company.facebook %}
-                                        <li>
-                                            <a target="_blank" href="{{ company.facebook }}"><i class="fab fa-facebook-f"></i></a>
-                                        </li>
-                                    {% endif %}
-                                    {% if company.instagram %}
-                                        <li>
-                                            <a target="_blank" href="{{ company.instagram }}"><i class="fab fa-instagram"></i></a>
-                                        </li>
-                                    {% endif %}
-                                    {% if company.whatsapp %}
-                                        <li>
-                                            <a target="_blank" href="{{ company.whatsapp }}"><i class="fab fa-whatsapp"></i></a>
-                                        </li>
-                                    {% endif %}
-                                </ul>
-                            </div>
+                                {% if company.instagram %}
+                                    <li>
+                                        <a target="_blank" href="{{ company.instagram }}"><i class="fab fa-instagram"></i></a>
+                                    </li>
+                                {% endif %}
+                                {% if company.whatsapp %}
+                                    <li>
+                                        <a target="_blank" href="{{ company.whatsapp }}"><i class="fab fa-whatsapp"></i></a>
+                                    </li>
+                                {% endif %}
+                            </ul>
                         </div>
                     </div>
+
                 </div>
+
             </div>
         </div>
     </header>
-    <div
-            {% if company.menu_background %}
-                class="mad-breadcrumb with-bg" data-bg-image-src="{{ company.menu_background.url }}">
-            {% else %}
-                class="mad-breadcrumb with-bg" data-bg-image-src="{% static 'velikorodnov/images/1920x544_bg3.jpg' %}">
-            {% endif %}
-    <div class="container">
-        {#    todo : bura dinamikleşecek #}
-        <nav class="mad-breadcrumb-path"><span>Menu</span>
-        </nav>
-        <h1 class="mad-page-title">{{ company.name }} </h1>
-    </div>
-    </div>
-    {% block content %}{% endblock %}
+</div>
+<div
+        {% if company.menu_background %}
+            class="mad-breadcrumb with-bg" data-bg-image-src="{{ company.menu_background.url }}">
+        {% else %}
+            class="mad-breadcrumb with-bg" data-bg-image-src="{% static 'velikorodnov/images/1920x544_bg3.jpg' %}">
+        {% endif %}
+<div class="container">
+    <nav class="mad-breadcrumb-path"><span>Menu</span>
+    </nav>
+    <h1 class="mad-page-title">{{ company.name }} </h1>
+</div>
+</div>
+{% block content %}{% endblock %}
 
 
 </div>
