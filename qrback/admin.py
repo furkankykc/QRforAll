@@ -8,6 +8,7 @@ from django.utils.safestring import mark_safe
 from qrback.models import *
 # admin.site.register(Entry)
 from qrforall import settings
+from modeltranslation.admin import TranslationAdmin
 
 
 class CustomAdminSite(admin.AdminSite):
@@ -58,7 +59,7 @@ class UserModelAdmin(admin.ModelAdmin):
 
 
 @admin.register(Entry, site=customAdminSite)
-class EntryAdmin(admin.ModelAdmin):
+class EntryAdmin(TranslationAdmin):
     list_display = ('name', 'price', 'category', 'company', 'image')
 
     # def __init__(self, *args, **kwargs):
@@ -86,7 +87,7 @@ class EntryAdmin(admin.ModelAdmin):
 
 
 @admin.register(FoodCategory, site=customAdminSite)
-class FoodCategoryAdmin(admin.ModelAdmin):
+class FoodCategoryAdmin(TranslationAdmin):
     list_display = ('name', 'group')
 
     def get_readonly_fields(self, request, obj=None):
@@ -113,7 +114,7 @@ class FoodCategoryAdmin(admin.ModelAdmin):
 
 
 @admin.register(FoodGroup, site=customAdminSite)
-class FoodGroupAdmin(admin.ModelAdmin):
+class FoodGroupAdmin(TranslationAdmin):
 
     def get_readonly_fields(self, request, obj=None):
         if obj and not request.user.is_superuser:  # editing an existing object
