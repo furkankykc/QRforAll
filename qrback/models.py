@@ -146,7 +146,6 @@ class FoodCategory(models.Model):
         return self.image
 
 
-# python manage.py sync_translation_fields
 class Entry(models.Model):
     class Meta:
         verbose_name = 'Menü Ürünü'
