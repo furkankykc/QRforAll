@@ -27,6 +27,7 @@
     <link rel="stylesheet" href="{% static 'imagine/css/aos.css' %}">
 
     <link rel="stylesheet" href="{% static 'imagine/css/style.css' %}">
+    <link rel="shortcut icon" href="{% static 'vroom_logo.ico' %}">
 
 </head>
 <body data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
@@ -226,15 +227,15 @@
     </div>
     <div class="site-section" id="references">
         <div class="container">
-        {% if companies.count > 0 %}
-            <div class="row mb-5 justify-content-center text-center" data-aos="fade-up">
-                <div class="col-7 text-center  mb-5">
-                    <h2 class="section-title">Referanslarımız</h2>
-{#                    <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fuga quos quaerat sapiente#}
-{#                        nam, id vero.</p>#}
+            {% if companies.count > 0 %}
+                <div class="row mb-5 justify-content-center text-center" data-aos="fade-up">
+                    <div class="col-7 text-center  mb-5">
+                        <h2 class="section-title">Referanslarımız</h2>
+                        {#                    <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fuga quos quaerat sapiente#}
+                        {#                        nam, id vero.</p>#}
+                    </div>
                 </div>
-            </div>
-        {% endif %}
+            {% endif %}
 
 
             <div class="row">
@@ -243,16 +244,20 @@
                         <div class="person">
                             <div class="bio-img">
                                 <figure style="align-items: center;min-height: 330px;display: flex;">
-                                    {% if company.logo %} <img src="{{ company.logo.url }}" width="330" alt="Image" class="img-fluid"> {% endif %}
+                                    {% if company.logo %}
+                                        <img src="{{ company.logo.url }}" width="330" alt="Image" class="img-fluid"> {% endif %}
                                 </figure>
                                 <div class="social">
 
-                                   {% if company.facebook %} <a href="{{ company.facebook }}"><span class="icon-facebook"></span></a> {% endif %}
-                                   {% if company.twitter %} <a href="{{ company.twitter }}"><span class="icon-twitter"></span></a> {% endif %}
-                                   {% if company.instagram %} <a href="{{ company.instagram }}"><span class="icon-instagram"></span></a> {% endif %}
+                                    {% if company.facebook %}
+                                        <a href="{{ company.facebook }}"><span class="icon-facebook"></span></a> {% endif %}
+                                    {% if company.twitter %}
+                                        <a href="{{ company.twitter }}"><span class="icon-twitter"></span></a> {% endif %}
+                                    {% if company.instagram %}
+                                        <a href="{{ company.instagram }}"><span class="icon-instagram"></span></a> {% endif %}
                                 </div>
                             </div>
-{#                            <h2 class="text-black h1">{{ company.name }}</h2>#}
+                            {#                            <h2 class="text-black h1">{{ company.name }}</h2>#}
                         </div>
                     </div>
                 {% endfor %}
