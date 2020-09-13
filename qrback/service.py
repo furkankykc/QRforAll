@@ -11,19 +11,28 @@ from qrforall import settings
 
 def create_qr(obj, category=None, num=None):
     imgname = os.path.join('photos', str(obj.slug), '{}.png'.format(obj.slug))
+    # print("{}://{}".format(settings.HTTP_METHOD, settings.SITE_URL) + reverse('menu-detail',
+    #                                                                           args=(
+    #                                                                               obj.prefix, obj.slug, category,
+    #                                                                               num)))
     if not os.path.exists(os.path.join(settings.MEDIA_ROOT, 'photos', str(obj.slug))):
         os.makedirs(os.path.join(settings.MEDIA_ROOT, 'photos', str(obj.slug)))
+
     if num == None or category == None:
         url = pyqrcode.QRCode(
-            "{}://{}".format(settings.HTTP_METHOD, settings.SITE_URL) + reverse('menu-detail', args=(obj.slug,)),
+            "{}://{}".format(settings.HTTP_METHOD, settings.SITE_URL) + reverse('menu-detail',
+                                                                                args=(obj.prefix, obj.slug,)),
             error='H')
 
     else:
-        imgname = os.path.join('photos', str(obj.slug), '{}-{}.png'.format(obj.slug, num))
+        imgname = os.path.join('photos', str(obj.slug), '{}-{}-{}.png'.format(obj.slug, category, num))
         url = pyqrcode.QRCode(
             "{}://{}".format(settings.HTTP_METHOD, settings.SITE_URL) + reverse('menu-detail',
-                                                                                args=(obj.slug, category, num)),
+                                                                                args=(
+                                                                                    obj.prefix, obj.slug, category,
+                                                                                    num)),
             error='H')
+
     scale = 10
     url.png(os.path.join(settings.MEDIA_ROOT, imgname), scale=scale)
     im = Image.open(os.path.join(settings.MEDIA_ROOT, imgname))

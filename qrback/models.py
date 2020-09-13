@@ -48,6 +48,7 @@ class Company(models.Model):
 
     owner = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, verbose_name='sahip')
     slug = models.SlugField(blank=True, verbose_name='url')
+    prefix = models.SlugField(blank=False, null=False, default='menu', verbose_name='prefix')
 
     name = models.CharField(max_length=20, verbose_name='İsim')
     slogan = models.CharField(max_length=40, blank=True, null=True)
@@ -109,7 +110,6 @@ class Company(models.Model):
             for j in self.account_type.categories.all():
                 qr_list.extend(
                     [service.create_qr(self, j.slug, i) for i in range(1, self.account_type.count_of_max_table + 1)])
-
         return qr_list
 
     def __str__(self):

@@ -46,6 +46,15 @@
                     padding-bottom: unset;
                     background: #000000;
                 }
+
+            }
+
+            .mad-footer {
+                position: relative;
+                padding: 2rem 0;
+                background: unset;
+                background-color: #0b0b0b;
+                background-size: contain;
             }
 
             .flags {
@@ -102,7 +111,7 @@
                             {{ company.slogan }}
                         </a>
                     {% endif %}
-                                    <div class="flags">
+                    <div class="flags">
                         <ul style="display: block">
                             {% languages 'square' %}
                         </ul>
@@ -142,7 +151,7 @@
             class="mad-breadcrumb with-bg" data-bg-image-src="{% static 'velikorodnov/images/1920x544_bg3.jpg' %}">
         {% endif %}
 <div class="container">
-    <nav class="mad-breadcrumb-path"><span>Menu</span>
+    {#    <nav class="mad-breadcrumb-path"><span>Menu</span>#}
     </nav>
     <h1 class="mad-page-title">{{ company.name }} </h1>
 </div>
@@ -152,37 +161,37 @@
 
 </div>
 
-<footer id="mad-footer" class="mad-footer">
+<footer id="mad-footer" class="mad-footer" style="padding-top: 2rem">
     <!--================ Footer row ================-->
     <div class="mad-footer-main">
         <div class="container">
             <div class="row">
-                <div class="col-md-4">
-                    <!--================ Widget ================-->
-                    {#                        <section class="mad-widget">#}
-                    {#                            <h4 class="mad-widget-title">We Are Open</h4>#}
-                    {#                            <div class="mad-timetable mad-vr-list">#}
-                    {#                                <ul>#}
-                    {#                                    <li>#}
-                    {#                                        <div class="mad-tt-title">Brunch</div>#}
-                    {#                                        Saturday: 10am – 2pm#}
-                    {#                                    </li>#}
-                    {#                                    <li>#}
-                    {#                                        <div class="mad-tt-title">Dinner</div>#}
-                    {#                                        Monday – Thursday: 5pm – 10pm <br>#}
-                    {#                                        Friday – Saturday: 4pm – 11pm#}
-                    {#                                    </li>#}
-                    {#                                    <li>#}
-                    {#                                        <div class="mad-tt-title">Happy Hour</div>#}
-                    {#                                        Monday – Thursday: 5pm – 6pm <br>#}
-                    {#                                        Friday – Saturday: 2pm – 4pm#}
-                    {#                                    </li>#}
-                    {#                                </ul>#}
-                    {#                            </div>#}
-                    {#                        </section>#}
-                    <!--================ End of Widget ================-->
-                </div>
-                <div class="col-md-4">
+                {#                <div class="col-md-4">#}
+                <!--================ Widget ================-->
+                {#                        <section class="mad-widget">#}
+                {#                            <h4 class="mad-widget-title">We Are Open</h4>#}
+                {#                            <div class="mad-timetable mad-vr-list">#}
+                {#                                <ul>#}
+                {#                                    <li>#}
+                {#                                        <div class="mad-tt-title">Brunch</div>#}
+                {#                                        Saturday: 10am – 2pm#}
+                {#                                    </li>#}
+                {#                                    <li>#}
+                {#                                        <div class="mad-tt-title">Dinner</div>#}
+                {#                                        Monday – Thursday: 5pm – 10pm <br>#}
+                {#                                        Friday – Saturday: 4pm – 11pm#}
+                {#                                    </li>#}
+                {#                                    <li>#}
+                {#                                        <div class="mad-tt-title">Happy Hour</div>#}
+                {#                                        Monday – Thursday: 5pm – 6pm <br>#}
+                {#                                        Friday – Saturday: 2pm – 4pm#}
+                {#                                    </li>#}
+                {#                                </ul>#}
+                {#                            </div>#}
+                {#                        </section>#}
+                <!--================ End of Widget ================-->
+                {#                </div>#}
+                <div class="col-md-4" style="margin: auto;">
                     <!--================ Widget ================-->
                     <section class="mad-widget">
                         {% if company.logo %}
@@ -263,8 +272,9 @@
         </div>
     </div>
     <!--================ End of Footer row ================-->
-    <p class="copyrights"> karekodyazilimi.com <a href="https://tr.linkedin.com/company/vgrstudio"
-                                                  class="mad-link link-white">VR Gaming Room</a> Yazılım projesidir.
+    <p class="copyrights"><a href="https://karekodyazilimi.com">karekodyazilimi.com</a>
+        <a href="https://tr.linkedin.com/company/vgrstudio"
+           class="mad-link link-white">VR Gaming Room</a> Yazılım projesidir.
     </p>
 </footer>
 {% block js %}

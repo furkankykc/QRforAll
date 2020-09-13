@@ -165,13 +165,15 @@ class CompanyAdmin(admin.ModelAdmin):
     def generate_qr(self, obj):
         return mark_safe(
             '<a class="button" title="Generate QR codes" name="index" href="{}">QR Code</a>'.format(
-                "{}://{}".format(settings.HTTP_METHOD, settings.SITE_URL) + reverse('generate_qr', args=([obj.slug]))))
+                "{}://{}".format(settings.HTTP_METHOD, settings.SITE_URL) + reverse('generate_qr',
+                                                                                    args=([obj.slug]))))
 
     def menu_url(self, obj):
         return mark_safe(
             '<a class="button" title="Generate QR codes" name="index" href="{}">{}</a>'.format(
-                "{}://{}".format(settings.HTTP_METHOD, settings.SITE_URL) + reverse('menu-detail', args=([obj.slug])),
-                reverse('menu-detail', args=[obj.slug])))
+                "{}://{}".format(settings.HTTP_METHOD, settings.SITE_URL) + reverse('menu-detail',
+                                                                                    args=([obj.prefix, obj.slug])),
+                reverse('menu-detail', args=[obj.prefix, obj.slug])))
 
     title.short_description = 'Action'
     visitors.short_description = 'VISITORS'

@@ -3,14 +3,11 @@ from django.urls import path
 from qrback.admin import customAdminSite
 from qrback.views import *
 
+# handler404 = 'qrback.views.handler404'
 
 urlpatterns = [
     path('panel/<slug:slug>/', panel, name='panel'),
     path('login/', customAdminSite.login, name='login'),
-    path('menu/<slug:slug>/', menu, name='menu-detail'),
-    path('menu/<slug:slug>/category/<int:category_id>', menu_no_table, name='category'),
-    path('menu/<slug:slug>/<slug:category_slug>/<int:table_id>', menu, name='menu-detail'),
-    path('menu/<slug:slug>/<slug:category_slug>/<int:table_id>/category/<int:category_id>', menu, name='category'),
 
     path('order/<slug:slug>/<slug:category_slug>/<int:table_id>/category/<int:category_id>', menu, name='order'),
     path('detail/<slug:slug>/<slug:category_slug>/<int:table_id>', orderDetail, name='order-detail'),
@@ -25,4 +22,10 @@ urlpatterns = [
     path('download/<slug:slug>/', download, name='download'),
     path('test/<slug:slug>/', test, name='test'),
     path('', index, name='index'),
+    path('<slug:prefix>/<slug:slug>/', menu, name='menu-detail'),
+    path('<slug:prefix>/<slug:slug>/category/<int:category_id>', menu_no_table, name='category'),
+    path('<slug:prefix>/<slug:slug>/<slug:category_slug>/<int:table_id>', menu, name='menu-detail'),
+    path('<slug:prefix>/<slug:slug>/<slug:category_slug>/<int:table_id>/category/<int:category_id>', menu,
+         name='category'),
+
 ]

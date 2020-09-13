@@ -167,9 +167,9 @@
         <div class="cards-list">
             {% for category in categories %}
                 {% if table_id %}
-                    <a href="{% url 'category' company.slug category_slug category.id  table_id %}">
+                    <a href="{% url 'category' company.prefix company.slug category_slug category.id  table_id %}">
                 {% else %}
-                    <a href="{% url 'category' company.slug category.id %}">
+                    <a href="{% url 'category' company.prefix company.slug category.id %}">
                 {% endif %}
             <div class="card 1">
                 <div class="card_image">

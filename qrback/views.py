@@ -3,8 +3,8 @@ from shutil import make_archive
 
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
-from django.http import HttpResponse, HttpResponseNotFound
-from django.shortcuts import render, redirect
+from django.http import HttpResponse, HttpResponseNotFound, Http404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import DetailView
 
 from qrback import service
@@ -47,7 +47,7 @@ def request_garson(request, slug, category_slug, table_id: int):
     company = Company.objects.get(slug=slug)
     category = Category.objects.get(slug=category_slug)
     Accounting.get_table_account(company, table_id, category).request_garson()
-    return redirect('menu-detail', slug, category_slug, table_id)
+    return redirect('menu-detail', company.prefix, slug, category_slug, table_id)
 
 
 def garson_is_on_the_way(request, slug, category_slug, table_id: int):
@@ -122,15 +122,19 @@ class QRDetailView(DetailView):
     context_object_name = 'company'
 
 
-def menu_no_table(request, slug, category_id):
-    company = Company.objects.get(slug__exact=slug)
+def menu_no_table(request, slug, category_id, prefix):
+    company = Company.objects.get(slug__exact=slug, prefix__exact=prefix)
     return render(request, template_name='digitalMenuItem.html',
                   context={'categories': Entry.objects.filter(company_id=company.id, category=category_id),
                            'company': company, 'category_id': category_id})
 
 
+# def handler404(request, exception):
+#     return render(request, 'errors/404.html', locals())
+
 def menu(request, *args, **kwargs):
     slug = kwargs['slug']
+    prefix = kwargs['prefix']
     category_slug = None
     if 'category_slug' in kwargs:
         category_slug = kwargs['category_slug']
@@ -141,7 +145,9 @@ def menu(request, *args, **kwargs):
     if 'category_id' in kwargs:
         category_id = kwargs['category_id']
 
-    company = Company.objects.get(slug__exact=slug)
+    # company = Company.objects.get(slug__exact=slug)
+    company = get_object_or_404(Company, slug__exact=slug, prefix__exact=prefix)
+
     max_table_count = company.account_type.count_of_max_table
     table_category = None
     if company.account_type.categories.filter(slug=category_slug).exists():
@@ -160,14 +166,13 @@ def menu(request, *args, **kwargs):
 
         account.add_entry(entry, count)
         print(entry, '|', count, '| table=', table_id)
-        return redirect("category", slug, category_slug, table_id,category_id)
+        return redirect("category", slug, category_slug, table_id, category_id)
     print('table_category=', category_slug, '| table=', table_id)
 
     eid = Entry.objects.filter(company__slug=slug).values('category').distinct()
     categories = FoodCategory.objects.filter(id__in=eid)
     # return render(request, template_name='digitalMenuNotOrder.html',
     #               context={'company': company, 'entries': Entry.objects.filter(company=company.id)})
-
 
     if company.account_type.has_digital_menu:
         if company.account_type.has_unique_tables:
