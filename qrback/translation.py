@@ -9,7 +9,7 @@ from qrback.models import Entry, FoodGroup, FoodCategory
 
 class ProductTranslationOptions(TranslationOptions):
     fields = ('name', 'detail',)
-    required_languages = ('tr',)
+    required_languages = {'tr': ('name',)}
 
 
 class FoodTranslationOptions(TranslationOptions):

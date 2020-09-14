@@ -26,8 +26,8 @@ urlpatterns = [
 
 ]
 urlpatterns += i18n_patterns(
+    path('i18n/',include('django.conf.urls.i18n')),
     path('', include('qrback.urls')),
-    url(r'^i18n/', include('django.conf.urls.i18n')),
 
     prefix_default_language=False
 )
