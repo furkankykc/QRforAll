@@ -1,143 +1,144 @@
 {% extends 'menu/base_menu.html' %}
 {% load static %}
 {% block content %}
-{% regroup entries by category.group as entries_by_date %}
-<!--================ End of Breadcrumb ================-->
-<div class="mad-content no-pd">
-    <div class="container">
-        <div class="mad-section mad-section--stretched mad-colorizer--scheme-" style="padding-top: 2rem;">
-            <div class="mad-colorizer-bg-color">
-                <div class="with-svg-item svg-right-side">
-                    {% if not company.not_order_background %}
-                        <img id="no-bg-image"
-                             src="{% static 'velikorodnov/images/top_half_right.png' %}" alt="">
-                    {% else %}
-                        <img id="no-bg-image" width="397" height="587"
-                             src="{{ company.not_order_background.url }}" alt="">
-                    {% endif %}
-                </div>
-            </div>
-            <!--================ Tabs ================-->
-
-            <div class="mad-tabs">
-
-                <!--================ Tabs Navigation ================-->
-                <div role="tablist" aria-label="Tabs v1" class="mad-tabs-nav justify-content-lg-start">
-                    {#                <span class="mad-active">#}
-                    {#                    <a id="tab-1-link" href="#tab-1" role="tab" aria-selected="false" aria-controls="tab-1"#}
-                    {#                       class="mad-tab-link">Food Menu</a>#}
-                    {#                </span>#}
-
-                    {% for ent in entries_by_date %}
-
-                        {% if forloop.first %}
-                            <span class="mad-active">
+    {% regroup entries by category.group as entries_by_date %}
+    <!--================ End of Breadcrumb ================-->
+    <div class="mad-content no-pd">
+        <div class="container">
+            <div class="mad-section mad-section--stretched mad-colorizer--scheme-" style="padding-top: 2rem;">
+                <div class="mad-colorizer-bg-color">
+                    <div class="with-svg-item svg-right-side">
+                        {% if not company.not_order_background %}
+                            <img id="no-bg-image"
+                                 src="{% static 'velikorodnov/images/top_half_right.png' %}" alt="">
                         {% else %}
-                            <span>
+                            <img id="no-bg-image" width="397" height="587"
+                                 src="{{ company.not_order_background.url }}" alt="">
                         {% endif %}
-                    <a id="tab-{{ forloop.counter }}-link" href="#tab-{{ forloop.counter }}" role="tab"
-                       aria-selected="true" aria-controls="tab-{{ forloop.counter }}"
-                       class="mad-tab-link">{{ ent.grouper }}</a>
-                    </span>
-                    {% endfor %}
+                    </div>
                 </div>
-                <!--================ End of Tabs Navigation ================-->
-                <!--================ Tabs Container ================-->
-                <div class="mad-tabs-container">
-                    <!--================ Tab ================-->
+                <!--================ Tabs ================-->
+
+                <div class="mad-tabs">
+
+                    <!--================ Tabs Navigation ================-->
+                    <div role="tablist" aria-label="Tabs v1" class="mad-tabs-nav justify-content-lg-start">
+                        {#                <span class="mad-active">#}
+                        {#                    <a id="tab-1-link" href="#tab-1" role="tab" aria-selected="false" aria-controls="tab-1"#}
+                        {#                       class="mad-tab-link">Food Menu</a>#}
+                        {#                </span>#}
+
+                        {% for ent in entries_by_date %}
+
+                            {% if forloop.first %}
+                                <span class="mad-active">
+                            {% else %}
+                                <span>
+                            {% endif %}
+                        <a id="tab-{{ forloop.counter }}-link" href="#tab-{{ forloop.counter }}" role="tab"
+                           aria-selected="true" aria-controls="tab-{{ forloop.counter }}"
+                           class="mad-tab-link">{{ ent.grouper }}</a>
+                        </span>
+                        {% endfor %}
+                    </div>
+                    <!--================ End of Tabs Navigation ================-->
+                    <!--================ Tabs Container ================-->
+                    <div class="mad-tabs-container">
+                        <!--================ Tab ================-->
 
 
-                    {% for ent in entries_by_date %}
-                        {#                            <h4>{{ ent.grouper }}</h4>#}
-                        {% regroup ent.list by category as entries_by_tab %}
+                        {% for ent in entries_by_date %}
+                            {#                            <h4>{{ ent.grouper }}</h4>#}
+                            {% regroup ent.list by category as entries_by_tab %}
 
-                        <div id="tab-{{ forloop.counter }}" tabindex="0" role="tabpanel"
-                             aria-labelledby="tab-{{ forloop.counter }}-link" class="mad-tab">
-                            <div class="mad-specs-section">
+                            <div id="tab-{{ forloop.counter }}" tabindex="0" role="tabpanel"
+                                 aria-labelledby="tab-{{ forloop.counter }}-link" class="mad-tab">
+                                <div class="mad-specs-section">
 
-                                {% for entry in entries_by_tab %}
+                                    {% for entry in entries_by_tab %}
 
-                                    {% for item in entry.list %}
-                                        {% if forloop.first %}
+                                        {% for item in entry.list %}
+                                            {% if forloop.first %}
 
-                                            <div class="{% cycle 'row row-lg-reverse' 'row' as val %}">
-                                            {% ifequal val 'row row-lg-reverse' %}
+                                                <div class="{% cycle 'row row-lg-reverse' 'row' as val %}">
+                                                {% ifequal val 'row row-lg-reverse' %}
+                                                    <div class="col-lg-6">
+
+                                                        <figure>
+                                                            {% if item.category.image %}
+                                                                <img
+                                                                        src="{{ item.category.image.url }}"
+                                                                        alt="{{ forloop.counter|add:forloop.parentloop.counter0 }}">
+                                                            {% endif %}
+                                                        </figure>
+                                                    </div>
+                                                {% endifequal %}
                                                 <div class="col-lg-6">
+                                                <!-- Our Specifications -->
+                                                <div class="mad-specs">
+                                                <h4>{{ entry.grouper }}</h4>
 
+                                                <!-- Specification item -->
+
+                                            {% endif %}
+                                        <div class="mad-col">
+                                            <div class="mad-spec-item">
+                                                <div class="mad-spec-info">
+                                                    <div class="mad-spec-header">
+                                                        <div class="mad-spec-title">{{ item.name }}</div>
+                                                        <div class="mad-line"></div>
+                                                        <div class="mad-spec-price">{{ item.price|floatformat }}₺</div>
+                                                    </div>
+                                                    <div class="mad-spec-tags">
+                                                        <div class="mad-spec-el">
+                                                            {% if item.detail %}{{ item.detail }}{% endif %}
+                                                        </div>
+                                                        {#                                                    <a href="#" class="mad-link">vegetarian</a>,#}
+                                                        {#                                                    <a href="#" class="mad-link">vegan</a>#}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {% if forloop.last %}
+                                            <!-- End of Specification item -->
+
+                                            </div>
+                                            <!-- End of Our Specifications -->
+                                            </div>
+                                            {% ifequal val 'row' %}
+
+                                                <div class="col-lg-6">
                                                     <figure>
                                                         {% if item.category.image %}
-                                                            <img
-                                                                    src="{{ item.category.image.url }}"
-                                                                    alt="{{ forloop.counter|add:forloop.parentloop.counter0 }}">
+                                                            <img src="{{ item.category.image.url }}"
+                                                                 alt="{{ forloop.counter0|add:forloop.parentloop.counter0 }}">
                                                         {% endif %}
                                                     </figure>
                                                 </div>
-                                            {% endifequal %}
-                                            <div class="col-lg-6">
-                                            <!-- Our Specifications -->
-                                            <div class="mad-specs">
-                                            <h4>{{ entry.grouper }}</h4>
 
-                                            <!-- Specification item -->
+                                            {% endifequal %}
+                                            </div>
 
                                         {% endif %}
-                                    <div class="mad-col">
-                                        <div class="mad-spec-item">
-                                            <div class="mad-spec-info">
-                                                <div class="mad-spec-header">
-                                                    <div class="mad-spec-title">{{ item.name }}</div>
-                                                    <div class="mad-line"></div>
-                                                    <div class="mad-spec-price">{{ item.price|floatformat }}₺</div>
-                                                </div>
-                                                <div class="mad-spec-tags">
-                                                    <div class="mad-spec-el">{{ item.detail }}
-                                                    </div>
-                                                    {#                                                    <a href="#" class="mad-link">vegetarian</a>,#}
-                                                    {#                                                    <a href="#" class="mad-link">vegan</a>#}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                        {% endfor %}
 
-                                    {% if forloop.last %}
-                                        <!-- End of Specification item -->
 
-                                        </div>
-                                        <!-- End of Our Specifications -->
-                                        </div>
-                                        {% ifequal val 'row' %}
-
-                                            <div class="col-lg-6">
-                                                <figure>
-                                                    {% if item.category.image %}
-                                                        <img src="{{ item.category.image.url }}"
-                                                             alt="{{ forloop.counter0|add:forloop.parentloop.counter0 }}">
-                                                    {% endif %}
-                                                </figure>
-                                            </div>
-
-                                        {% endifequal %}
-                                        </div>
-
-                                    {% endif %}
                                     {% endfor %}
 
-
-                                {% endfor %}
-
+                                </div>
                             </div>
-                        </div>
-                    {% empty %}
-                        <a class="center" style="text-align: center;">Bu restaurant'ın her hangi bir ürünü
-                            bulunmamaktadır</a>
-                    {% endfor %}
-                    <!--================ End of Tab ================-->
+                        {% empty %}
+                            <a class="center" style="text-align: center;">Bu restaurant'ın her hangi bir ürünü
+                                bulunmamaktadır</a>
+                        {% endfor %}
+                        <!--================ End of Tab ================-->
 
+                    </div>
+                    <!--================ End of Tabs Container ================-->
                 </div>
-                <!--================ End of Tabs Container ================-->
+                <!--================ End of Tabs ================-->
             </div>
-            <!--================ End of Tabs ================-->
         </div>
     </div>
-</div>
 {% endblock %}
