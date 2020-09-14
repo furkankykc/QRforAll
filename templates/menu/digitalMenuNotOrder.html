@@ -87,7 +87,9 @@
                                                     <div class="mad-spec-header">
                                                         <div class="mad-spec-title">{{ item.name }}</div>
                                                         <div class="mad-line"></div>
+                                                           {% if not item.category.is_abstract %}
                                                         <div class="mad-spec-price">{{ item.price|floatformat }}₺</div>
+                                                        {% endif %}
                                                     </div>
                                                     <div class="mad-spec-tags">
                                                         <div class="mad-spec-el">
