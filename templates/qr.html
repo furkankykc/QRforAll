@@ -20,7 +20,7 @@
 {#</style>#}
 <div class="row1">
 
-    <a href="{% url 'download' company.slug %}">Download All!</a>
+    <a href="{% url 'download' company.slug %}">İndir!</a>
 </div>
 {% for cmp in company.create_qr %}
     <img height="50" width="50" src="{{ cmp }}">
