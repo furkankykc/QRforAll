@@ -35,6 +35,17 @@ customAdminSite.register(Category)
 customAdminSite.register(AccountType)
 
 
+def compress(image):
+    im = Image.open(image)
+    # create a BytesIO object
+    im_io = BytesIO()
+    # save image to BytesIO object
+    im.save(im_io, 'JPEG', quality=70)
+    # create a django-friendly Files object
+    new_image = File(im_io, name=image.name)
+    return new_image
+
+
 # customAdminSite.register(User)
 # customAdminSite.register(Group)
 
@@ -85,6 +96,14 @@ class EntryAdmin(TranslationAdmin):
         # self.fields['category'].queryset = FoodCategory.objects.filter(owner=request.user)  # or something else
         return qs.filter(company__owner=request.user)
 
+    def save_model(self, request, obj, form, change):
+        if change:
+            if 'image' in form.changed_data:
+                obj.image = compress(obj.image)
+                obj.save()
+
+        super(EntryAdmin, self).save_model(request, obj, form, change)
+
 
 @admin.register(FoodCategory, site=customAdminSite)
 class FoodCategoryAdmin(TranslationAdmin):
@@ -111,6 +130,15 @@ class FoodCategoryAdmin(TranslationAdmin):
         if request.user.is_superuser:
             return qs
         return qs.filter(owner=request.user)
+
+    def save_model(self, request, obj, form, change):
+
+        if change:
+            if 'image' in form.changed_data:
+                obj.image = compress(obj.image)
+                obj.save()
+
+        super(FoodCategoryAdmin, self).save_model(request, obj, form, change)
 
 
 @admin.register(FoodGroup, site=customAdminSite)
@@ -202,3 +230,14 @@ class CompanyAdmin(admin.ModelAdmin):
             self.message_user(request, "This villain is now unique")
             return HttpResponseRedirect(".")
         return super().response_change(request, obj)
+
+    def save_model(self, request, obj, form, change):
+
+        print("Save data for comp testing")
+        if change:
+            if 'menu_background' in form.changed_data:
+                print("menu degismis ")
+                obj.menu_background = compress(obj.menu_background)
+                obj.save()
+
+        super(CompanyAdmin, self).save_model(request, obj, form, change)

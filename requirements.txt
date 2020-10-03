@@ -6,6 +6,9 @@ PyQRCode==1.2.1
 django-split-settings==1.0.1
 django-modeltranslation
 django-translation-flags
+# sudo apt-get install memcached # Ubuntu
+# sudo service memcached start
+
 python-memcached
 # sudo apt-get install python3-dev
 django-compressor

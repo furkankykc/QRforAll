@@ -15,17 +15,6 @@ from django.core.files import File
 from PIL import Image
 
 
-def compress(image):
-    im = Image.open(image)
-    # create a BytesIO object
-    im_io = BytesIO()
-    # save image to BytesIO object
-    im.save(im_io, 'JPEG', quality=70)
-    # create a django-friendly Files object
-    new_image = File(im_io, name=image.name)
-    return new_image
-
-
 def get_image_path(instance, filename):
     return os.path.join('photos', str(instance.id), filename)
 
@@ -86,10 +75,12 @@ class Company(models.Model):
         verbose_name='Logo',
         optimized_image_output_size=(360, 360),
         optimized_image_resize_method='cover')
-    menu_background = models.ImageField(upload_to=get_image_path, blank=True, null=True,
-                                        help_text="Bu kısım sadece dijital menü kullanan kullanıcılarımıza özeldir",
-                                        verbose_name='dijital menü banner'
-                                        )
+    menu_background = OptimizedImageField(
+        upload_to=get_image_path, blank=True, null=True,
+        help_text="Bu kısım sadece dijital menü kullanan kullanıcılarımıza özeldir",
+        verbose_name='dijital menü banner',
+        optimized_image_output_size=(480, 360),
+        optimized_image_resize_method='cover')
     not_order_background = models.ImageField(upload_to=get_image_path, blank=True, null=True,
                                              help_text="Bu kısım sadece siparişsiz dijital menü kullanan kullanıcılarımıza özeldir",
                                              verbose_name='siparissiz menü arkaplani'
@@ -125,9 +116,6 @@ class Company(models.Model):
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
-        new_image = compress(self.menu_background)
-        # set self.image to new_image
-        self.menu_background = new_image
         super(Company, self).save(*args, **kwargs)
 
     @property
@@ -181,12 +169,6 @@ class FoodCategory(models.Model):
     def get_image(self):
         return self.image
 
-    def save(self, *args, **kwargs):
-        new_image = compress(self.image)
-        # set self.image to new_image
-        self.image = new_image
-        super(FoodCategory, self).save(*args, **kwargs)
-
 
 class Entry(models.Model):
     class Meta:
@@ -213,12 +195,6 @@ class Entry(models.Model):
 
     def __str__(self):
         return self.name
-
-    def save(self, *args, **kwargs):
-        new_image = compress(self.image)
-        # set self.image to new_image
-        self.image = new_image
-        super(Entry, self).save(*args, **kwargs)
 
 
 class Account_Entry(models.Model):

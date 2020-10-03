@@ -21,7 +21,7 @@ def index(request):
 def optimize_images(request):
     if request.user.is_superuser:
         optimization.optimize_images()
-    return redirect('home')
+    return redirect('index')
 
 
 def check_accounting_entry(request, slug, order_id):

@@ -25,6 +25,7 @@
     {% compress css %}
         {% block css %}
             <link rel="preload" as="style" href="{% static 'velikorodnov/css/fontawesome-all.min.css' %}">
+            <link rel="preload" href="{% static 'velikorodnov/fonts/fa-brands-400.woff2' %}" as="font" type="font/woff2" crossorigin>
             <link rel="stylesheet" href="{% static 'materialize/materialfont.css' %}">
             <link rel="stylesheet" href="{% static 'materialize/asap-font.css' %}">
             <link rel="stylesheet" href="{% static 'velikorodnov/css/bootstrap.min.css' %}">
@@ -64,10 +65,13 @@
                 }
 
                 .flags {
-                    width: 200px;
-                    height: 32px;
-                    /* sağa almak için "float: right;" kullanabilirsiniz*/
+                    width: 50%;
                     float: left;
+                }
+
+                .flags ul li a span {
+                    width: 32px;
+                    height: 27px;
                 }
 
                 .flags ul {
@@ -78,6 +82,14 @@
 
                 .flags ul li {
                     display: inline;
+
+                    padding-left: 10px;
+                }
+
+                .sticky {
+                    position: fixed;
+                    top: 0;
+                    width: 100%;
                 }
             </style>
         {% endblock %}
@@ -92,7 +104,7 @@
 <div id="mad-page-wrapper" class="mad-page-wrapper">
     <header id="mad-header" class="mad-header mad-header--transparent">
 
-        <div class="mad-header-section">
+        <div id="navbar" class="mad-header-section">
 
             <div class="mad-header-items item-col-3">
                 <div class="mad-header-item">
@@ -103,12 +115,15 @@
                     {% endif %}
                 </div>
                 <div class="mad-header-item">
-                    {% if company.logo %}
-                        <p href="#" class="mad-logo">
-                            {% if company.logo %}
-                                <img width="210px" src="{{ company.logo.url }}" alt="">
-                            {% endif %}
-                        </p>
+                    {% if company.name %}
+                        {#                        <p href="#" class="mad-logo">#}
+                        {#                            {% if company.logo %}#}
+                        {#                                <img width="210px" src="{{ company.logo.url }}" alt="">#}
+                        {#                            {% endif %}#}
+                        {#                        </p>#}
+                        <a style="font-weight: bold;">
+                            {{ company.name }}
+                        </a>
                     {% endif %}
                 </div>
                 <style>
@@ -126,52 +141,54 @@
                             {{ company.slogan }}
                         </a>
                     {% endif %}
-                    <div class="flags">
-                        <ul style="display: block">
+
+                    {#                    <div class="mad-header-item">#}
+                    {#                        <div class="flags">#}
+                    {#                            <ul style="display:block;">#}
+                    {#                                {% languages 'square' %}#}
+                    {#                            </ul>#}
+                    {#                        </div>#}
+                    <div class="mad-social-icons">
+                        <ul>
                             {% languages 'square' %}
+                            {% if company.facebook %}
+                                <li>
+                                    <a target="_blank" href="{{ company.facebook }}"><i class="fab fa-facebook-f"></i></a>
+                                </li>
+                            {% endif %}
+                            {% if company.instagram %}
+                                <li>
+                                    <a target="_blank" href="{{ company.instagram }}"><i class="fab fa-instagram"></i></a>
+                                </li>
+                            {% endif %}
+                            {% if company.whatsapp %}
+                                <li>
+                                    <a target="_blank" href="{{ company.whatsapp }}"><i class="fab fa-whatsapp"></i></a>
+                                </li>
+                            {% endif %}
+                            {#                                {% if company.n11 %}#}
+                            {#                                    <li>#}
+                            {#                                        <a target="_blank" href="{{ company.n11 }}"><span class="icon" style="background: url('https://n11scdn.akamaized.net/static/favicon.ico')"></span></a>#}
+                            {#                                    </li>#}
+                            {#                                {% endif %}#}
+                            {#                                <if></if> company.hepsiburada %}#}
+                            {#                                    <li>#}
+                            {#                                        <a target="_blank" href="{{ company.hepsiburada }}"><span class="icon" style="background: url('https://images.hepsiburada.net/assets/sfstatic/Content/images/favicon-new.ico')"></span></a>#}
+                            {#                                    </li>#}
+                            {#                                {% endif %}#}
+                            {#                                {% if company.trendyol %}#}
+                            {#                                    <li>#}
+                            {#                                        <a target="_blank" href="{{ company.trendyol }}"><span class="icon" style="background: url('https://www.trendyol.com/frontend/web/assets/images/favicon.ico')"></span></a>#}
+                            {#                                    </li>#}
+                            {#                                {% endif %}#}
+                            {#                                {% if company.websitesi %}#}
+                            {#                                    <li>#}
+                            {#                                        <a target="_blank" href="{{ company.websitesi }}"><i class="fab fa-globe"></i></a>#}
+                            {#                                    </li>#}
+                            {#                                {% endif %}#}
                         </ul>
                     </div>
-                    <div class="mad-header-item">
-                        <div class="mad-social-icons">
-                            <ul>
-                                {% if company.facebook %}
-                                    <li>
-                                        <a target="_blank" href="{{ company.facebook }}"><i class="fab fa-facebook-f"></i></a>
-                                    </li>
-                                {% endif %}
-                                {% if company.instagram %}
-                                    <li>
-                                        <a target="_blank" href="{{ company.instagram }}"><i class="fab fa-instagram"></i></a>
-                                    </li>
-                                {% endif %}
-                                {% if company.whatsapp %}
-                                    <li>
-                                        <a target="_blank" href="{{ company.whatsapp }}"><i class="fab fa-whatsapp"></i></a>
-                                    </li>
-                                {% endif %}
-{#                                {% if company.n11 %}#}
-{#                                    <li>#}
-{#                                        <a target="_blank" href="{{ company.n11 }}"><span class="icon" style="background: url('https://n11scdn.akamaized.net/static/favicon.ico')"></span></a>#}
-{#                                    </li>#}
-{#                                {% endif %}#}
-{#                                <if></if> company.hepsiburada %}#}
-{#                                    <li>#}
-{#                                        <a target="_blank" href="{{ company.hepsiburada }}"><span class="icon" style="background: url('https://images.hepsiburada.net/assets/sfstatic/Content/images/favicon-new.ico')"></span></a>#}
-{#                                    </li>#}
-{#                                {% endif %}#}
-{#                                {% if company.trendyol %}#}
-{#                                    <li>#}
-{#                                        <a target="_blank" href="{{ company.trendyol }}"><span class="icon" style="background: url('https://www.trendyol.com/frontend/web/assets/images/favicon.ico')"></span></a>#}
-{#                                    </li>#}
-{#                                {% endif %}#}
-{#                                {% if company.websitesi %}#}
-{#                                    <li>#}
-{#                                        <a target="_blank" href="{{ company.websitesi }}"><i class="fab fa-globe"></i></a>#}
-{#                                    </li>#}
-{#                                {% endif %}#}
-                            </ul>
-                        </div>
-                    </div>
+                    {#                    </div>#}
 
                 </div>
 
@@ -297,26 +314,26 @@
                                         </a>
                                     </li>
                                 {% endif %}
-{#                                {% if company.n11 %}#}
-{#                                    <li>#}
-{#                                        <a target="_blank" href="{{ company.n11 }}"><span class="icon" style="background: url('https://n11scdn.akamaized.net/static/favicon.ico')"></span></a>#}
-{#                                    </li>#}
-{#                                {% endif %}#}
-{#                                {% if company.hepsiburada %}#}
-{#                                    <li>#}
-{#                                        <a target="_blank" href="{{ company.hepsiburada }}"><span class="icon" style="background: url('https://images.hepsiburada.net/assets/sfstatic/Content/images/favicon-new.ico')"></span></a>#}
-{#                                    </li>#}
-{#                                {% endif %}#}
-{#                                {% if company.trendyol %}#}
-{#                                    <li>#}
-{#                                        <a target="_blank" href="{{ company.trendyol }}"><span class="icon" style="background: url('https://www.trendyol.com/frontend/web/assets/images/favicon.ico')"></span></a>#}
-{#                                    </li>#}
-{#                                {% endif %}#}
-{#                                {% if company.websitesi %}#}
-{#                                    <li>#}
-{#                                        <a target="_blank" href="{{ company.websitesi }}"><i class="fab fa-globe"></i></a>#}
-{#                                    </li>#}
-{#                                {% endif %}#}
+                                {#                                {% if company.n11 %}#}
+                                {#                                    <li>#}
+                                {#                                        <a target="_blank" href="{{ company.n11 }}"><span class="icon" style="background: url('https://n11scdn.akamaized.net/static/favicon.ico')"></span></a>#}
+                                {#                                    </li>#}
+                                {#                                {% endif %}#}
+                                {#                                {% if company.hepsiburada %}#}
+                                {#                                    <li>#}
+                                {#                                        <a target="_blank" href="{{ company.hepsiburada }}"><span class="icon" style="background: url('https://images.hepsiburada.net/assets/sfstatic/Content/images/favicon-new.ico')"></span></a>#}
+                                {#                                    </li>#}
+                                {#                                {% endif %}#}
+                                {#                                {% if company.trendyol %}#}
+                                {#                                    <li>#}
+                                {#                                        <a target="_blank" href="{{ company.trendyol }}"><span class="icon" style="background: url('https://www.trendyol.com/frontend/web/assets/images/favicon.ico')"></span></a>#}
+                                {#                                    </li>#}
+                                {#                                {% endif %}#}
+                                {#                                {% if company.websitesi %}#}
+                                {#                                    <li>#}
+                                {#                                        <a target="_blank" href="{{ company.websitesi }}"><i class="fab fa-globe"></i></a>#}
+                                {#                                    </li>#}
+                                {#                                {% endif %}#}
                             </ul>
                         </div>
                     </section>
@@ -409,6 +426,30 @@
     {% endblock %}
     {% block extra-script %} {% endblock %}
 
+{% endcompress %}
+{% compress js inline %}
+    <script>
+        window.onscroll = function () {
+            myFunction()
+        };
+
+        var navbar = document.getElementById("mad-header");
+        var sticky = navbar.offsetTop;
+
+        function myFunction() {
+            console.log(window.pageYOffset);
+            if (window.pageYOffset > sticky) {
+
+                navbar.style.position = "fixed";
+                navbar.classList.add("sticky")
+            } else {
+
+
+                navbar.style.position = "relative";
+                navbar.classList.remove("sticky");
+            }
+        }
+    </script>
 {% endcompress %}
 </body>
 </html>
