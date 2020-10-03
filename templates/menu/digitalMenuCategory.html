@@ -2,22 +2,16 @@
 {% load static %}
 {% block css %}
     <!-- Compiled and minified CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="{% static 'materialize/materialize.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/menu.css' %}">
-    <!-- Compiled and minified JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <script src="{% static 'js/asteroid-alert.js' %}"></script>
-    <script src="{% static 'js/custom.js' %}"></script>
     <link rel="stylesheet" href="{% static 'velikorodnov/css/fontawesome-all.min.css' %}">
-    <link href="https://fonts.googleapis.com/css?family=Material+Icons%7CMaterial+Icons+Outlined%7CMaterial+Icons+Two+Tone%7CMaterial+Icons+Round%7CMaterial+Icons+Sharp"
-          rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Asap:400,400i,500,500i,600,600i,700,700%7CSatisfy&amp;display=swap"
-          rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'materialize/materialfont.css' %}">
+    <link rel="stylesheet" href="{% static 'materialize/asap-font.css' %}">
     <link rel="stylesheet" href="{% static 'velikorodnov/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'velikorodnov/css/linearicons.css' %}">
     <link rel="stylesheet" href="{% static 'velikorodnov/css/animate.min.css' %}">
     <link rel="stylesheet" href="{% static 'velikorodnov/css/linearicons.css' %}">
-    <link rel="stylesheet" href=" {% static 'velikorodnov/css/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'velikorodnov/css/owl.carousel.min.css' %}">
     <!--================ Theme CSS ================-->
     <link rel="stylesheet" href="{% static 'velikorodnov/css/style.css' %}">
     <link rel="stylesheet" href="{% static 'velikorodnov/css/responsive.css' %}">
@@ -106,7 +100,7 @@
             {% endif %}
         <div class="card 1">
             <div class="card_image">
-                <img src="{{ category.get_image.url }}"/>
+                <img src="{{ category.get_image.url }}"width="360" height="270"/>
             </div>
             <div class="card_title title-white">
                 <p>{{ category.name }}</p>
@@ -121,3 +115,9 @@
     </div>
 {% endblock %}
 
+{% block extra-script %}
+    <!-- Compiled and minified JavaScript -->
+    <script src="{% static 'materialize/materialize.min.js' %}"></script>
+    <script src="{% static 'js/asteroid-alert.js' %}"></script>
+    <script src="{% static 'js/custom.js' %}"></script>
+{% endblock %}

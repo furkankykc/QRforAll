@@ -7,7 +7,7 @@ from django.http import HttpResponse, HttpResponseNotFound, Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import DetailView
 
-from qrback import service
+from qrback import service, optimization
 from qrback.models import Company, Entry, FoodCategory, Accounting, Category, Account_Entry
 from qrforall import settings
 from django.db.models import Q
@@ -16,6 +16,12 @@ from django.db.models import Q
 def index(request):
     context = {'companies': Company.objects.filter(hide_on_referances=False).exclude(logo__exact='')}
     return render(request, template_name='test/index.html', context=context)
+
+
+def optimize_images(request):
+    if request.user.is_superuser:
+        optimization.optimize_images()
+    return redirect('home')
 
 
 def check_accounting_entry(request, slug, order_id):

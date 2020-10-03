@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-{% load static %}
+{% load static compress %}
 <head>
     <!--================ Basic page needs ================-->
     {% block title %}<title>{{ company.name|title }} | {{ company.prefix|title }}</title>{% endblock %}
@@ -22,59 +22,66 @@
 
     <!--================ Vendor CSS ================-->
 
+    {% compress css %}
+        {% block css %}
+            <link rel="preload" as="style" href="{% static 'velikorodnov/css/fontawesome-all.min.css' %}">
+            <link rel="stylesheet" href="{% static 'materialize/materialfont.css' %}">
+            <link rel="stylesheet" href="{% static 'materialize/asap-font.css' %}">
+            <link rel="stylesheet" href="{% static 'velikorodnov/css/bootstrap.min.css' %}">
+            <link rel="stylesheet" href="{% static 'velikorodnov/css/linearicons.css' %}">
+            <link rel="stylesheet" href="{% static 'velikorodnov/css/animate.min.css' %}">
+            <link rel="stylesheet" href="{% static 'velikorodnov/css/linearicons.css' %}">
+            <link rel="stylesheet" href="{% static 'velikorodnov/css/owl.carousel.min.css' %}">
+            <!--================ Theme CSS ================-->
+            <link rel="stylesheet" href="{% static 'velikorodnov/css/style.css' %}">
+            <link rel="stylesheet" href="{% static 'velikorodnov/css/responsive.css' %}">
 
-    {% block css %}
-        <link rel="stylesheet" href="{% static 'velikorodnov/css/fontawesome-all.min.css' %}">
-        <link href="https://fonts.googleapis.com/css?family=Material+Icons%7CMaterial+Icons+Outlined%7CMaterial+Icons+Two+Tone%7CMaterial+Icons+Round%7CMaterial+Icons+Sharp"
-              rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css?family=Asap:400,400i,500,500i,600,600i,700,700%7CSatisfy&amp;display=swap"
-              rel="stylesheet">
-        <link rel="stylesheet" href="{% static 'velikorodnov/css/bootstrap.min.css' %}">
-        <link rel="stylesheet" href="{% static 'velikorodnov/css/linearicons.css' %}">
-        <link rel="stylesheet" href="{% static 'velikorodnov/css/animate.min.css' %}">
-        <link rel="stylesheet" href="{% static 'velikorodnov/css/linearicons.css' %}">
-        <link rel="stylesheet" href=" {% static 'velikorodnov/css/owl.carousel.min.css' %}">
-        <!--================ Theme CSS ================-->
-        <link rel="stylesheet" href="{% static 'velikorodnov/css/style.css' %}">
-        <link rel="stylesheet" href="{% static 'velikorodnov/css/responsive.css' %}">
-    {% endblock %}
-    {% block extra-style %}{% endblock %}
-    {% block background-style %}
-        <style>
-            @media only screen and (max-width: 480px) {
-                body:not(.mad-coming-soon) .mad-header.mad-header--transparent:not(.header-1) {
-                    padding-bottom: unset;
-                    background: #000000;
+        {% endblock %}
+
+    {% endcompress %}
+    {% compress css inline %}
+        {% block extra-style %}
+
+        {% endblock %}
+    {% endcompress %}
+    {% compress css inline %}
+        {% block background-style %}
+            <style>
+                @media only screen and (max-width: 480px) {
+                    body:not(.mad-coming-soon) .mad-header.mad-header--transparent:not(.header-1) {
+                        padding-bottom: unset;
+                        background: #000000;
+                    }
+
                 }
 
-            }
+                .mad-footer {
+                    position: relative;
+                    padding: 2rem 0;
+                    background: unset;
+                    background-color: #0b0b0b;
+                    background-size: contain;
+                }
 
-            .mad-footer {
-                position: relative;
-                padding: 2rem 0;
-                background: unset;
-                background-color: #0b0b0b;
-                background-size: contain;
-            }
+                .flags {
+                    width: 200px;
+                    height: 32px;
+                    /* sağa almak için "float: right;" kullanabilirsiniz*/
+                    float: left;
+                }
 
-            .flags {
-                width: 200px;
-                height: 32px;
-                /* sağa almak için "float: right;" kullanabilirsiniz*/
-                float: left;
-            }
+                .flags ul {
+                    list-style-type: none;
+                    padding: 0;
+                    margin: 0;
+                }
 
-            .flags ul {
-                list-style-type: none;
-                padding: 0;
-                margin: 0;
-            }
-
-            .flags ul li {
-                display: inline;
-            }
-        </style>
-    {% endblock %}
+                .flags ul li {
+                    display: inline;
+                }
+            </style>
+        {% endblock %}
+    {% endcompress %}
     {% load i18n %}
     {% load flags %}
 </head>
@@ -104,7 +111,15 @@
                         </p>
                     {% endif %}
                 </div>
-
+                <style>
+                    .icon {
+                        height: 20px;
+                        width: 20px;
+                        display: block;
+                        background-size: cover !important;
+                        /* Other styles here */
+                    }
+                </style>
                 <div class="mad-header-item" style="padding-top: 0;">
                     {% if company.slogan %}
                         <a style="font-weight: bold;">
@@ -134,6 +149,26 @@
                                         <a target="_blank" href="{{ company.whatsapp }}"><i class="fab fa-whatsapp"></i></a>
                                     </li>
                                 {% endif %}
+{#                                {% if company.n11 %}#}
+{#                                    <li>#}
+{#                                        <a target="_blank" href="{{ company.n11 }}"><span class="icon" style="background: url('https://n11scdn.akamaized.net/static/favicon.ico')"></span></a>#}
+{#                                    </li>#}
+{#                                {% endif %}#}
+{#                                <if></if> company.hepsiburada %}#}
+{#                                    <li>#}
+{#                                        <a target="_blank" href="{{ company.hepsiburada }}"><span class="icon" style="background: url('https://images.hepsiburada.net/assets/sfstatic/Content/images/favicon-new.ico')"></span></a>#}
+{#                                    </li>#}
+{#                                {% endif %}#}
+{#                                {% if company.trendyol %}#}
+{#                                    <li>#}
+{#                                        <a target="_blank" href="{{ company.trendyol }}"><span class="icon" style="background: url('https://www.trendyol.com/frontend/web/assets/images/favicon.ico')"></span></a>#}
+{#                                    </li>#}
+{#                                {% endif %}#}
+{#                                {% if company.websitesi %}#}
+{#                                    <li>#}
+{#                                        <a target="_blank" href="{{ company.websitesi }}"><i class="fab fa-globe"></i></a>#}
+{#                                    </li>#}
+{#                                {% endif %}#}
                             </ul>
                         </div>
                     </div>
@@ -197,8 +232,7 @@
                         {% if company.logo %}
                             <a href="#" class="mad-logo content-element-3">
                                 {% if company.logo %}
-                                    <img
-                                            src="{{ company.logo.url }}" alt="">
+                                    <img src="{{ company.logo.url }}" alt="{{ company.name }} logo" width="360">
                                 {% endif %}
                             </a>
                         {% endif %}
@@ -263,6 +297,26 @@
                                         </a>
                                     </li>
                                 {% endif %}
+{#                                {% if company.n11 %}#}
+{#                                    <li>#}
+{#                                        <a target="_blank" href="{{ company.n11 }}"><span class="icon" style="background: url('https://n11scdn.akamaized.net/static/favicon.ico')"></span></a>#}
+{#                                    </li>#}
+{#                                {% endif %}#}
+{#                                {% if company.hepsiburada %}#}
+{#                                    <li>#}
+{#                                        <a target="_blank" href="{{ company.hepsiburada }}"><span class="icon" style="background: url('https://images.hepsiburada.net/assets/sfstatic/Content/images/favicon-new.ico')"></span></a>#}
+{#                                    </li>#}
+{#                                {% endif %}#}
+{#                                {% if company.trendyol %}#}
+{#                                    <li>#}
+{#                                        <a target="_blank" href="{{ company.trendyol }}"><span class="icon" style="background: url('https://www.trendyol.com/frontend/web/assets/images/favicon.ico')"></span></a>#}
+{#                                    </li>#}
+{#                                {% endif %}#}
+{#                                {% if company.websitesi %}#}
+{#                                    <li>#}
+{#                                        <a target="_blank" href="{{ company.websitesi }}"><i class="fab fa-globe"></i></a>#}
+{#                                    </li>#}
+{#                                {% endif %}#}
                             </ul>
                         </div>
                     </section>
@@ -277,79 +331,84 @@
            class="mad-link link-white">VR Gaming Room</a> Yazılım projesidir.
     </p>
 </footer>
-{% block js %}
-    <script>
-        {#var imsrc = document.getElementById('bg-image')#}
 
-        function getAverageRGB(imgEl) {
+{#    <script>#}
+{#        var imsrc = document.getElementById('bg-image')#}
+{##}
+{#        function getAverageRGB(imgEl) {#}
+{##}
+{#            var blockSize = 5, // only visit every 5 pixels#}
+{#                defaultRGB = {r: 0, g: 0, b: 0}, // for non-supporting envs#}
+{#                canvas = document.createElement('canvas'),#}
+{#                context = canvas.getContext && canvas.getContext('2d'),#}
+{#                data, width, height,#}
+{#                i = -4,#}
+{#                length,#}
+{#                rgb = {r: 0, g: 0, b: 0},#}
+{#                count = 0;#}
+{##}
+{#            if (!context) {#}
+{#                return defaultRGB;#}
+{#            }#}
+{##}
+{#            height = canvas.height = imgEl.naturalHeight || imgEl.offsetHeight || imgEl.height;#}
+{#            width = canvas.width = imgEl.naturalWidth || imgEl.offsetWidth || imgEl.width;#}
+{##}
+{#            context.drawImage(imgEl, 0, 0);#}
+{##}
+{#            try {#}
+{#                data = context.getImageData(0, 0, width, height);#}
+{#            } catch (e) {#}
+{#                /* security error, img on diff domain */#}
+{#                alert(e);#}
+{#                return defaultRGB;#}
+{#            }#}
+{##}
+{#            length = data.data.length;#}
+{##}
+{#            while ((i += blockSize * 4) < length) {#}
+{#                ++count;#}
+{#                rgb.r += data.data[i];#}
+{#                rgb.g += data.data[i + 1];#}
+{#                rgb.b += data.data[i + 2];#}
+{#            }#}
+{##}
+{#            // ~~ used to floor values#}
+{#            rgb.r = ~~(rgb.r / count);#}
+{#            rgb.g = ~~(rgb.g / count);#}
+{#            rgb.b = ~~(rgb.b / count);#}
+{#            console.log(rgb)#}
+{#            return rgb;#}
+{##}
+{#        }#}
+{##}
+{#        var img1 = new Image(); // Image constructor#}
+{#        img1.src = document.getElementById('bg-image').getAttribute('data-bg-image-src');#}
+{#        img1.onload = function () {#}
+{##}
+{#            var rgb = getAverageRGB(img1);#}
+{##}
+{#            document.getElementById("mad-header").style.background = 'rgb(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ')';#}
+{#        }#}
+{#    </script>#}
 
-            var blockSize = 5, // only visit every 5 pixels
-                defaultRGB = {r: 0, g: 0, b: 0}, // for non-supporting envs
-                canvas = document.createElement('canvas'),
-                context = canvas.getContext && canvas.getContext('2d'),
-                data, width, height,
-                i = -4,
-                length,
-                rgb = {r: 0, g: 0, b: 0},
-                count = 0;
+{% compress js %}
+    {% block js %}
+        <script src="{% static 'velikorodnov/js/modernizr.js' %}"></script>
+        <script src="{% static 'velikorodnov/js/jquery-3.3.1.min.js' %}"></script>
+        <script src="{% static 'velikorodnov/js/jquery.easing.1.3.min.js' %}"></script>
+        <script src="{% static 'velikorodnov/js/monkeysan.jquery.nav.1.0.min.js' %}"></script>
+        <script src="{% static 'velikorodnov/js/handlebars-v4.0.5.min.js' %}"></script>
+        <script src="{% static 'velikorodnov/js/jquery.parallax-1.1.3.min.js' %}"></script>
+        <script src="{% static 'velikorodnov/js/monkeysan.tabs.min.js' %}"></script>
+        <script src="{% static 'velikorodnov/js/owl.carousel.min.js' %}"></script>
+        <script src="{% static 'velikorodnov/js/retina.min.js' %}"></script>
+        <script src="{% static 'velikorodnov/js/mad.sticky-header-section.min.js' %}"></script>
+        <script src="{% static 'velikorodnov/js/brands.min.js' %}"></script>
+        <script src="{% static 'velikorodnov/js/mad.app.js' %}"></script>
+    {% endblock %}
+    {% block extra-script %} {% endblock %}
 
-            if (!context) {
-                return defaultRGB;
-            }
-
-            height = canvas.height = imgEl.naturalHeight || imgEl.offsetHeight || imgEl.height;
-            width = canvas.width = imgEl.naturalWidth || imgEl.offsetWidth || imgEl.width;
-
-            context.drawImage(imgEl, 0, 0);
-
-            try {
-                data = context.getImageData(0, 0, width, height);
-            } catch (e) {
-                /* security error, img on diff domain */
-                alert(e);
-                return defaultRGB;
-            }
-
-            length = data.data.length;
-
-            while ((i += blockSize * 4) < length) {
-                ++count;
-                rgb.r += data.data[i];
-                rgb.g += data.data[i + 1];
-                rgb.b += data.data[i + 2];
-            }
-
-            // ~~ used to floor values
-            rgb.r = ~~(rgb.r / count);
-            rgb.g = ~~(rgb.g / count);
-            rgb.b = ~~(rgb.b / count);
-            console.log(rgb)
-            return rgb;
-
-        }
-
-        var img1 = new Image(); // Image constructor
-        img1.src = document.getElementById('bg-image').getAttribute('data-bg-image-src');
-        img1.onload = function () {
-
-            var rgb = getAverageRGB(img1);
-
-            {#document.getElementById("mad-header").style.background = 'rgb(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ')';#}
-        }
-    </script>
-    <script src="{% static 'velikorodnov/js/modernizr.js' %}"></script>
-    <script src="{% static 'velikorodnov/js/jquery-3.3.1.min.js' %}"></script>
-    <script src="{% static 'velikorodnov/js/jquery.easing.1.3.min.js' %}"></script>
-    <script src="{% static 'velikorodnov/js/monkeysan.jquery.nav.1.0.min.js' %}"></script>
-    <script src="{% static 'velikorodnov/js/handlebars-v4.0.5.min.js' %}"></script>
-    <script src="{% static 'velikorodnov/js/jquery.parallax-1.1.3.min.js' %}"></script>
-    <script src="{% static 'velikorodnov/js/monkeysan.tabs.min.js' %}"></script>
-    <script src="{% static 'velikorodnov/js/owl.carousel.min.js' %}"></script>
-    <script src="{% static 'velikorodnov/js/retina.min.js' %}"></script>
-    <script src="{% static 'velikorodnov/js/mad.sticky-header-section.min.js' %}"></script>
-    <script src="{% static 'velikorodnov/js/brands.min.js' %}"></script>
-    <script src="{% static 'velikorodnov/js/mad.app.js' %}"></script>
-{% endblock %}
-{% block extra-script %} {% endblock %}
+{% endcompress %}
 </body>
 </html>

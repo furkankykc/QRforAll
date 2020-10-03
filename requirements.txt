@@ -6,3 +6,8 @@ PyQRCode==1.2.1
 django-split-settings==1.0.1
 django-modeltranslation
 django-translation-flags
+python-memcached
+# sudo apt-get install python3-dev
+django-compressor
+django-htmlmin
+django-image-optimizer

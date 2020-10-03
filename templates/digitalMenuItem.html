@@ -1,94 +1,100 @@
 <!DOCTYPE html>
+{% load static compress %}
 <html lang="en">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ company.name }} | Digital Menu</title>
     <meta name="description"
           content="{{ company.name|title }} olarak menümüzü karekodyazilimi.com ile tanışıp dijitale taşıdık.QR menümüzü bu sayfada bulabilirsiniz.">
+    {% compress css %}
+        {% block css %}
+            <link rel="stylesheet" href="{% static 'materialize/icon.css' %}">
+            <!-- Compiled and minified CSS -->
+            <link rel="stylesheet" href="{% static 'materialize/materialize.min.css' %}">
+        {% endblock %}
+    {% endcompress %}
+    {% compress js %}
+        {% block js %}
 
-    {% load static %}
-    {% block css %}
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-              rel="stylesheet">
-        <!-- Compiled and minified CSS -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-        <!-- Compiled and minified JavaScript -->
-        <script src="{% static 'js/asteroid-alert.js' %}"></script>
-        <script src="{% static 'js/custom.js' %}"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-        <script src="{% static 'js/bootstrap-input-spinner.js' %}"></script>
-    {% endblock %}
+            <!-- Compiled and minified JavaScript -->
+            <script src="{% static 'js/asteroid-alert.js' %}"></script>
+            <script src="{% static 'js/custom.js' %}"></script>
+            <script src="{% static 'materialize/materialize.min.js' %}"></script>
+            <script src="{% static 'js/jquery.min.js' %}"></script>
+            <script src="{% static 'js/bootstrap-input-spinner.js' %}"></script>
+        {% endblock %}
+    {% endcompress %}
 </head>
+{% compress css inline %}
+    <style>
+        html, body {
+            margin: 0;
+            height: 100%;
+        }
 
-<style>
-    html, body {
-        margin: 0;
-        height: 100%;
-    }
+        img {
+            max-height: 400px;
+            display: block;
+            width: 100%;
+            object-fit: cover;
+        }
 
-    img {
-        max-height: 400px;
-        display: block;
-        width: 100%;
-        object-fit: cover;
-    }
+        * {
+            box-sizing: border-box;
+        }
 
-    * {
-        box-sizing: border-box;
-    }
-
-    .centered {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-    }
+        .centered {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
 
 
-    .overlay {
-        position: absolute;
-        bottom: 0;
-        background: rgb(0, 0, 0);
-        background: rgba(0, 0, 0, 0.5); /* Black see-through */
-        color: #f1f1f1;
-        width: 100%;
-        transition: .5s ease;
-        opacity: 0;
-        color: white;
-        font-size: 20px;
-        padding: 20px;
-        text-align: center;
-    }
+        .overlay {
+            position: absolute;
+            bottom: 0;
+            background: rgb(0, 0, 0);
+            background: rgba(0, 0, 0, 0.5); /* Black see-through */
+            color: #f1f1f1;
+            width: 100%;
+            transition: .5s ease;
+            opacity: 0;
+            color: white;
+            font-size: 20px;
+            padding: 20px;
+            text-align: center;
+        }
 
-    .container:hover .overlay {
-        opacity: 1;
-    }
+        .container:hover .overlay {
+            opacity: 1;
+        }
 
-    a.btn-floating {
-        font-size: 10px;
-    }
+        a.btn-floating {
+            font-size: 10px;
+        }
 
-    {#.card{#}
-    {#    margin-bottom: 0.1px;#}
-    {#    margin-top: 0.1px;#}
-    .npt-group {
-        display: flex;
-        width: initial;
-    }
+        {#.card{#}
+        {#    margin-bottom: 0.1px;#}
+        {#    margin-top: 0.1px;#}
+        .npt-group {
+            display: flex;
+            width: initial;
+        }
 
-    .btn {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        display: flex;
-        width: initial;
-    }
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            display: flex;
+            width: initial;
+        }
 
-    .waves-button-input {
-        color: white;
-    }
-</style>
+        .waves-button-input {
+            color: white;
+        }
+    </style>
+{% endcompress %}
 <body>
 {% if table_id %}
     <div class="fixed-action-btn" style="size: 1px">
@@ -114,7 +120,7 @@
 
     <div class="card">
         <div class="card-image waves-effect waves-block waves-light">
-            <img class="activator" src="{{ category.get_image.url }}">
+            <img class="activator" src="{{ category.get_image.url }}" width="360" height="270" alt="{{ category.name}} image">
         </div>
         <div class="card-reveal">
             <span class="card-title grey-text text-darken-4">{{ category.name }}<i
@@ -159,21 +165,22 @@
     {#    <a href="{% url 'category' company.slug category.id table_id %}">{{ category.name }}</a>#}
 {% endfor %}
 </body>
-<script>
+{% compress js inline %}
+    <script>
 
-    function myFcheckunction(event) {
-        var src = event.parentNode
-        console.log(src)
-        $confirm("Sipariş verme işleminizi onaylıyormusunuz?", "#26a69a ")
-            .then(() => {
-                $toast("Siparişiniz verildi", "#26a69a");
-                src.submit()
+        function myFcheckunction(event) {
+            var src = event.parentNode
+            console.log(src)
+            $confirm("Sipariş verme işleminizi onaylıyormusunuz?", "#26a69a ")
+                .then(() => {
+                    $toast("Siparişiniz verildi", "#26a69a");
+                    src.submit()
 
-            })
-    }
+                })
+        }
 
-    $("input[type='number']").inputSpinner()
+        $("input[type='number']").inputSpinner()
 
-</script>
-
+    </script>
+{% endcompress %}
 </html>

@@ -19,6 +19,7 @@ urlpatterns = [
     path('delete/<slug:slug>/<int:order_id>/', delete_accounting_entry, name='delete'),
     path('remove/<slug:slug>/<int:order_id>/', remove_accounting_entry, name='remove'),
     path('qr/<slug:slug>/', QRDetailView.as_view(), name='generate_qr'),
+    path('optimize/<slug:slug>/',optimize_images,name='optimize_images'),
     path('download/<slug:slug>/', download, name='download'),
     path('test/<slug:slug>/', test, name='test'),
     path('', index, name='index'),

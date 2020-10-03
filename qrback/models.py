@@ -5,11 +5,25 @@ from django.core.validators import RegexValidator
 from django.db import models
 from django.db.models import Sum, F
 from django.utils.text import slugify
-
 from django.utils.translation import ugettext as _
-
+from image_optimizer.fields import OptimizedImageField
 from qrback import service
 from django.utils import timezone
+
+from io import BytesIO
+from django.core.files import File
+from PIL import Image
+
+
+def compress(image):
+    im = Image.open(image)
+    # create a BytesIO object
+    im_io = BytesIO()
+    # save image to BytesIO object
+    im.save(im_io, 'JPEG', quality=70)
+    # create a django-friendly Files object
+    new_image = File(im_io, name=image.name)
+    return new_image
 
 
 def get_image_path(instance, filename):
@@ -65,8 +79,13 @@ class Company(models.Model):
                                    null=True, verbose_name='telefon 2')  # validators should be a list
     email = models.CharField(validators=[email_regex], max_length=50, blank=True)
     address = models.CharField(max_length=200, blank=True, verbose_name='adres')
-    logo = models.ImageField(upload_to=get_image_path, blank=True, null=True)
-
+    logo = OptimizedImageField(
+        upload_to=get_image_path,
+        blank=True,
+        null=True,
+        verbose_name='Logo',
+        optimized_image_output_size=(360, 360),
+        optimized_image_resize_method='cover')
     menu_background = models.ImageField(upload_to=get_image_path, blank=True, null=True,
                                         help_text="Bu kısım sadece dijital menü kullanan kullanıcılarımıza özeldir",
                                         verbose_name='dijital menü banner'
@@ -82,6 +101,11 @@ class Company(models.Model):
     youtube = models.URLField(blank=True)
     whatsapp = models.URLField(blank=True,
                                help_text='http://api.whatsapp.com/send?phone=+90********** şeklinde girilmelidir')
+    # n11 = models.URLField(blank=True)
+    # hepsiburada = models.URLField(blank=True)
+    # trendyol = models.URLField(blank=True)
+    # websitesi = models.URLField(blank=True)
+
     counter = models.IntegerField(default=0, verbose_name='Menü görüntülenme sayısı')
     hide_on_referances = models.BooleanField(default=False,
                                              help_text="Referanslarimiz içerisinde gözükmek istemiyorsanız bu kutucuğu işaretleyerek bunu belirtebilirsiniz.",
@@ -101,6 +125,9 @@ class Company(models.Model):
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
+        new_image = compress(self.menu_background)
+        # set self.image to new_image
+        self.menu_background = new_image
         super(Company, self).save(*args, **kwargs)
 
     @property
@@ -134,7 +161,14 @@ class FoodCategory(models.Model):
         verbose_name_plural = 'Menü Kategorileri'
 
     name = models.CharField(max_length=20, verbose_name=_('isim'))
-    image = models.ImageField(upload_to=get_image_path, blank=True, null=True, verbose_name='kapak fotoğrafı')
+    image = OptimizedImageField(
+        upload_to=get_image_path,
+        blank=True,
+        null=True,
+        verbose_name='kapak fotoğrafı',
+        optimized_image_output_size=(360, 270),
+        optimized_image_resize_method='cover'  # 'thumbnail', 'cover' or None
+    )
     is_abstract = models.BooleanField(default=False, verbose_name='soyut',
                                       help_text='Aktifleştirildiğinde bu kategoride bulunan ürünlerin fiyatları müşterilere gösterilmez.(sadece dijital siparişli menü içindir)')
     owner = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='sahip')
@@ -147,6 +181,12 @@ class FoodCategory(models.Model):
     def get_image(self):
         return self.image
 
+    def save(self, *args, **kwargs):
+        new_image = compress(self.image)
+        # set self.image to new_image
+        self.image = new_image
+        super(FoodCategory, self).save(*args, **kwargs)
+
 
 class Entry(models.Model):
     class Meta:
@@ -156,7 +196,14 @@ class Entry(models.Model):
     name = models.CharField(max_length=30, verbose_name=_('isim'))
     detail = models.CharField(max_length=100, verbose_name=_('ürün detayı'), blank=True)
     price = models.FloatField(verbose_name='fiyat')
-    image = models.ImageField(upload_to=get_image_path, blank=True, null=True, verbose_name='kapak fotoğrafı')
+    image = OptimizedImageField(
+        upload_to=get_image_path,
+        blank=True,
+        null=True,
+        verbose_name='kapak fotoğrafı',
+        optimized_image_output_size=(360, 270),
+        optimized_image_resize_method='cover'  # 'thumbnail', 'cover' or None
+    )
     category = models.ForeignKey(FoodCategory, on_delete=models.CASCADE, verbose_name='Kategori')
     company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='comp_entry', verbose_name='sirket')
 
@@ -166,6 +213,12 @@ class Entry(models.Model):
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        new_image = compress(self.image)
+        # set self.image to new_image
+        self.image = new_image
+        super(Entry, self).save(*args, **kwargs)
 
 
 class Account_Entry(models.Model):

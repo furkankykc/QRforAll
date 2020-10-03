@@ -70,3 +70,4 @@ def generate_num(num, size):
     d.text(((size[0] - w) / 2, (size[1] - h - h / 2) / 2), str(num), font=font, fill="black")
 
     return img
+
