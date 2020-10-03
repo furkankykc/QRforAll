@@ -193,11 +193,6 @@ MEDIA_URL = '/media/'
 # SECURE_REFERRER_POLICY = 'same-origin'
 # SECURE_CONTENT_TYPE_NOSNIFF = True
 
-if DEBUG:
-    HTTP_METHOD = 'http'
-    SITE_URL = '192.168.1.3:8000'
-    STATICFILES_DIRS = (os.path.join('static'),)
-else:
-    STATIC_ROOT = os.path.join('static')
-    HTTP_METHOD = 'https'
-    SITE_URL = 'karekodyazilimi.com'
+STATIC_ROOT = os.path.join('static')
+HTTP_METHOD = 'https'
+SITE_URL = 'karekodyazilimi.com'
