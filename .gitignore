@@ -139,7 +139,7 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
-/media/
+/media/*
 qrforall/setting/development.py
 static/imagine/css/.DS_Store
 static/imagine/fonts/.DS_Store
