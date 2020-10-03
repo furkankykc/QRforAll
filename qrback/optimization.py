@@ -41,10 +41,13 @@ def optimize_images():
             if image.split('.')[-1] != "JPEG":
                 print('{} is not null or blank starting optimization process'.format(image))
                 image_path = os.path.join(settings.MEDIA_ROOT, image)
-                im = Image.open(image_path)
-                im = post_image(im).convert('RGB')
-                # print('{} was successfully opened'.format(image))
-                im.save(os.path.join(settings.MEDIA_ROOT, image), format="JPEG", quality=70)
-                # print('{} was successfully saved wit %70 quality'.format(image))
+                try:
+                    im = Image.open(image_path)
+                    im = post_image(im).convert('RGB')
+                    # print('{} was successfully opened'.format(image))
+                    im.save(os.path.join(settings.MEDIA_ROOT, image), format="JPEG", quality=70)
+                    # print('{} was successfully saved wit %70 quality'.format(image))
+                except FileNotFoundError as e:
+                    print(e)
             else:
                 print('{} was JPEG it wont be reduced'.format(image))
