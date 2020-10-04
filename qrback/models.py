@@ -183,7 +183,7 @@ class Entry(models.Model):
         blank=True,
         null=True,
         verbose_name='kapak fotoğrafı',
-        optimized_image_output_size=(360, 270),
+        optimized_image_output_size=(480, 480),
         optimized_image_resize_method='cover'  # 'thumbnail', 'cover' or None
     )
     category = models.ForeignKey(FoodCategory, on_delete=models.CASCADE, verbose_name='Kategori')
