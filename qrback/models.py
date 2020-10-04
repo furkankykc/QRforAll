@@ -73,14 +73,14 @@ class Company(models.Model):
         blank=True,
         null=True,
         verbose_name='Logo',
-        optimized_image_output_size=(360, 360),
-        optimized_image_resize_method='cover')
+        optimized_image_output_size=(480, 480),
+        optimized_image_resize_method='thumbnail')
     menu_background = OptimizedImageField(
         upload_to=get_image_path, blank=True, null=True,
         help_text="Bu kısım sadece dijital menü kullanan kullanıcılarımıza özeldir",
         verbose_name='dijital menü banner',
-        optimized_image_output_size=(480, 360),
-        optimized_image_resize_method='cover')
+        optimized_image_output_size=(480, 480),
+        optimized_image_resize_method='thumbnail')
     not_order_background = models.ImageField(upload_to=get_image_path, blank=True, null=True,
                                              help_text="Bu kısım sadece siparişsiz dijital menü kullanan kullanıcılarımıza özeldir",
                                              verbose_name='siparissiz menü arkaplani'
@@ -154,8 +154,8 @@ class FoodCategory(models.Model):
         blank=True,
         null=True,
         verbose_name='kapak fotoğrafı',
-        optimized_image_output_size=(360, 270),
-        optimized_image_resize_method='cover'  # 'thumbnail', 'cover' or None
+        optimized_image_output_size=(480, 480),
+        optimized_image_resize_method='thumbnail'  # 'thumbnail', 'cover' or None
     )
     is_abstract = models.BooleanField(default=False, verbose_name='soyut',
                                       help_text='Aktifleştirildiğinde bu kategoride bulunan ürünlerin fiyatları müşterilere gösterilmez.(sadece dijital siparişli menü içindir)')
@@ -184,7 +184,7 @@ class Entry(models.Model):
         null=True,
         verbose_name='kapak fotoğrafı',
         optimized_image_output_size=(480, 480),
-        optimized_image_resize_method='cover'  # 'thumbnail', 'cover' or None
+        optimized_image_resize_method='thumbnail'  # 'thumbnail', 'cover' or None
     )
     category = models.ForeignKey(FoodCategory, on_delete=models.CASCADE, verbose_name='Kategori')
     company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='comp_entry', verbose_name='sirket')

@@ -13,8 +13,8 @@ BACKGROUND_TRANSPARENT = (255, 255, 255, 0)
 
 
 def post_image(image):
-    output_size = (480, 360)
-    image = resizeimage.resize_cover(image, output_size, validate=False)
+    output_size = (480, 480)
+    image = resizeimage.resize_thumbnail(image, output_size, resample=Image.LANCZOS)
 
     output_image = Image.new('RGBA', output_size, BACKGROUND_TRANSPARENT)
     output_image_center = (int((output_size[0] - image.size[0]) / 2),
