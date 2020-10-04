@@ -50,7 +50,7 @@ def optimize_images():
                     print(e)
             else:
                 print('{} was JPEG it wont be reduced'.format(image))
-
+    optimize_categories()
 
 def optimize_categories():
     # all images in Entry model
