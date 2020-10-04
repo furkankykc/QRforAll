@@ -1,5 +1,4 @@
 import os
-
 from image_optimizer.utils import image_optimizer
 
 from qrback.models import Company, Entry, FoodCategory
@@ -45,9 +44,31 @@ def optimize_images():
                     im = Image.open(image_path)
                     im = post_image(im).convert('RGB')
                     # print('{} was successfully opened'.format(image))
-                    im.save(os.path.join(settings.MEDIA_ROOT, image), format="JPEG", quality=70)
+                    im.save(image_path, format="JPEG", quality=70)
                     # print('{} was successfully saved wit %70 quality'.format(image))
-                except FileNotFoundError as e:
+                except Exception as e:
+                    print(e)
+            else:
+                print('{} was JPEG it wont be reduced'.format(image))
+
+
+def optimize_categories():
+    # all images in Entry model
+    images = list(FoodCategory.objects.values_list('image', flat=True))
+
+    # Optimize images %70 reduction
+    for image in images:
+        if image != "" and image is not None:
+            if image.split('.')[-1] != "JPEG":
+                print('{} is not null or blank starting optimization process'.format(image))
+                image_path = os.path.join(settings.MEDIA_ROOT, image)
+                try:
+                    im = Image.open(image_path)
+                    im = post_image(im).convert('RGB')
+                    # print('{} was successfully opened'.format(image))
+                    im.save(image_path, format="JPEG", quality=70)
+                    # print('{} was successfully saved wit %70 quality'.format(image))
+                except Exception as e:
                     print(e)
             else:
                 print('{} was JPEG it wont be reduced'.format(image))
