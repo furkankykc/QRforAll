@@ -245,7 +245,7 @@
                             <div class="bio-img">
                                 <figure style="align-items: center;min-height: 330px;display: flex;">
                                     {% if company.logo %}
-                                        <img src="{{ company.logo.url }}" width="330" alt="Image" class="img-fluid"> {% endif %}
+                                        <a href="{% url 'menu-detail' company.prefix company.slug %}"><img src="{{ company.logo.url }}" width="330" alt="Image" class="img-fluid"> {% endif %}</a>
                                 </figure>
                                 <div class="social">
 

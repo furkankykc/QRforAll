@@ -52,6 +52,7 @@ def optimize_images():
                 print('{} was JPEG it wont be reduced'.format(image))
     optimize_categories()
 
+
 def optimize_categories():
     # all images in Entry model
     images = list(FoodCategory.objects.values_list('image', flat=True))
