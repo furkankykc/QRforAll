@@ -227,12 +227,12 @@ def manifest_for_company(request, company):
         "short_name": f"{company_obj.name}",
         "name": f"{company_obj.name}",
         "start_url": f"/{company_obj.prefix}/{company_obj.slug}/",
-        "background_color": "#ffff",
-        "theme_color": "#ffff",
-        "display": "fullscreen",
-        "description": "Test app for Django and PWA",
+        "background_color": "#ffffff",
+        "theme_color": "#000000",
+        "display": "standalone",
+        "description": f"{company_obj.slogan}",
         "dir": "ltr",
-        "lang": "en-US",
+        "lang": "tr-TR",
         "orientation": "portrait-primary",
 
         "icons": [{
