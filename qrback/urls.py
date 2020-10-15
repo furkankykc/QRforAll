@@ -1,4 +1,6 @@
 from django.urls import path
+from django.views.decorators.cache import cache_control
+from django.views.generic import TemplateView
 
 from qrback.admin import customAdminSite
 from qrback.views import *
@@ -21,6 +23,7 @@ urlpatterns = [
     path('qr/<slug:slug>/', QRDetailView.as_view(), name='generate_qr'),
     path('optimize/', optimize_images, name='optimize_images'),
     path('download/<slug:slug>/', download, name='download'),
+    path('manifest/<slug:company>/', manifest_for_company, name='manifest'),
     path('test/<slug:slug>/', test, name='test'),
     path('', index, name='index'),
     path('<slug:prefix>/<slug:slug>/', menu, name='menu-detail'),
@@ -28,5 +31,9 @@ urlpatterns = [
     path('<slug:prefix>/<slug:slug>/<slug:category_slug>/<int:table_id>', menu, name='menu-detail'),
     path('<slug:prefix>/<slug:slug>/<slug:category_slug>/<int:table_id>/category/<int:category_id>', menu,
          name='category'),
+    path(r'service-worker.js', cache_control(max_age=2592000)(TemplateView.as_view(
+        template_name="service-worker.js",
+        content_type='application/javascript',
+    )), name='service-worker.js'),
 
 ]

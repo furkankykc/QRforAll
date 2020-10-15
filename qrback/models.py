@@ -1,6 +1,8 @@
 import os
+from tempfile import NamedTemporaryFile
 
 from django.contrib.auth.models import User
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.core.validators import RegexValidator
 from django.db import models
 from django.db.models import Sum, F
@@ -10,13 +12,20 @@ from image_optimizer.fields import OptimizedImageField
 from qrback import service
 from django.utils import timezone
 
-from io import BytesIO
+from io import BytesIO, StringIO
 from django.core.files import File
 from PIL import Image
 
 
-def get_image_path(instance, filename):
+def get_image_path(instance, filename) -> str:
     return os.path.join('photos', str(instance.id), filename)
+
+
+def image_to_byte_array(image: Image):
+    imgByteArr = BytesIO()
+    image.save(imgByteArr, format="PNG")
+    imgByteArr = imgByteArr.getvalue()
+    return imgByteArr
 
 
 class Category(models.Model):
@@ -75,6 +84,8 @@ class Company(models.Model):
         verbose_name='Logo',
         optimized_image_output_size=(480, 480),
         optimized_image_resize_method='thumbnail')
+    logo_96 = models.ImageField(upload_to=get_image_path, blank=True, null=True, verbose_name="192x logo")
+    logo_512 = models.ImageField(upload_to=get_image_path, blank=True, null=True, verbose_name="512x logo")
     menu_background = OptimizedImageField(
         upload_to=get_image_path, blank=True, null=True,
         help_text="Bu kısım sadece dijital menü kullanan kullanıcılarımıza özeldir",
@@ -116,8 +127,50 @@ class Company(models.Model):
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
-        super(Company, self).save(*args, **kwargs)
 
+        super(Company, self).save(*args, **kwargs)
+        if self.logo:
+            im = Image.open(self.logo.path)
+            im1 = im.resize((192, 192))
+            im2 = im.resize((512, 512))
+
+            # Create a file-like object to write thumb data (thumb data previously created
+            # using PIL, and stored in variable 'thumb')
+            thumb_io1 = BytesIO()
+            thumb_io2 = BytesIO()
+            im1.save(thumb_io1, format='png')
+            im2.save(thumb_io2, format='png')
+
+            thumb_file1 = InMemoryUploadedFile(
+                file=thumb_io1,
+                field_name=None,
+                name=f"{self.logo.name.split('.')[0]}_192.{self.logo.name.split('.')[1]}",
+                content_type="PNG",
+                size=im1.size,
+                charset=None
+            )
+            thumb_file2 = InMemoryUploadedFile(
+                file=thumb_io2,
+                field_name=None,
+                name=f"{self.logo.name.split('.')[0]}_512.{self.logo.name.split('.')[1]}",
+                content_type="PNG",
+                size=im2.size,
+                charset=None
+            )
+
+            self.logo_96.save(thumb_file1.name, thumb_file1,save=False)
+            self.logo_512.save(thumb_file2.name, thumb_file2,save=False)
+
+            # tempfile_io1 = BytesIO()
+            # tempfile_io2 = BytesIO()
+            # im1.save(tempfile_io1, format='JPEG')
+            # image_file1 = InMemoryUploadedFile(tempfile_io1, None, 'rotate.jpg', 'image/jpeg', tempfile_io1.len, None)
+            # image_file2 = InMemoryUploadedFile(tempfile_io1, None, 'rotate2.jpg', 'image/jpeg', tempfile_io2.len, None)
+            #
+            # im1.save(f"{self.logo.name.split[0]}_192.{self.logo.name.split('.')[1]}", image_file1)
+            # im2.save(f"{self.logo.name.split[0]}_512.{self.logo.name.split('.')[1]}", image_file2)
+
+            super(Company, self).save(*args, **kwargs)
     @property
     def create_qr(self):
         qr_list = [service.create_qr(self)]

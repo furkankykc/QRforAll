@@ -17,6 +17,13 @@
     <!--================ Favicon ================-->
     {% block favicon %}
         <link rel="shortcut icon" href="{% static 'vroom_logo.ico' %}">
+
+    {% endblock %}
+    {% block pwa %}
+
+        <!--=============PWA ============-->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="manifest" href="{% url 'manifest' company.slug %}">
     {% endblock %}
     <!--================ Google web fonts ================-->
 
@@ -37,9 +44,11 @@
             <link rel="stylesheet" href="{% static 'velikorodnov/css/style.css' %}">
             <link rel="stylesheet" href="{% static 'velikorodnov/css/responsive.css' %}">
 
+
         {% endblock %}
 
     {% endcompress %}
+
     {% compress css inline %}
         {% block extra-style %}
 
@@ -104,7 +113,7 @@
                     line-height: 3.5rem;
                     height: 20px;
 
-                    width:unset;
+                    width: unset;
                     display: unset;
                     background-size: unset !important;
                 }
@@ -115,7 +124,22 @@
     {% load flags %}
 </head>
 
+<script>
 
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('{% url 'service-worker.js' %}', {scope: '.'}).then(function (reg) {
+            // registration worked
+            console.log('Registration succeeded. Scope is ' + reg.scope);
+        }).catch(function (error) {
+            // registration failed
+            console.log('Registration failed with ' + error);
+        });
+
+
+    }
+
+
+</script>
 <body>
 <div class="mad-preloader"></div>
 <div id="mad-page-wrapper" class="mad-page-wrapper">
@@ -229,7 +253,66 @@
 
 
 </div>
+{#<div id="installContainer" class="hidden">#}
+{#    <button id="butInstall" type="button">#}
+{#        Install#}
+{#    </button>#}
+{#</div>#}
+<script>
 
+    window.addEventListener('beforeinstallprompt', (event) => {
+        console.log('👍', 'beforeinstallprompt', event);
+        // Stash the event so it can be triggered later.
+        window.deferredPrompt = event;
+        // Remove the 'hidden' class from the install button container
+        divInstall.classList.toggle('hidden', false);
+    });
+    butInstall = document.getElementById('butInstall');
+    butInstall.addEventListener('click', () => {
+        console.log('👍', 'butInstall-clicked');
+        const promptEvent = window.deferredPrompt;
+        if (!promptEvent) {
+            // The deferred prompt isn't available.
+            return;
+        }
+        // Show the install prompt.
+        promptEvent.prompt();
+        // Log the result
+        promptEvent.userChoice.then((result) => {
+            console.log('👍', 'userChoice', result);
+            // Reset the deferred prompt variable, since
+            // prompt() can only be called once.
+            window.deferredPrompt = null;
+            // Hide the install button.
+            divInstall.classList.toggle('hidden', true);
+        });
+    });
+    window.addEventListener('appinstalled', (event) => {
+        console.log('👍', 'appinstalled', event);
+    });
+</script>
+<style>
+.hidden{display:none !important}
+
+#installContainer{
+    position:absolute;
+    top:1em;
+    display:flex;
+    justify-content:center;
+    width:100%;
+    z-index:10;
+}
+
+#installContainer button{
+    background-color:green;
+    border:1px solid white;
+    color:white;
+    font-size:1em;
+    padding:0.75em
+}
+
+#installContainer button:hover{background-color:lightGreen}
+</style>
 <footer id="mad-footer" class="mad-footer" style="padding-top: 2rem">
     <!--================ Footer row ================-->
     <div class="mad-footer-main">
@@ -454,7 +537,7 @@
         var sticky = navbar.offsetTop;
 
         function myFunction() {
-            console.log(window.pageYOffset);
+            {#console.log(window.pageYOffset);#}
             if (window.pageYOffset > sticky) {
 
                 navbar.style.position = "fixed";

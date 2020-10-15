@@ -11,6 +11,9 @@ from qrback import service, optimization
 from qrback.models import Company, Entry, FoodCategory, Accounting, Category, Account_Entry
 from qrforall import settings
 from django.db.models import Q
+import json
+
+from qrforall import settings
 
 
 def index(request):
@@ -215,3 +218,33 @@ class MenuDetailView(DetailView):
     model = Company
     template_name = 'paperMenu.html'
     context_object_name = 'company'
+
+
+def manifest_for_company(request, company):
+    company_obj = Company.objects.get(slug=company)
+    data_dump = {
+
+        "short_name": f"{company_obj.name}",
+        "name": f"{company_obj.name}",
+        "start_url": f"/{company_obj.prefix}/{company_obj.slug}/",
+        "background_color": "#ffff",
+        "theme_color": "#ffff",
+        "display": "fullscreen",
+        "description": "Test app for Django and PWA",
+        "dir": "ltr",
+        "lang": "en-US",
+        "orientation": "portrait-primary",
+
+        "icons": [{
+            "src": f"{settings.HTTP_METHOD}://{settings.SITE_URL}{company_obj.logo_96.url}",
+            "type": "image/png",
+            "sizes": "192x192"
+        }, {
+            "src": f"{settings.HTTP_METHOD}://{settings.SITE_URL}{company_obj.logo_512.url}",
+            "type": "image/png",
+            "sizes": "512x512"
+        }]
+    }
+
+    data = json.dumps(data_dump)
+    return HttpResponse(data, content_type='application/json')
