@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="{% static 'velikorodnov/css/style.css' %}">
     <link rel="stylesheet" href="{% static 'velikorodnov/css/responsive.css' %}">
 {% endblock %}
-
+<link rel="apple-touch-icon" sizes="180x180" href="{{ company.logo_192.url }}">
 {% block extra-style %}
     <style>
         html, body {
@@ -101,7 +101,7 @@
             {% endif %}
         <div class="card 1">
             <div class="card_image">
-                <img src="{{ category.get_image.url }}"width="360" height="270" alt="{{ category.name }} category"/>
+                <img src="{{ category.get_image.url }}" width="360" height="270" alt="{{ category.name }} category"/>
             </div>
             <div class="card_title title-white">
                 <p>{{ category.name }}</p>
