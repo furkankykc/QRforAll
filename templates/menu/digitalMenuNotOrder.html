@@ -1,8 +1,12 @@
 {% extends 'menu/base_menu.html' %}
 {% load static %}
-{% block content %}
+{% block apple-support %}
+    {{ block.super }}
 
     <link rel="apple-touch-icon" href="{{ company.logo_96.url }}">
+{% endblock %}
+{% block content %}
+
     {% regroup entries by category.group as entries_by_date %}
     <!--================ End of Breadcrumb ================-->
     <div class="mad-content no-pd">

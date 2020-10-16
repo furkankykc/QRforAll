@@ -17,6 +17,10 @@
     <link rel="stylesheet" href="{% static 'velikorodnov/css/style.css' %}">
     <link rel="stylesheet" href="{% static 'velikorodnov/css/responsive.css' %}">
 {% endblock %}
+{% block apple-support %}
+    {{ block.super }}
+    <link rel="apple-touch-icon" href="{{ company.logo_96.url }}">
+{% endblock %}
 
 
 {% block extra-style %}
@@ -79,7 +83,6 @@
 {% endblock %}
 {% block content %}
 
-    <link rel="apple-touch-icon" href="{{ company.logo_96.url }}">
     {% if table_id %}
         <div class="fixed-action-btn" style="size: 1px">
             <a class="btn-floating btn-large red" style="size: 1px">
