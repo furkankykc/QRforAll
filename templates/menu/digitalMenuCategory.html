@@ -1,6 +1,7 @@
 {% extends 'menu/base_menu.html' %}
 {% load static %}
 {% block css %}
+
     <!-- Compiled and minified CSS -->
     <link rel="stylesheet" href="{% static 'materialize/materialize.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/menu.css' %}">
@@ -16,7 +17,8 @@
     <link rel="stylesheet" href="{% static 'velikorodnov/css/style.css' %}">
     <link rel="stylesheet" href="{% static 'velikorodnov/css/responsive.css' %}">
 {% endblock %}
-<link rel="apple-touch-icon" sizes="192x192" href="{{ company.logo_96.url }}">
+
+
 {% block extra-style %}
     <style>
         html, body {
@@ -76,6 +78,8 @@
     </style>
 {% endblock %}
 {% block content %}
+
+    <link rel="apple-touch-icon" sizes="192x192" href="{{ company.logo_96.url }}">
     {% if table_id %}
         <div class="fixed-action-btn" style="size: 1px">
             <a class="btn-floating btn-large red" style="size: 1px">
