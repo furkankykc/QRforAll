@@ -2,7 +2,7 @@
 {% load static %}
 {% block content %}
 
-    <link rel="apple-touch-icon" sizes="192x192" href="{{ company.logo_96.url }}">
+    <link rel="apple-touch-icon" href="{{ company.logo_96.url }}">
     {% regroup entries by category.group as entries_by_date %}
     <!--================ End of Breadcrumb ================-->
     <div class="mad-content no-pd">
