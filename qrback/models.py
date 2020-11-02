@@ -45,6 +45,7 @@ class AccountType(models.Model):
     has_unique_tables = models.BooleanField(default=False)
     has_unique_categories = models.BooleanField(default=False)
     has_digital_menu = models.BooleanField(default=False)
+    has_whatsapp_order = models.BooleanField(default=False)
     count_of_max_table = models.IntegerField(default=50)
     extra_fee = models.FloatField(default=0)
     categories = models.ManyToManyField(Category)

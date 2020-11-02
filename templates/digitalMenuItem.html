@@ -120,7 +120,7 @@
 
     <div class="card">
         <div class="card-image waves-effect waves-block waves-light">
-            <img class="activator" src="{{ category.get_image.url }}" width="480" height="480" alt="{{ category.name}} image">
+            <img class="activator" src="{{ category.get_image.url }}" width="480" height="480" alt="{{ category.name }} image">
         </div>
         <div class="card-reveal">
             <span class="card-title grey-text text-darken-4">{{ category.name }}<i
@@ -128,6 +128,17 @@
             {% if category.detail %}
                 <p>{{ category.detail }}</p>
             {% endif %}
+          {% if company.account_type.has_whatsapp_order %}
+                    <div>
+                    <p>Sipariş ver butonuna tıklayarak whatsapp üzerinden {{ category.name }} siparişi
+                        verebilirsiniz</p>
+                    <input type="hidden" name="chosen_entry" id="entry_id" value="{{ category.name }}">
+                    <input class="quantity" type="number" name="count" id="count" value="1" min="1" max="10" step="1"/>
+                    {#                    <input style="display:none;" class="btn waves-effect waves-light" type="submit" value="Sipariş ver">#}
+                    <a class="waves-effect waves-light btn modal-trigger" onclick="whatsappOrderFunction(this)">Sipariş
+                        Ver</a>
+                    </div>
+                {% endif %}
             {% if table_id %}
                 <p>Sipariş ver butonuna tıklayarak {{ category.name }} siparişi verebilirsiniz</p>
             {% endif %}
@@ -142,6 +153,7 @@
                             Ver</a>
                     </form>
                 {% endif %}
+
 
 
             </div>
@@ -167,7 +179,18 @@
 </body>
 {% compress js inline %}
     <script>
-
+        function  whatsappOrderFunction(event){
+            var src = event.parentNode
+             $confirm("Sipariş verme işleminizi onaylıyormusunuz?", "#26a69a ")
+                .then(() => {
+                    {#$toast("Siparişiniz verildi", "#26a69a");#}
+                    var count = src.querySelector("#count").value;
+                    var item = src.querySelector("#entry_id").value;
+                    var text = count + "x" +item + " sipariş etmek istiyorum. Adresim:";
+                    var phone = {{ company.phone }};
+                    window.open('https://api.whatsapp.com/send?phone='+phone+"&text="+encodeURIComponent(text), '_blank');
+                })
+        }
         function myFcheckunction(event) {
             var src = event.parentNode
             console.log(src)
