@@ -138,6 +138,11 @@ def menu_no_table(request, slug, category_id, prefix):
                            'company': company, 'category_id': category_id})
 
 
+def due_date(request):
+    return HttpResponse(
+        Company.set_initial_due_date())
+
+
 # def handler404(request, exception):
 #     return render(request, 'errors/404.html', locals())
 

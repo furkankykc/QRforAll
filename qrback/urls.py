@@ -22,6 +22,7 @@ urlpatterns = [
     path('remove/<slug:slug>/<int:order_id>/', remove_accounting_entry, name='remove'),
     path('qr/<slug:slug>/', QRDetailView.as_view(), name='generate_qr'),
     path('optimize/', optimize_images, name='optimize_images'),
+    path('due_date/', due_date, name='due_date'),
     path('download/<slug:slug>/', download, name='download'),
     path('manifest/<slug:company>/', manifest_for_company, name='manifest'),
     path('test/<slug:slug>/', test, name='test'),
