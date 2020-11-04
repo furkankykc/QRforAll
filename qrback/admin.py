@@ -220,7 +220,7 @@ class CompanyAdmin(admin.ModelAdmin):
 
         if obj and not request.user.is_superuser:  # editing an existing object
             return self.readonly_fields + (
-                'owner', 'account_type', 'menu', 'not_order_background', 'counter', 'prefix', 'due_day', 'is_active')
+                'owner', 'account_type', 'menu', 'not_order_background', 'counter', 'prefix', 'due_date', 'is_active')
         return self.readonly_fields
 
     def get_form(self, request, obj=None, **kwargs):

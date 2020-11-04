@@ -69,7 +69,7 @@ class Company(models.Model):
                              help_text=_("Bu kısım resim bazlı menü kullanan kullanıcılarımıza özeldir"))
     account_type = models.ForeignKey(AccountType, on_delete=models.CASCADE, verbose_name='Hesap tipi')
     is_active = models.BooleanField(default=True, verbose_name="Aktiflik Durumu")
-    due_date = models.DateTimeField(default=timezone.now() + relativedelta(months=12))
+    due_date = models.DateTimeField(default=timezone.now() + relativedelta(months=12), verbose_name='Lisans bitiş tarihi')
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$',
                                  message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
     email_regex = RegexValidator(regex=r'^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$',
