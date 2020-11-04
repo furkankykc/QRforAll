@@ -128,7 +128,7 @@ class Company(models.Model):
     def set_initial_due_date(cls):
         for comp in cls.objects.all():
             if comp.owner:
-                comp.due_date = comp.owner.date_joined+relativedelta(months=12)
+                comp.due_date = comp.owner.date_joined + relativedelta(months=12)
                 comp.save()
 
     def renew_payment(self, credit=12):

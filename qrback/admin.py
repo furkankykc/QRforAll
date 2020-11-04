@@ -173,15 +173,22 @@ class FoodGroupAdmin(TranslationAdmin):
 class CompanyAdmin(admin.ModelAdmin):
     # fields = ('slug', 'name', 'account_type', 'categories', 'menu')
     prepopulated_fields = {'slug': ('name',)}
-    # exclude = ['not_order_background']
+    exclude = ['not_order_background']
     # readonly_fields = ['counter']
-    list_display = ('name', 'visitors', 'menu_url', 'generate_qr')
+    list_display = ('name', 'visitors', 'menu_url', 'generate_qr', 'is_company_active')
 
     # def menuPreview(self, obj):
     #     return mark_safe(
     #         '<images alt="{}"with=50 height=50 src={}/>'.format(obj.name,
     #                                                             os.path.join(settings.MEDIA_URL, obj.logo.url))
     #     )
+    def is_company_active(self, obj):
+        if obj.get_company_is_active:
+            if (obj.due_date - timezone.now()).days > 0:
+                return f"Lisansınızın bitmesine {(obj.due_date - timezone.now()).days} gün kaldı."
+            return f"Lisansınız {obj.due_date} tarihinde bitmiştir.Lütfen Yenileyiniz."
+
+    is_company_active.short_description = 'Lisans durumu'
 
     def get_queryset(self, request):
         qs = super(CompanyAdmin, self).get_queryset(request)
@@ -212,7 +219,8 @@ class CompanyAdmin(admin.ModelAdmin):
     def get_readonly_fields(self, request, obj=None):
 
         if obj and not request.user.is_superuser:  # editing an existing object
-            return self.readonly_fields + ('owner', 'account_type', 'menu', 'not_order_background', 'counter', 'prefix')
+            return self.readonly_fields + (
+                'owner', 'account_type', 'menu', 'not_order_background', 'counter', 'prefix', 'due_day', 'is_active')
         return self.readonly_fields
 
     def get_form(self, request, obj=None, **kwargs):
