@@ -121,6 +121,8 @@ class FoodCategoryAdmin(TranslationAdmin):
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if not request.user.is_superuser:
+            if db_field.name == "group":
+                kwargs["queryset"] = FoodGroup.objects.filter(owner=request.user)
             if db_field.name == "owner":
                 kwargs["queryset"] = User.objects.filter(id=request.user.id)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
