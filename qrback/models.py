@@ -1,5 +1,6 @@
 import os
 from tempfile import NamedTemporaryFile
+from dateutil.relativedelta import relativedelta
 
 from django.contrib.auth.models import User
 from django.core.files.uploadedfile import InMemoryUploadedFile
@@ -62,12 +63,13 @@ class Company(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, verbose_name='sahip')
     slug = models.SlugField(blank=True, verbose_name='url')
     prefix = models.SlugField(blank=False, null=False, default='menu', verbose_name='prefix')
-
     name = models.CharField(max_length=20, verbose_name='İsim')
     slogan = models.CharField(max_length=40, blank=True, null=True)
     menu = models.ImageField(upload_to=get_image_path, blank=True, null=True,
                              help_text=_("Bu kısım resim bazlı menü kullanan kullanıcılarımıza özeldir"))
     account_type = models.ForeignKey(AccountType, on_delete=models.CASCADE, verbose_name='Hesap tipi')
+    is_active = models.BooleanField(default=True, verbose_name="Aktiflik Durumu")
+    due_date = models.DateTimeField(default=timezone.now() + relativedelta(months=12))
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$',
                                  message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
     email_regex = RegexValidator(regex=r'^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$',
@@ -104,10 +106,6 @@ class Company(models.Model):
     youtube = models.URLField(blank=True)
     whatsapp = models.URLField(blank=True,
                                help_text='http://api.whatsapp.com/send?phone=+90********** şeklinde girilmelidir')
-    # n11 = models.URLField(blank=True)
-    # hepsiburada = models.URLField(blank=True)
-    # trendyol = models.URLField(blank=True)
-    # websitesi = models.URLField(blank=True)
 
     counter = models.IntegerField(default=0, verbose_name='Menü görüntülenme sayısı')
     hide_on_referances = models.BooleanField(default=False,
@@ -125,6 +123,24 @@ class Company(models.Model):
 
     def get_menu_num(self):
         return range(1, self.account_type.count_of_max_table)
+
+    @classmethod
+    def set_initial_due_date(cls):
+        for comp in cls.objects.all():
+            if comp.owner:
+                comp.due_date = comp.owner.date_joined+relativedelta(months=12)
+                comp.save()
+
+    def renew_payment(self, credit=12):
+        pay_today = timezone.now()
+        if self.due_date < pay_today:
+            self.due_date = pay_today + relativedelta(months=credit)
+        else:
+            self.due_date += relativedelta(months=credit)
+
+    @property
+    def get_company_is_active(self):
+        return self.is_active and self.due_date > timezone.now()
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
@@ -159,8 +175,8 @@ class Company(models.Model):
                 charset=None
             )
 
-            self.logo_96.save(thumb_file1.name, thumb_file1,save=False)
-            self.logo_512.save(thumb_file2.name, thumb_file2,save=False)
+            self.logo_96.save(thumb_file1.name, thumb_file1, save=False)
+            self.logo_512.save(thumb_file2.name, thumb_file2, save=False)
 
             # tempfile_io1 = BytesIO()
             # tempfile_io2 = BytesIO()
@@ -172,6 +188,7 @@ class Company(models.Model):
             # im2.save(f"{self.logo.name.split[0]}_512.{self.logo.name.split('.')[1]}", image_file2)
 
             super(Company, self).save(*args, **kwargs)
+
     @property
     def create_qr(self):
         qr_list = [service.create_qr(self)]
