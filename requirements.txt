@@ -14,3 +14,4 @@ python-memcached
 django-compressor
 django-htmlmin
 django-image-optimizer
+python-dateutil
