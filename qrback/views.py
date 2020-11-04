@@ -139,8 +139,9 @@ def menu_no_table(request, slug, category_id, prefix):
 
 
 def due_date(request):
-    return HttpResponse(
-        Company.set_initial_due_date())
+    if request.user.is_superuser:
+        return HttpResponse(
+            Company.set_initial_due_date())
 
 
 # def handler404(request, exception):
