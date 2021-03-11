@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'image_optimizer',
 
 ]
-
+X_FRAME_OPTIONS = 'SAMEORIGIN'
 OPTIMIZED_IMAGE_METHOD = 'pillow'
 MIDDLEWARE = [
     # add these below 3 middleware at the first position

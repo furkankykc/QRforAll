@@ -105,6 +105,64 @@ class EntryAdmin(TranslationAdmin):
         super(EntryAdmin, self).save_model(request, obj, form, change)
 
 
+@admin.register(Document, site=customAdminSite)
+class DocumentAdmin(admin.ModelAdmin):
+    # list_display = ('name', 'price', 'category', 'company', 'image')
+    prepopulated_fields = {'slug': ('name',)}
+    # def __init__(self, *args, **kwargs):
+    #     super(EntryAdmin, self).__init__(*args, **kwargs)
+    #     self.fields['category'].queryset = FoodCategory.objects.filter(owner=)  # or something else
+    list_display = ('name', 'url', 'qr')
+
+    def url(self, obj):
+        return mark_safe(
+            '<a class="button" title="Generate QR codes" name="index" href="{}">{}</a>'.format(
+                "{}://{}".format(settings.HTTP_METHOD, settings.SITE_URL) + reverse('document',
+                                                                                    args=(
+                                                                                        [obj.company.prefix,
+                                                                                         obj.company.slug, obj.slug])),
+                reverse('menu-detail', args=[obj.company.prefix, obj.slug])))
+
+    def qr(self, obj):
+        return mark_safe(
+            '<a class="button" title="Generate QR codes" name="index" href="{}">QR Code</a>'.format(
+                "{}://{}".format(settings.HTTP_METHOD, settings.SITE_URL) + reverse('generate_qr_pdf',
+                                                                                    args=(
+                                                                                        [obj.company.slug, obj.slug]))))
+
+    def get_readonly_fields(self, request, obj=None):
+
+        if obj and not request.user.is_superuser:  # editing an existing object
+            return self.readonly_fields + ('company',)
+        return self.readonly_fields
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if not request.user.is_superuser:
+            if db_field.name == "company":
+                kwargs["queryset"] = Company.objects.filter(owner=request.user)
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+    def get_queryset(self, request):
+        qs = super(DocumentAdmin, self).get_queryset(request)
+        if request.user.is_superuser:
+            return qs
+        # self.fields['category'].queryset = FoodCategory.objects.filter(owner=request.user)  # or something else
+        return qs.filter(company__owner=request.user)
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super(DocumentAdmin, self).get_form(request, obj, **kwargs)
+        form.base_fields['slug'].disabled = True
+        form.base_fields['slug'].help_text = "This field is not editable"
+        return form
+    # def save_model(self, request, obj, form, change):
+    #     if change:
+    #         if 'image' in form.changed_data:
+    #             obj.image = compress(obj.image)
+    #             obj.save()
+    #
+    #     super(DocumentAdmin, self).save_model(request, obj, form, change)
+
+
 @admin.register(FoodCategory, site=customAdminSite)
 class FoodCategoryAdmin(TranslationAdmin):
     list_display = ('name', 'group')

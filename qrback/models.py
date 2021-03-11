@@ -4,7 +4,7 @@ from dateutil.relativedelta import relativedelta
 
 from django.contrib.auth.models import User
 from django.core.files.uploadedfile import InMemoryUploadedFile
-from django.core.validators import RegexValidator
+from django.core.validators import RegexValidator, FileExtensionValidator
 from django.db import models
 from django.db.models import Sum, F
 from django.utils.text import slugify
@@ -17,9 +17,15 @@ from io import BytesIO, StringIO
 from django.core.files import File
 from PIL import Image
 
+from qrback.validators import validate_file_extension
+
 
 def get_image_path(instance, filename) -> str:
     return os.path.join('photos', str(instance.id), filename)
+
+
+def get_pdf_path(instance, filename) -> str:
+    return os.path.join('pdf', str(instance.company.name), filename)
 
 
 def image_to_byte_array(image: Image):
@@ -47,6 +53,7 @@ class AccountType(models.Model):
     has_unique_categories = models.BooleanField(default=False)
     has_digital_menu = models.BooleanField(default=False)
     has_whatsapp_order = models.BooleanField(default=False)
+    has_pdf = models.BooleanField(default=False)
     count_of_max_table = models.IntegerField(default=50)
     extra_fee = models.FloatField(default=0)
     categories = models.ManyToManyField(Category)
@@ -69,7 +76,8 @@ class Company(models.Model):
                              help_text=_("Bu kısım resim bazlı menü kullanan kullanıcılarımıza özeldir"))
     account_type = models.ForeignKey(AccountType, on_delete=models.CASCADE, verbose_name='Hesap tipi')
     is_active = models.BooleanField(default=True, verbose_name="Aktiflik Durumu")
-    due_date = models.DateTimeField(default=timezone.now() + relativedelta(months=12), verbose_name='Lisans bitiş tarihi')
+    due_date = models.DateTimeField(default=timezone.now() + relativedelta(months=12),
+                                    verbose_name='Lisans bitiş tarihi')
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$',
                                  message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
     email_regex = RegexValidator(regex=r'^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$',
@@ -212,6 +220,28 @@ class FoodGroup(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Document(models.Model):
+    class Meta:
+        verbose_name = 'Döküman'
+        verbose_name_plural = 'Döküman'
+        unique_together = ('company', 'slug',)
+
+    name = models.CharField(max_length=100, verbose_name='isim')
+    slug = models.SlugField(blank=True)
+    document = models.FileField(upload_to=get_pdf_path, blank=True, null=True, verbose_name='dosya',
+                                validators=[FileExtensionValidator(allowed_extensions=['pdf'])])
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='comp_doc', verbose_name='sirket')
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(Document, self).save(*args, **kwargs)
+
+    @property
+    def create_qr(self):
+        qr_list = service.create_qr_pdf(self)
+        return qr_list
 
 
 class FoodCategory(models.Model):

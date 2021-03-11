@@ -9,6 +9,38 @@ from PIL import Image, ImageDraw
 from qrforall import settings
 
 
+def create_qr_pdf(obj):
+    print('pdf calisti')
+    print(reverse('document',args=(obj.company.prefix, obj.company.slug,obj.slug)))
+    imgname = os.path.join('pdf', str(obj.company.slug), '{}.png'.format(obj.slug))
+    if not os.path.exists(os.path.join(settings.MEDIA_ROOT, 'pdf', str(obj.company.slug))):
+        os.makedirs(os.path.join(settings.MEDIA_ROOT, 'pdf', str(obj.company.slug)))
+    url = pyqrcode.QRCode(
+        "{}://{}".format(settings.HTTP_METHOD, settings.SITE_URL) + reverse('document',
+                                                                            args=(obj.company.prefix, obj.company.slug,obj.slug)),
+        error='H')
+
+    scale = 10
+    url.png(os.path.join(settings.MEDIA_ROOT, imgname), scale=scale)
+    im = Image.open(os.path.join(settings.MEDIA_ROOT, imgname))
+    im = im.convert("RGBA")
+    if obj.company.logo and hasattr(obj.company.logo, 'url'):
+        logo = Image.open(obj.company.logo.path).convert("RGBA")
+        logo_size = 41 * 0.3 * scale
+        width, height = im.size
+        # Calculate xmin, ymin, xmax, ymax to put the logo
+        xmin = ymin = int((width / 2) - (logo_size / 2))
+        xmax = ymax = int((width / 2) + (logo_size / 2))
+        # resize the logo as calculated
+        logo = logo.resize((xmax - xmin, ymax - ymin))
+        im.paste(Image.new('RGB', logo.size, (255, 255, 255)), (xmin, ymin, xmax, ymax))
+        im.paste(logo, (xmin, ymin, xmax, ymax), logo)
+
+    # im.paste(generate_num(1), (xmin, ymin, xmax, ymax))
+    # im.show()
+    im.save(os.path.join(settings.MEDIA_ROOT, imgname))
+    # print(settings.MEDIA_URL + imgname)
+    return settings.MEDIA_URL + imgname
 def create_qr(obj, category=None, num=None):
     imgname = os.path.join('photos', str(obj.slug), '{}.png'.format(obj.slug))
     # print("{}://{}".format(settings.HTTP_METHOD, settings.SITE_URL) + reverse('menu-detail',

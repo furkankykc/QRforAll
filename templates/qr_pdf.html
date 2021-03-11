@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <title>{{ document.name }}</title>
+</head>
+
+{#<style>#}
+{#    html, body {#}
+{#        margin: 0;#}
+{#        height: 100%;#}
+{#    }#}
+{##}
+{#    images {#}
+{#        display: block;#}
+{#        width: 100%;#}
+{#        object-fit: cover;#}
+{#    }#}
+{#</style>#}
+<div class="row1">
+
+    <a href="{% url 'download' document.slug %}">İndir!</a>
+</div>
+{#{% for cmp in document.create_qr_pdf %}#}
+
+    <img height="50" width="50" src="{{ document.create_qr }}">
+{#{% endfor %}#}
+</body>
+</html>
