@@ -69,7 +69,8 @@ class Company(models.Model):
                              help_text=_("Bu kısım resim bazlı menü kullanan kullanıcılarımıza özeldir"))
     account_type = models.ForeignKey(AccountType, on_delete=models.CASCADE, verbose_name='Hesap tipi')
     is_active = models.BooleanField(default=True, verbose_name="Aktiflik Durumu")
-    due_date = models.DateTimeField(default=timezone.now() + relativedelta(months=12), verbose_name='Lisans bitiş tarihi')
+    due_date = models.DateTimeField(default=timezone.now() + relativedelta(months=12),
+                                    verbose_name='Lisans bitiş tarihi')
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$',
                                  message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
     email_regex = RegexValidator(regex=r'^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$',
@@ -144,9 +145,12 @@ class Company(models.Model):
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
+        previous_logo = None
+        if self.id is not None:
+            previous_logo = Company.objects.get(id=self.id).logo
 
         super(Company, self).save(*args, **kwargs)
-        if self.logo:
+        if self.logo and self.logo != previous_logo:
             im = Image.open(self.logo.path)
             im1 = im.resize((192, 192))
             im2 = im.resize((512, 512))
@@ -322,14 +326,16 @@ class Accounting(models.Model):
     def withdraw(self, money=0):
         borrowed = 0
         if money != 0:
-            borrowed = self.get_borrow() - money
+            borrowed = self.get_borrow - money
         else:
             self.checked_money = self.get_borrow
             self.save()
         if borrowed == 0:
             self.is_closed = True
             self.closed_at = timezone.now()
-            self.save()
+        else:
+            self.checked_money = money
+        self.save()
 
     @property
     def get_borrow(self):
