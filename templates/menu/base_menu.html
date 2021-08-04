@@ -129,8 +129,10 @@
     {% load i18n %}
     {% load flags %}
     {% block apple-support %}
-        {#<link rel="apple-touch-startup-image" href="launch.png">#}
-        {#    <meta name="apple-mobile-web-app-title" content="Appscope">#}
+        {% if company.logo96  %}
+            <link rel="apple-touch-icon" href="{{ company.logo_96.url }}">
+        {% endif %}
+        <meta name="apple-mobile-web-app-title" content="{{ company.name }}">
 
     {% endblock %}
 </head>
