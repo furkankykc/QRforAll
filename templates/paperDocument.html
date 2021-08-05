@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="{{ company.name|title }} olarak menümüzü karekodyazilimi.com ile tanışıp dijitale taşıdık.QR menümüzü bu sayfada bulabilirsiniz.">
+
+    {% load static %}
+    <title>{{ company.name }}</title>
+</head>
+
+<style>
+   html,body{
+    margin:0;
+    height:100%;
+}
+img{
+  display:block;
+  width:100%;
+  object-fit: cover;
+}
+</style>
+
+{#{% for cmp in document.create_qr_pdf %}#}
+{% if pdf.document.url %}
+<object data='{{ pdf.document.url }}'  width="100%" height="100%" type="application/pdf" >
+    <p>Oops! Your browser doesn't support PDFs!</p>
+    <p><a href='{{ pdf.document.url }}'>Download Instead</a></p>
+</object>
+{% endif %}
+</body>
+</html>

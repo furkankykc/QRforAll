@@ -32,6 +32,8 @@ urlpatterns = [
     path('<slug:prefix>/<slug:slug>/<slug:category_slug>/<int:table_id>', menu, name='menu-detail'),
     path('<slug:prefix>/<slug:slug>/<slug:category_slug>/<int:table_id>/category/<int:category_id>', menu,
          name='category'),
+    path('pqr/<slug:slug>/<slug:pdf>', generate_qr_pdf, name='generate_qr_pdf'),
+    path('<slug:prefix>/<slug:slug>/<slug:pdf>', document, name='document'),
     path(r'service-worker.js', cache_control(max_age=2592000)(TemplateView.as_view(
         template_name="service-worker.js",
         content_type='application/javascript',

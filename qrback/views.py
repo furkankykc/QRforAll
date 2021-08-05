@@ -8,7 +8,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import DetailView
 
 from qrback import service, optimization
-from qrback.models import Company, Entry, FoodCategory, Accounting, Category, Account_Entry
+from qrback.models import Company, Entry, FoodCategory, Accounting, Category, Account_Entry, Document
 from qrforall import settings
 from django.db.models import Q
 import json
@@ -218,6 +218,19 @@ def menu(request, *args, **kwargs):
     else:
         company.count()
         return render(request, template_name='paperMenu.html', context={'company': company})
+
+
+def document(request, slug, prefix, pdf):
+    company = get_object_or_404(Company, slug__exact=slug, prefix__exact=prefix)
+    return render(request, template_name='paperDocument.html',
+                  context={'company': company, 'pdf': Document.objects.get(company_id=company.id, slug=pdf)})
+
+
+def generate_qr_pdf(request, slug, pdf):
+    company = get_object_or_404(Company, slug__exact=slug)
+    Document.objects.get(company_id=company.id, slug=pdf)
+    return render(request, template_name='qr_pdf.html',
+                  context={'document': Document.objects.get(company_id=company.id, slug=pdf)})
 
 
 class MenuDetailView(DetailView):
